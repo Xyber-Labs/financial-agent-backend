@@ -1,9 +1,12 @@
 package main
 
 import (
+	"context"
+
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/transactor"
@@ -17,7 +20,7 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "financial-agent-backend",
 		Short: "Financial Agent Backend",
-		Long: `Financial Agent Backend`,
+		Long:  `Financial Agent Backend`,
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg, err := config.LoadConfig()
 			if err != nil {
@@ -38,7 +41,24 @@ var (
 			}
 			log.Info().Str("rpc_url", cfg.Network.HttpRpcUrl).Msg("Connected to node")
 
-			transactor := transactor.NewTransactor(ethClient)
+			chainId, err := ethClient.ChainID(context.Background())
+			if err != nil {
+				log.Error().Err(err).Msg("Error getting chain id")
+				return
+			}
+
+			// Prepare transactor opts.
+			transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(cfg.Network.SenderPrivateKey, chainId)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating transactor")
+				return
+			}
+
+			transactor, err := transactor.NewTransactor(ethClient, transactOpts, common.HexToAddress(cfg.Network.TrustManagementRouterAddress))
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating transactor")
+				return
+			}
 			if err := transactor.InitializeOnChainSession(); err != nil {
 				log.Error().Err(err).Msg("Error initializing transactor")
 				return
