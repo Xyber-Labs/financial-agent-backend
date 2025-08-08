@@ -11,6 +11,8 @@ import (
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
+
+	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
 
 var (
@@ -54,7 +56,8 @@ var (
 				return
 			}
 
-			transactor, err := transactor.NewTransactor(ethClient, transactOpts, common.HexToAddress(cfg.Network.TrustManagementRouterAddress))
+			teeService := sgx_quote.NewTeeService(false)
+			transactor, err := transactor.NewTransactor(ethClient, transactOpts, common.HexToAddress(cfg.Network.TrustManagementRouterAddress), teeService)
 			if err != nil {
 				log.Error().Err(err).Msg("Error creating transactor")
 				return

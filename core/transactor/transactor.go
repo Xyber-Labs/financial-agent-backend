@@ -14,13 +14,11 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
-
-	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
 
 type Transactor struct {
 	client                *ethclient.Client
-	teeService            *sgx_quote.TeeService
+	teeService            TeeService
 	teeSessionKey         *ecdsa.PrivateKey
 	teeSessionAddress     ethcommon.Address
 	transactOpts          *bind.TransactOpts
@@ -31,9 +29,8 @@ func NewTransactor(
 	client *ethclient.Client,
 	transactOpts *bind.TransactOpts,
 	trustManagementRouterAddress ethcommon.Address,
+	teeService TeeService,
 ) (*Transactor, error) {
-	teeService := sgx_quote.NewTeeService(false)
-
 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouterCaller(
 		trustManagementRouterAddress,
 		client,
@@ -87,8 +84,8 @@ func (t *Transactor) SignAndSendTransaction(tx *ethtypes.Transaction) error {
 }
 
 func (t *Transactor) extractQuote(sessionKey ethcommon.Address) ([]byte, error) {
-	// return t.teeService.GetQuote(sessionKey[:])
-	return []byte("quote"), nil
+	return t.teeService.GetQuote(sessionKey[:])
+	// return []byte("quote"), nil
 }
 
 // Creates a new ECDSA private key using the secp256k1 curve
