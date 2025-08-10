@@ -2,8 +2,12 @@ package transactor
 
 import (
 	"errors"
+	"slices"
 	"testing"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	ethcommon "github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 )
@@ -14,57 +18,58 @@ func TestInitialization(t *testing.T) {
 
 // Tests for InitializeOnChainSession using mockery-generated MockTeeService
 func TestInitializeOnChainSession(t *testing.T) {
-    type testCase struct {
-        name     string
-        retQuote []byte
-        retErr   error
-        wantErr  bool
-    }
+	testCases := []struct {
+		name        string
+		getQuoteRes []byte
+		getQuoteErr error
+		wantErr     bool
+	}{
+		{
+			name:        "success: generates session, calls GetQuote with address bytes",
+			getQuoteRes: []byte("quote"),
+			getQuoteErr: nil,
+			wantErr:     false,
+		},
+		{
+			name:        "error: propagates GetQuote error",
+			getQuoteRes: nil,
+			getQuoteErr: errors.New("boom"),
+			wantErr:     true,
+		},
+	}
 
-    testCases := []testCase{
-        {
-            name:     "success: generates session, calls GetQuote with address bytes",
-            retQuote: []byte("quote"),
-            retErr:   nil,
-            wantErr:  false,
-        },
-        {
-            name:     "error: propagates GetQuote error",
-            retQuote: nil,
-            retErr:   errors.New("boom"),
-            wantErr:  true,
-        },
-    }
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			r := require.New(t)
 
-    for _, tc := range testCases {
-        t.Run(tc.name, func(t *testing.T) {
-            r := require.New(t)
+			// Arrange
+			mteeService := NewMockTeeService(t)
+			var captured []byte
+			mteeService.EXPECT().GetQuote(mock.Anything).Run(func(b []byte) {
+				// capture argument for later comparison
+				if b != nil {
+					captured = slices.Clone(b)
+				}
+			}).Return(tc.getQuoteRes, tc.getQuoteErr)
 
-            // Arrange
-            mtee := NewMockTeeService(t)
-            var captured []byte
-            mtee.EXPECT().GetQuote(mock.Anything).Run(func(b []byte) {
-                // capture argument for later comparison
-                if b != nil {
-                    captured = append([]byte(nil), b...)
-                }
-            }).Return(tc.retQuote, tc.retErr)
+			// Build Transactor via constructor with minimal deps
+			client := &ethclient.Client{}
+			opts := &bind.TransactOpts{From: ethcommon.Address{}}
+			routerAddr := ethcommon.Address{0x1}
+			walletAddr := ethcommon.Address{0x2}
+			transactor, nerr := NewTransactor(client, opts, routerAddr, walletAddr, mteeService)
+			r.NoError(nerr)
 
-            subject := &Transactor{teeService: mtee}
-
-            // Act
-            err := subject.InitializeOnChainSession()
-
-            // Assert
-            if tc.wantErr {
-                r.Error(err)
-                return
-            }
-            r.NoError(err)
-            r.NotNil(subject.teeSessionKey)
-            // Ensure the address is set and was used as input to GetQuote
-            r.NotEqualValues([20]byte{}, subject.teeSessionAddress)
-            r.Equal(subject.teeSessionAddress[:], captured)
-        })
-    }
+			// Assert
+			err := transactor.InitializeOnChainSession()
+			if tc.wantErr {
+				r.Error(err)
+				return
+			}
+			r.NoError(err)
+			r.NotNil(transactor.teeSessionKey)
+			r.NotEqualValues([20]byte{}, transactor.teeSessionAddress)
+			r.Equal(transactor.teeSessionAddress[:], captured)
+		})
+	}
 }

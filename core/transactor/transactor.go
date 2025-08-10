@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -13,7 +14,10 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/rs/zerolog/log"
 
+	"financial-agent-backend/core/abi/bindings/TEEWallet"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+
+	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
 
 type Transactor struct {
@@ -23,16 +27,25 @@ type Transactor struct {
 	teeSessionAddress     ethcommon.Address
 	transactOpts          *bind.TransactOpts
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouterCaller
+	TEEWallet             *TEEWallet.TEEWallet
 }
 
 func NewTransactor(
 	client *ethclient.Client,
 	transactOpts *bind.TransactOpts,
 	trustManagementRouterAddress ethcommon.Address,
+	teeWalletAddress ethcommon.Address,
 	teeService TeeService,
 ) (*Transactor, error) {
 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouterCaller(
 		trustManagementRouterAddress,
+		client,
+	)
+	if err != nil {
+		return nil, err
+	}
+	teeWallet, err := TEEWallet.NewTEEWallet(
+		teeWalletAddress,
 		client,
 	)
 	if err != nil {
@@ -43,12 +56,14 @@ func NewTransactor(
 		teeService:            teeService,
 		transactOpts:          transactOpts,
 		TrustManagementRouter: trustManagementRouter,
+		TEEWallet:             teeWallet,
 	}, nil
 }
 
 // In transaction initialization we perform quote extraction
 func (t *Transactor) InitializeOnChainSession() error {
 
+	// First generate tee session key
 	sessionKey, err := GenerateTeeSessionKey()
 	if err != nil {
 		return err
@@ -59,15 +74,41 @@ func (t *Transactor) InitializeOnChainSession() error {
 		Str("address", t.teeSessionAddress.String()).
 		Msg("NewTeeSession: generated session key for TeeSession")
 
+	// Extract SGX quote from the environment
 	quote, err := t.extractQuote(t.teeSessionAddress)
 	if err != nil {
 		return err
 	}
 	log.Info().
 		Str("quote", string(quote)).
+		Str("quoteHex", hex.EncodeToString(quote)).
 		Msg("NewTeeSession: extracted quote for TeeSession")
 
-	// TODO(ak): send transaction with quote proof to smart contract
+	// Prepare SGX quote for use in TEEWallet
+	sgxParser := sgx_quote.NewSgxParser()
+	parsedQuote, err := sgxParser.ParseQuote(quote)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
+	}
+
+	teeWaletProof, err := FromSgxQuoteToTeeWalletProof(parsedQuote)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
+	}
+
+	// Initialize session in TEEWallet contract
+	tx, err := t.TEEWallet.InitSessionKey(
+		t.transactOpts,
+		teeWaletProof.Leaf,
+		teeWaletProof.Intermediate,
+		teeWaletProof.Quote,
+		t.teeSessionAddress,
+	)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
+	}
+
+	log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TEEWallet")
 
 	return nil
 }

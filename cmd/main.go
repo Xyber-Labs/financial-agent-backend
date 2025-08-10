@@ -57,7 +57,13 @@ var (
 			}
 
 			teeService := sgx_quote.NewTeeService(false)
-			transactor, err := transactor.NewTransactor(ethClient, transactOpts, common.HexToAddress(cfg.Network.TrustManagementRouterAddress), teeService)
+			transactor, err := transactor.NewTransactor(
+				ethClient,
+				transactOpts,
+				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
+				common.HexToAddress(cfg.Network.TEEWalletAddress),
+				teeService,
+			)
 			if err != nil {
 				log.Error().Err(err).Msg("Error creating transactor")
 				return
