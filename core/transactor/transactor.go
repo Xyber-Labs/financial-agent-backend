@@ -11,7 +11,6 @@ import (
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/core/abi/bindings/TEEWallet"
@@ -21,7 +20,7 @@ import (
 )
 
 type Transactor struct {
-	client                *ethclient.Client
+	client                bind.ContractBackend
 	teeService            TeeService
 	teeSessionKey         *ecdsa.PrivateKey
 	teeSessionAddress     ethcommon.Address
@@ -31,7 +30,7 @@ type Transactor struct {
 }
 
 func NewTransactor(
-	client *ethclient.Client,
+	client bind.ContractBackend,
 	transactOpts *bind.TransactOpts,
 	trustManagementRouterAddress ethcommon.Address,
 	teeWalletAddress ethcommon.Address,

@@ -1,16 +1,21 @@
 package transactor
 
 import (
+	"context"
+	"crypto/ecdsa"
 	"errors"
+	"math/big"
 	"slices"
 	"testing"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/ethclient"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
+	"financial-agent-backend/core/utils"
 	testutils "financial-agent-backend/tests"
 )
 
@@ -20,10 +25,23 @@ func TestInitialization(t *testing.T) {
 
 // Tests for InitializeOnChainSession using mockery-generated MockTeeService
 func TestInitializeOnChainSession(t *testing.T) {
+	r := require.New(t)
 
 	// Create eth simulated setup
-	backend := testutils.CreateSimulatedNode(nil)
-	mockedContracts := testutils.DeployMockedContracts(backend.Client(), nil)
+	adminKey, err := utils.ParseKeyFromHex("0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80")
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := crypto.PubkeyToAddress(*pub)
+
+	backend := testutils.CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+	chainId, err := backend.Client().ChainID(context.Background())
+	require.NoError(t, err)
+	txOpts, err := bind.NewKeyedTransactorWithChainID(adminKey, chainId)
+	require.NoError(t, err)
+	mockedContracts := testutils.DeployMockedContracts(backend.Client(), txOpts)
 	teeWalletAddress := mockedContracts.TeeWallet
 
 	testCases := []struct {
@@ -48,7 +66,6 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			r := require.New(t)
 
 			// Arrange
 			mteeService := NewMockTeeService(t)
@@ -61,11 +78,10 @@ func TestInitializeOnChainSession(t *testing.T) {
 			}).Return(tc.getQuoteRes, tc.getQuoteErr)
 
 			// Build Transactor via constructor with minimal deps
-			client := &ethclient.Client{}
-			opts := &bind.TransactOpts{From: ethcommon.Address{}}
+			client := backend.Client()
 			routerAddr := ethcommon.Address{0x1}
 			walletAddr := teeWalletAddress
-			transactor, nerr := NewTransactor(client, opts, routerAddr, walletAddr, mteeService)
+			transactor, nerr := NewTransactor(client, txOpts, routerAddr, walletAddr, mteeService)
 			r.NoError(nerr)
 
 			// Assert
