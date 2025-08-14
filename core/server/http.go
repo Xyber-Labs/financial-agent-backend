@@ -2,26 +2,44 @@ package server
 
 import (
 	"fmt"
+	"math/big"
 	"net/http"
+
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	ethcommon "github.com/ethereum/go-ethereum/common"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/config"
+	"financial-agent-backend/core/abi/bindings/AavePool"
+	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/transactor"
 )
 
 type HttpAgentServer struct {
-	Config     *config.HttpServerConfig
-	Transactor *transactor.Transactor
-	gin        *gin.Engine
+	Config                *config.HttpServerConfig
+	Transactor            *transactor.Transactor
+	createTxOpts          *bind.TransactOpts
+	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
+	AavePool              *AavePool.AavePool
+	gin                   *gin.Engine
 }
 
-func NewHttpAgentServer(config *config.HttpServerConfig, transactor *transactor.Transactor) *HttpAgentServer {
+func NewHttpAgentServer(
+	config *config.HttpServerConfig,
+	transactor *transactor.Transactor,
+	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
+	aavePool *AavePool.AavePool,
+	createTxOpts *bind.TransactOpts,
+) *HttpAgentServer {
 	s := &HttpAgentServer{
-		Config:     config,
-		Transactor: transactor,
-		gin:        gin.New(),
+		Config:                config,
+		Transactor:            transactor,
+		TrustManagementRouter: trustManagementRouter,
+		AavePool:              aavePool,
+		gin:                   gin.New(),
 	}
 	s.registerHandlers()
 	return s
@@ -52,6 +70,56 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		// Prepare TrustManagementRouter.depositWithPermit transaction
+		userAddress := ethcommon.HexToAddress(req.UserAddress)
+		tokenAddress := ethcommon.HexToAddress(req.TokenAddress)
+		tokenAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
+		if !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
+			return
+		}
+		sigR := ethcommon.HexToHash(req.SigR)
+		sigS := ethcommon.HexToHash(req.SigS)
+		depositWithPermitTx, err := s.TrustManagementRouter.DepositWithPermit(
+			s.createTxOpts,
+			userAddress,
+			tokenAddress,
+			big.NewInt(int64(req.Deadline)),
+			TrustManagementRouter.ITrustManagementStructsPermit{
+				Amount:   tokenAmount,
+				Deadline: big.NewInt(int64(req.Deadline)),
+				V:        req.SigV,
+				R:        sigR,
+				S:        sigS,
+			},
+		)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Create AavePool.supply transaction
+		aaveSupplyTx, err := s.AavePool.Supply(
+			s.createTxOpts,
+			tokenAddress,
+			tokenAmount,
+			userAddress,
+			0,
+		)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		// Batch and execute transactions
+		tx, err := s.Transactor.BatchAndExecute([]*ethtypes.Transaction{depositWithPermitTx, aaveSupplyTx})
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"tx": tx.Hash().String()})
 	}
 }
 
@@ -79,6 +147,7 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 }
 
 type DepositRequest struct {
+	UserAddress  string `json:"userAddress"`
 	ChainId      uint64 `json:"chainId"`
 	TokenAddress string `json:"tokenAddress"`
 	Amount       string `json:"amount"`
