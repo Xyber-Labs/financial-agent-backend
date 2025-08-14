@@ -39,6 +39,8 @@ parse_foundry_output() {
 }
 
 parse_foundry_output "MockTEEWallet"
+parse_foundry_output "MockAavePool"
+parse_foundry_output "MockTrustManagementRouter"
 
 ABIGEN=abigen
 
@@ -74,3 +76,5 @@ generate_bindings() {
 }
 
 generate_bindings "MockTEEWallet"
+generate_bindings "MockAavePool"
+generate_bindings "MockTrustManagementRouter"

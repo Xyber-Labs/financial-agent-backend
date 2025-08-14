@@ -31,10 +31,9 @@ func TestDeposit(t *testing.T) {
 	testTransactor, err := transactor.NewTransactor(
 		ethBackend.Client(),
 		transactOpts,
-		mockedContracts.TeeWallet,
+		mockedContracts.TrustManagementRouter,
 		mockedContracts.TeeWallet,
 		mteeService,
 	)
-
-	r.True(false)
+	r.NoError(err)
 }
