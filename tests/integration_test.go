@@ -5,6 +5,7 @@ import (
 	"crypto/ecdsa"
 	"math/big"
 	"testing"
+	"time"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
@@ -22,6 +23,7 @@ import (
 
 func TestDeposit(t *testing.T) {
 	r := require.New(t)
+	ctx := context.Background()
 
 	senderPrivKeyStr := "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
@@ -76,5 +78,9 @@ func TestDeposit(t *testing.T) {
 		trustManagementRouter,
 		aavePool,
 	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
 	_ = agentServer
 }
