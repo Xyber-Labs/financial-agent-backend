@@ -11,10 +11,12 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
+	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
+	"financial-agent-backend/core/abi/bindings/TEEWallet"
+	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/utils"
 	testutils "financial-agent-backend/tests"
 	"financial-agent-backend/tests/mocks"
@@ -33,7 +35,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 	r.NoError(err)
 	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
 	r.True(ok)
-	adminPubkey := crypto.PubkeyToAddress(*pub)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
 
 	backend := testutils.CreateSimulatedNode(ethtypes.GenesisAlloc{
 		adminPubkey: {Balance: big.NewInt(10000000000000000)},
@@ -43,7 +45,17 @@ func TestInitializeOnChainSession(t *testing.T) {
 	txOpts, err := bind.NewKeyedTransactorWithChainID(adminKey, chainId)
 	require.NoError(t, err)
 	mockedContracts := testutils.DeployMockedContracts(backend.Client(), txOpts)
-	teeWalletAddress := mockedContracts.TeeWallet
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		backend.Client(),
+	)
+	r.NoError(err)
+	teeWallet, err := TEEWallet.NewTEEWallet(
+		mockedContracts.TeeWallet,
+		backend.Client(),
+	)
+	r.NoError(err)
 
 	testCases := []struct {
 		name        string
@@ -80,9 +92,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 			// Build Transactor via constructor with minimal deps
 			client := backend.Client()
-			routerAddr := ethcommon.Address{0x1}
-			walletAddr := teeWalletAddress
-			transactor, nerr := NewTransactor(client, txOpts, routerAddr, walletAddr, mteeService)
+			transactor, nerr := NewTransactor(client, txOpts, trustManagementRouter, teeWallet, mteeService)
 			r.NoError(nerr)
 
 			// Assert

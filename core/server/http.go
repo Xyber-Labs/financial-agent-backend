@@ -21,9 +21,9 @@ import (
 type HttpAgentServer struct {
 	Config                *config.HttpServerConfig
 	Transactor            *transactor.Transactor
-	createTxOpts          *bind.TransactOpts
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
 	AavePool              *AavePool.AavePool
+	createTxOpts          *bind.TransactOpts
 	gin                   *gin.Engine
 }
 
@@ -32,13 +32,19 @@ func NewHttpAgentServer(
 	transactor *transactor.Transactor,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	aavePool *AavePool.AavePool,
-	createTxOpts *bind.TransactOpts,
 ) *HttpAgentServer {
+	// createTxOpts only used to consturct the calldata for the transactions
+	// to be later reconstructed in a batch transaction. Therefore we don't actually
+	// want to sign, estimate or execute them.
+	createTxOpts := bind.TransactOpts{
+		NoSend: true,
+	}
 	s := &HttpAgentServer{
 		Config:                config,
 		Transactor:            transactor,
 		TrustManagementRouter: trustManagementRouter,
 		AavePool:              aavePool,
+		createTxOpts:          &createTxOpts,
 		gin:                   gin.New(),
 	}
 	s.registerHandlers()

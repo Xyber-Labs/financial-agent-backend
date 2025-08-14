@@ -9,6 +9,8 @@ import (
 	"github.com/spf13/viper"
 
 	"financial-agent-backend/config"
+	"financial-agent-backend/core/abi/bindings/TEEWallet"
+	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
 
@@ -56,12 +58,29 @@ var (
 				return
 			}
 
+			trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
+				ethClient,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating trust management router")
+				return
+			}
+			teeWallet, err := TEEWallet.NewTEEWallet(
+				common.HexToAddress(cfg.Network.TEEWalletAddress),
+				ethClient,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating tee wallet")
+				return
+			}
+
 			teeService := sgx_quote.NewTeeService(false)
 			transactor, err := transactor.NewTransactor(
 				ethClient,
 				transactOpts,
-				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
-				common.HexToAddress(cfg.Network.TEEWalletAddress),
+				trustManagementRouter,
+				teeWallet,
 				teeService,
 			)
 			if err != nil {
