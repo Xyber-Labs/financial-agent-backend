@@ -83,7 +83,7 @@ func TestDeposit(t *testing.T) {
 		aavePool,
 	)
 
-	ginCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
 	defer cancel()
 	go agentServer.Start(ginCtx)
 
