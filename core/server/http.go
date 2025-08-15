@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/big"
 	"net/http"
+	"regexp"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
@@ -84,9 +85,48 @@ func (s *HttpAgentServer) registerHandlers() {
 // 2.2. Calls TrustManagemtnRouter.execute with encoded AAVE deposit transaction
 func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		log.Info().Interface("request", c.Request).Msg("depositHandler: received request")
 		var req DepositRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
+			log.Error().Err(err).Msg("depositHandler: failed to bind request")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		addressRegex := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+
+		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
+			return
+		}
+
+		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
+			return
+		}
+
+		if req.Amount == "" || req.Amount == "0" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
+			return
+		}
+
+		if req.Deadline == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "deadline is required"})
+			return
+		}
+
+		if req.SigV == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "sigV is required"})
+			return
+		}
+
+		if req.SigR == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "sigR is required"})
+			return
+		}
+
+		if req.SigS == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "sigS is required"})
 			return
 		}
 

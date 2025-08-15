@@ -1,9 +1,13 @@
 package tests
 
 import (
+	"bytes"
 	"context"
 	"crypto/ecdsa"
+	"encoding/json"
+	"fmt"
 	"math/big"
+	"net/http"
 	"testing"
 	"time"
 
@@ -79,8 +83,43 @@ func TestDeposit(t *testing.T) {
 		aavePool,
 	)
 
-	ginCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	ginCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	// Get nonceBefore before sending the request
+	nonceBefore, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	r.NoError(err)
+	fmt.Println("nonceBefore", nonceBefore)
+
+	// Make /deposit HTTP request to server
+	depositUrl := fmt.Sprintf("http://127.0.0.1:%d/deposit", serverConfig.Port)
+	depositReqBody := server.DepositRequest{
+		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		ChainId:      1,
+		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		Amount:       "10000000000000000",
+		Deadline:     1700000000,
+		SigV:         27,
+		SigR:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
+		SigS:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
+	}
+	reqBody, err := json.Marshal(depositReqBody)
+	r.NoError(err)
+	resp, err := http.Post(depositUrl, "application/json", bytes.NewBuffer(reqBody))
+	r.NoError(err)
+	defer resp.Body.Close()
+	fmt.Println(resp)
+
+	// Get nonceAfter after sending the request
+	nonceAfter, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	r.NoError(err)
+	fmt.Println("nonceAfter", nonceAfter)
+
+	r.Equal(nonceBefore+1, nonceAfter)
+
 	_ = agentServer
 }
