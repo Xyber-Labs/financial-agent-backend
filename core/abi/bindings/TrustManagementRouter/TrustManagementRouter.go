@@ -48,8 +48,14 @@ type ChunkedX509Cert struct {
 	Signature   []byte
 }
 
-// IXyberTrustManagementStructsPermit is an auto generated low-level Go binding around an user-defined struct.
-type IXyberTrustManagementStructsPermit struct {
+// Deposit is an auto generated low-level Go binding around an user-defined struct.
+type Deposit struct {
+	Amount      *big.Int
+	LockedUntil *big.Int
+}
+
+// Permit is an auto generated low-level Go binding around an user-defined struct.
+type Permit struct {
 	Holder   common.Address
 	Amount   *big.Int
 	Deadline *big.Int
@@ -58,8 +64,8 @@ type IXyberTrustManagementStructsPermit struct {
 	S        [32]byte
 }
 
-// IXyberTrustManagementStructsTransaction is an auto generated low-level Go binding around an user-defined struct.
-type IXyberTrustManagementStructsTransaction struct {
+// Transaction is an auto generated low-level Go binding around an user-defined struct.
+type Transaction struct {
 	Target common.Address
 	Value  *big.Int
 	Data   []byte
@@ -67,7 +73,7 @@ type IXyberTrustManagementStructsTransaction struct {
 
 // TrustManagementRouterMetaData contains all meta data concerning the TrustManagementRouter contract.
 var TrustManagementRouterMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"walletBeacon\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2EmptyBytecode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2FailedDeployment\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"needed\",\"type\":\"uint256\"}],\"name\":\"Create2InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ECDSAInvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"ECDSAInvalidSignatureLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"ECDSAInvalidSignatureS\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EllipticCurve__InvalidNumber\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidEnclaveSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidIntermediateCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidLeafCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeReportDataHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__ReportMustBe384Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__SignatureMustBe64Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__CallerIsNotAgent\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__CallerIsNotOwnerOfWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__CallerIsNotUserOrAgent\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"callResponse\",\"type\":\"bytes\"}],\"name\":\"XyberTrustManagementRouter__MsgValueSendingFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__NewImplementationIsInvalid\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__TokenNotAllowed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__WalletAreadyExists\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberUpgradeChecker__E0\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"AllowedTokenSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"Executed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"FeeCollectorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"PerformanceFeeRateSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"SessionInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"WalletCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"feeAmount\",\"type\":\"uint256\"}],\"name\":\"Withdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SESSION_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WALLET_BEACON\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"allowedToken\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structIXyberTrustManagementStructs.Permit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"ecdsaOnKeccak256r1\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structIXyberTrustManagementStructs.Transaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeCollectorAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getWalletAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isDeployed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"leaf\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"intermediate\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"header\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"attestationKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeAuthenticationData\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedSGXQuote\",\"name\":\"quote\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"initSessionKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"defaultAdmin\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"perfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"performanceFeeRateValue\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rootCert\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"sessions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"name\":\"setAllowedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"}],\"name\":\"setFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"signatureHash\",\"type\":\"bytes32\"}],\"name\":\"usedSignature\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isUsed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"cert\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"verifyCert\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amountsWithYield\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"xyberContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"contractName\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"walletBeacon\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2EmptyBytecode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2FailedDeployment\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"needed\",\"type\":\"uint256\"}],\"name\":\"Create2InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ECDSAInvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"ECDSAInvalidSignatureLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"ECDSAInvalidSignatureS\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EllipticCurve__InvalidNumber\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidEnclaveSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidIntermediateCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidLeafCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeReportDataHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__ReportMustBe384Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__SignatureMustBe64Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__DeadlineExpired\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__ExecuteCallFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"perfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"XyberTrustManagementRouter__FeeRateExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCallTarget\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCaller\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__InvalidHashedData\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidSigner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__UnallowedToken\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__UnauthorizedMrEnclave\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__UsedSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__WalletCallFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroAddress\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroSessionKey\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberUpgradeChecker__E0\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"AllowedTokenSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"Executed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"FeeCollectorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"PerformanceFeeRateSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"SessionInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"WalletCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"feeAmount\",\"type\":\"uint256\"}],\"name\":\"Withdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SESSION_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WALLET_BEACON\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"allowedToken\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structPermit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"ecdsaOnKeccak256r1\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structTransaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeCollectorAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"}],\"name\":\"getBalances\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"balances\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getDeposits\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockedUntil\",\"type\":\"uint256\"}],\"internalType\":\"structDeposit[]\",\"name\":\"deposits\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getWalletAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isDeployed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawableAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableDeposits\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"withdrawableDepositsIds\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"leaf\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"intermediate\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"header\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"attestationKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeAuthenticationData\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedSGXQuote\",\"name\":\"quote\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"initSessionKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"defaultAdmin\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"rootCert\",\"type\":\"tuple\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"perfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"performanceFeeRateValue\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rootCert\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"sessions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"name\":\"setAllowedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"}],\"name\":\"setFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"isAuthorized\",\"type\":\"bool\"}],\"name\":\"setMrEnclave\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"totalDeposited\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalDepositedTokens\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"signatureHash\",\"type\":\"bytes32\"}],\"name\":\"usedSignature\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isUsed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"cert\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"verifyCert\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amountsWithYield\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"xyberContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"contractName\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
 }
 
 // TrustManagementRouterABI is the input ABI used to generate the binding from.
@@ -433,6 +439,68 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) FeeCollector()
 	return _TrustManagementRouter.Contract.FeeCollector(&_TrustManagementRouter.CallOpts)
 }
 
+// GetBalances is a free data retrieval call binding the contract method 0x6a385ae9.
+//
+// Solidity: function getBalances(address user, address[] tokens) view returns(uint256[] balances)
+func (_TrustManagementRouter *TrustManagementRouterCaller) GetBalances(opts *bind.CallOpts, user common.Address, tokens []common.Address) ([]*big.Int, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "getBalances", user, tokens)
+
+	if err != nil {
+		return *new([]*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]*big.Int)).(*[]*big.Int)
+
+	return out0, err
+
+}
+
+// GetBalances is a free data retrieval call binding the contract method 0x6a385ae9.
+//
+// Solidity: function getBalances(address user, address[] tokens) view returns(uint256[] balances)
+func (_TrustManagementRouter *TrustManagementRouterSession) GetBalances(user common.Address, tokens []common.Address) ([]*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetBalances(&_TrustManagementRouter.CallOpts, user, tokens)
+}
+
+// GetBalances is a free data retrieval call binding the contract method 0x6a385ae9.
+//
+// Solidity: function getBalances(address user, address[] tokens) view returns(uint256[] balances)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetBalances(user common.Address, tokens []common.Address) ([]*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetBalances(&_TrustManagementRouter.CallOpts, user, tokens)
+}
+
+// GetDeposits is a free data retrieval call binding the contract method 0x018fa360.
+//
+// Solidity: function getDeposits(address user, address token) view returns((uint256,uint256)[] deposits)
+func (_TrustManagementRouter *TrustManagementRouterCaller) GetDeposits(opts *bind.CallOpts, user common.Address, token common.Address) ([]Deposit, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "getDeposits", user, token)
+
+	if err != nil {
+		return *new([]Deposit), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]Deposit)).(*[]Deposit)
+
+	return out0, err
+
+}
+
+// GetDeposits is a free data retrieval call binding the contract method 0x018fa360.
+//
+// Solidity: function getDeposits(address user, address token) view returns((uint256,uint256)[] deposits)
+func (_TrustManagementRouter *TrustManagementRouterSession) GetDeposits(user common.Address, token common.Address) ([]Deposit, error) {
+	return _TrustManagementRouter.Contract.GetDeposits(&_TrustManagementRouter.CallOpts, user, token)
+}
+
+// GetDeposits is a free data retrieval call binding the contract method 0x018fa360.
+//
+// Solidity: function getDeposits(address user, address token) view returns((uint256,uint256)[] deposits)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetDeposits(user common.Address, token common.Address) ([]Deposit, error) {
+	return _TrustManagementRouter.Contract.GetDeposits(&_TrustManagementRouter.CallOpts, user, token)
+}
+
 // GetRoleAdmin is a free data retrieval call binding the contract method 0x248a9ca3.
 //
 // Solidity: function getRoleAdmin(bytes32 role) view returns(bytes32)
@@ -507,6 +575,68 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetWalletAddre
 	IsDeployed    bool
 }, error) {
 	return _TrustManagementRouter.Contract.GetWalletAddress(&_TrustManagementRouter.CallOpts, user)
+}
+
+// GetWithdrawableAmount is a free data retrieval call binding the contract method 0x46c58227.
+//
+// Solidity: function getWithdrawableAmount(address user, address token) view returns(uint256 withdrawableAmount)
+func (_TrustManagementRouter *TrustManagementRouterCaller) GetWithdrawableAmount(opts *bind.CallOpts, user common.Address, token common.Address) (*big.Int, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "getWithdrawableAmount", user, token)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// GetWithdrawableAmount is a free data retrieval call binding the contract method 0x46c58227.
+//
+// Solidity: function getWithdrawableAmount(address user, address token) view returns(uint256 withdrawableAmount)
+func (_TrustManagementRouter *TrustManagementRouterSession) GetWithdrawableAmount(user common.Address, token common.Address) (*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetWithdrawableAmount(&_TrustManagementRouter.CallOpts, user, token)
+}
+
+// GetWithdrawableAmount is a free data retrieval call binding the contract method 0x46c58227.
+//
+// Solidity: function getWithdrawableAmount(address user, address token) view returns(uint256 withdrawableAmount)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetWithdrawableAmount(user common.Address, token common.Address) (*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetWithdrawableAmount(&_TrustManagementRouter.CallOpts, user, token)
+}
+
+// GetWithdrawableDeposits is a free data retrieval call binding the contract method 0x7274b0c3.
+//
+// Solidity: function getWithdrawableDeposits(address user, address token) view returns(uint256[] withdrawableDepositsIds)
+func (_TrustManagementRouter *TrustManagementRouterCaller) GetWithdrawableDeposits(opts *bind.CallOpts, user common.Address, token common.Address) ([]*big.Int, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "getWithdrawableDeposits", user, token)
+
+	if err != nil {
+		return *new([]*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([]*big.Int)).(*[]*big.Int)
+
+	return out0, err
+
+}
+
+// GetWithdrawableDeposits is a free data retrieval call binding the contract method 0x7274b0c3.
+//
+// Solidity: function getWithdrawableDeposits(address user, address token) view returns(uint256[] withdrawableDepositsIds)
+func (_TrustManagementRouter *TrustManagementRouterSession) GetWithdrawableDeposits(user common.Address, token common.Address) ([]*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetWithdrawableDeposits(&_TrustManagementRouter.CallOpts, user, token)
+}
+
+// GetWithdrawableDeposits is a free data retrieval call binding the contract method 0x7274b0c3.
+//
+// Solidity: function getWithdrawableDeposits(address user, address token) view returns(uint256[] withdrawableDepositsIds)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetWithdrawableDeposits(user common.Address, token common.Address) ([]*big.Int, error) {
+	return _TrustManagementRouter.Contract.GetWithdrawableDeposits(&_TrustManagementRouter.CallOpts, user, token)
 }
 
 // HasRole is a free data retrieval call binding the contract method 0x91d14854.
@@ -719,6 +849,37 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) SupportsInterf
 	return _TrustManagementRouter.Contract.SupportsInterface(&_TrustManagementRouter.CallOpts, interfaceId)
 }
 
+// TotalDeposited is a free data retrieval call binding the contract method 0x0cac4d76.
+//
+// Solidity: function totalDeposited(address user, address token) view returns(uint256 totalDepositedTokens)
+func (_TrustManagementRouter *TrustManagementRouterCaller) TotalDeposited(opts *bind.CallOpts, user common.Address, token common.Address) (*big.Int, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "totalDeposited", user, token)
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// TotalDeposited is a free data retrieval call binding the contract method 0x0cac4d76.
+//
+// Solidity: function totalDeposited(address user, address token) view returns(uint256 totalDepositedTokens)
+func (_TrustManagementRouter *TrustManagementRouterSession) TotalDeposited(user common.Address, token common.Address) (*big.Int, error) {
+	return _TrustManagementRouter.Contract.TotalDeposited(&_TrustManagementRouter.CallOpts, user, token)
+}
+
+// TotalDeposited is a free data retrieval call binding the contract method 0x0cac4d76.
+//
+// Solidity: function totalDeposited(address user, address token) view returns(uint256 totalDepositedTokens)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) TotalDeposited(user common.Address, token common.Address) (*big.Int, error) {
+	return _TrustManagementRouter.Contract.TotalDeposited(&_TrustManagementRouter.CallOpts, user, token)
+}
+
 // UsedSignature is a free data retrieval call binding the contract method 0x0f945e9f.
 //
 // Solidity: function usedSignature(bytes32 signatureHash) view returns(bool isUsed)
@@ -878,42 +1039,42 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Deposit(re
 // DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
 // Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
-func (_TrustManagementRouter *TrustManagementRouterTransactor) DepositWithPermit(opts *bind.TransactOpts, receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterTransactor) DepositWithPermit(opts *bind.TransactOpts, receiver common.Address, token common.Address, lockDuration *big.Int, permit Permit) (*types.Transaction, error) {
 	return _TrustManagementRouter.contract.Transact(opts, "depositWithPermit", receiver, token, lockDuration, permit)
 }
 
 // DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
 // Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
-func (_TrustManagementRouter *TrustManagementRouterSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit Permit) (*types.Transaction, error) {
 	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
 }
 
 // DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
 // Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit Permit) (*types.Transaction, error) {
 	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
 }
 
 // Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
 // Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, txs []Transaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
 	return _TrustManagementRouter.contract.Transact(opts, "execute", txs, signature, deadline)
 }
 
 // Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
 // Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Execute(txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterSession) Execute(txs []Transaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
 	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, txs, signature, deadline)
 }
 
 // Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
 // Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Execute(txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Execute(txs []Transaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
 	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, txs, signature, deadline)
 }
 
@@ -959,25 +1120,25 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) InitSessio
 	return _TrustManagementRouter.Contract.InitSessionKey(&_TrustManagementRouter.TransactOpts, leaf, intermediate, quote, sessionKey)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
+// Initialize is a paid mutator transaction binding the contract method 0x776ad9dc.
 //
-// Solidity: function initialize(address defaultAdmin) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Initialize(opts *bind.TransactOpts, defaultAdmin common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "initialize", defaultAdmin)
+// Solidity: function initialize(address defaultAdmin, (bytes,bytes,bytes,bytes) rootCert) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Initialize(opts *bind.TransactOpts, defaultAdmin common.Address, rootCert ChunkedX509Cert) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "initialize", defaultAdmin, rootCert)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
+// Initialize is a paid mutator transaction binding the contract method 0x776ad9dc.
 //
-// Solidity: function initialize(address defaultAdmin) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Initialize(defaultAdmin common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin)
+// Solidity: function initialize(address defaultAdmin, (bytes,bytes,bytes,bytes) rootCert) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Initialize(defaultAdmin common.Address, rootCert ChunkedX509Cert) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin, rootCert)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
+// Initialize is a paid mutator transaction binding the contract method 0x776ad9dc.
 //
-// Solidity: function initialize(address defaultAdmin) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Initialize(defaultAdmin common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin)
+// Solidity: function initialize(address defaultAdmin, (bytes,bytes,bytes,bytes) rootCert) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Initialize(defaultAdmin common.Address, rootCert ChunkedX509Cert) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin, rootCert)
 }
 
 // RenounceRole is a paid mutator transaction binding the contract method 0x36568abe.
@@ -1062,6 +1223,27 @@ func (_TrustManagementRouter *TrustManagementRouterSession) SetFeeCollector(newF
 // Solidity: function setFeeCollector(address newFeeCollector) returns()
 func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetFeeCollector(newFeeCollector common.Address) (*types.Transaction, error) {
 	return _TrustManagementRouter.Contract.SetFeeCollector(&_TrustManagementRouter.TransactOpts, newFeeCollector)
+}
+
+// SetMrEnclave is a paid mutator transaction binding the contract method 0x3a343014.
+//
+// Solidity: function setMrEnclave(bytes32 mrEnclave, bool isAuthorized) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) SetMrEnclave(opts *bind.TransactOpts, mrEnclave [32]byte, isAuthorized bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "setMrEnclave", mrEnclave, isAuthorized)
+}
+
+// SetMrEnclave is a paid mutator transaction binding the contract method 0x3a343014.
+//
+// Solidity: function setMrEnclave(bytes32 mrEnclave, bool isAuthorized) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) SetMrEnclave(mrEnclave [32]byte, isAuthorized bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetMrEnclave(&_TrustManagementRouter.TransactOpts, mrEnclave, isAuthorized)
+}
+
+// SetMrEnclave is a paid mutator transaction binding the contract method 0x3a343014.
+//
+// Solidity: function setMrEnclave(bytes32 mrEnclave, bool isAuthorized) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetMrEnclave(mrEnclave [32]byte, isAuthorized bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetMrEnclave(&_TrustManagementRouter.TransactOpts, mrEnclave, isAuthorized)
 }
 
 // SetPerfomanceFeeRate is a paid mutator transaction binding the contract method 0x24402bba.
@@ -1204,10 +1386,19 @@ type TrustManagementRouterAllowedTokenSet struct {
 
 // FilterAllowedTokenSet is a free log retrieval operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterAllowedTokenSet(opts *bind.FilterOpts) (*TrustManagementRouterAllowedTokenSetIterator, error) {
+// Solidity: event AllowedTokenSet(address indexed token, bool indexed isAllowed, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterAllowedTokenSet(opts *bind.FilterOpts, token []common.Address, isAllowed []bool) (*TrustManagementRouterAllowedTokenSetIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "AllowedTokenSet")
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+	var isAllowedRule []interface{}
+	for _, isAllowedItem := range isAllowed {
+		isAllowedRule = append(isAllowedRule, isAllowedItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "AllowedTokenSet", tokenRule, isAllowedRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1216,10 +1407,19 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterAllowedTokenS
 
 // WatchAllowedTokenSet is a free log subscription operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchAllowedTokenSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterAllowedTokenSet) (event.Subscription, error) {
+// Solidity: event AllowedTokenSet(address indexed token, bool indexed isAllowed, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchAllowedTokenSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterAllowedTokenSet, token []common.Address, isAllowed []bool) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "AllowedTokenSet")
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+	var isAllowedRule []interface{}
+	for _, isAllowedItem := range isAllowed {
+		isAllowedRule = append(isAllowedRule, isAllowedItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "AllowedTokenSet", tokenRule, isAllowedRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1253,7 +1453,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchAllowedTokenSe
 
 // ParseAllowedTokenSet is a log parse operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
+// Solidity: event AllowedTokenSet(address indexed token, bool indexed isAllowed, address caller)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseAllowedTokenSet(log types.Log) (*TrustManagementRouterAllowedTokenSet, error) {
 	event := new(TrustManagementRouterAllowedTokenSet)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "AllowedTokenSet", log); err != nil {
@@ -1341,10 +1541,15 @@ type TrustManagementRouterClaimed struct {
 
 // FilterClaimed is a free log retrieval operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
 //
-// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterClaimed(opts *bind.FilterOpts) (*TrustManagementRouterClaimedIterator, error) {
+// Solidity: event Claimed(address wallet, address indexed user, address[] tokens, address receiver)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterClaimed(opts *bind.FilterOpts, user []common.Address) (*TrustManagementRouterClaimedIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Claimed")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Claimed", userRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1353,10 +1558,15 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterClaimed(opts 
 
 // WatchClaimed is a free log subscription operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
 //
-// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchClaimed(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterClaimed) (event.Subscription, error) {
+// Solidity: event Claimed(address wallet, address indexed user, address[] tokens, address receiver)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchClaimed(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterClaimed, user []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Claimed")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Claimed", userRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1390,7 +1600,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchClaimed(opts *
 
 // ParseClaimed is a log parse operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
 //
-// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
+// Solidity: event Claimed(address wallet, address indexed user, address[] tokens, address receiver)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseClaimed(log types.Log) (*TrustManagementRouterClaimed, error) {
 	event := new(TrustManagementRouterClaimed)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Claimed", log); err != nil {
@@ -1479,10 +1689,19 @@ type TrustManagementRouterDeposited struct {
 
 // FilterDeposited is a free log retrieval operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
 //
-// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterDeposited(opts *bind.FilterOpts) (*TrustManagementRouterDepositedIterator, error) {
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterDeposited(opts *bind.FilterOpts, user []common.Address, token []common.Address) (*TrustManagementRouterDepositedIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Deposited")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Deposited", userRule, tokenRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1491,10 +1710,19 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterDeposited(opt
 
 // WatchDeposited is a free log subscription operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
 //
-// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDeposited(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterDeposited) (event.Subscription, error) {
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDeposited(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterDeposited, user []common.Address, token []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Deposited")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Deposited", userRule, tokenRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1528,7 +1756,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDeposited(opts
 
 // ParseDeposited is a log parse operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
 //
-// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseDeposited(log types.Log) (*TrustManagementRouterDeposited, error) {
 	event := new(TrustManagementRouterDeposited)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Deposited", log); err != nil {
@@ -1615,10 +1843,15 @@ type TrustManagementRouterExecuted struct {
 
 // FilterExecuted is a free log retrieval operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
 //
-// Solidity: event Executed(address target, bytes data, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterExecuted(opts *bind.FilterOpts) (*TrustManagementRouterExecutedIterator, error) {
+// Solidity: event Executed(address indexed target, bytes data, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterExecuted(opts *bind.FilterOpts, target []common.Address) (*TrustManagementRouterExecutedIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Executed")
+	var targetRule []interface{}
+	for _, targetItem := range target {
+		targetRule = append(targetRule, targetItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Executed", targetRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1627,10 +1860,15 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterExecuted(opts
 
 // WatchExecuted is a free log subscription operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
 //
-// Solidity: event Executed(address target, bytes data, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchExecuted(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterExecuted) (event.Subscription, error) {
+// Solidity: event Executed(address indexed target, bytes data, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchExecuted(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterExecuted, target []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Executed")
+	var targetRule []interface{}
+	for _, targetItem := range target {
+		targetRule = append(targetRule, targetItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Executed", targetRule)
 	if err != nil {
 		return nil, err
 	}
@@ -1664,7 +1902,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchExecuted(opts 
 
 // ParseExecuted is a log parse operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
 //
-// Solidity: event Executed(address target, bytes data, address caller)
+// Solidity: event Executed(address indexed target, bytes data, address caller)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseExecuted(log types.Log) (*TrustManagementRouterExecuted, error) {
 	event := new(TrustManagementRouterExecuted)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Executed", log); err != nil {
@@ -2642,10 +2880,15 @@ type TrustManagementRouterSessionInitialized struct {
 
 // FilterSessionInitialized is a free log retrieval operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
 //
-// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterSessionInitialized(opts *bind.FilterOpts) (*TrustManagementRouterSessionInitializedIterator, error) {
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterSessionInitialized(opts *bind.FilterOpts, caller []common.Address) (*TrustManagementRouterSessionInitializedIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "SessionInitialized")
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "SessionInitialized", callerRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2654,10 +2897,15 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterSessionInitia
 
 // WatchSessionInitialized is a free log subscription operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
 //
-// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchSessionInitialized(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterSessionInitialized) (event.Subscription, error) {
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchSessionInitialized(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterSessionInitialized, caller []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "SessionInitialized")
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "SessionInitialized", callerRule)
 	if err != nil {
 		return nil, err
 	}
@@ -2691,7 +2939,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchSessionInitial
 
 // ParseSessionInitialized is a log parse operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
 //
-// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address indexed caller)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseSessionInitialized(log types.Log) (*TrustManagementRouterSessionInitialized, error) {
 	event := new(TrustManagementRouterSessionInitialized)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "SessionInitialized", log); err != nil {
@@ -3060,10 +3308,19 @@ type TrustManagementRouterWithdrawn struct {
 
 // FilterWithdrawn is a free log retrieval operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
 //
-// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterWithdrawn(opts *bind.FilterOpts) (*TrustManagementRouterWithdrawnIterator, error) {
+// Solidity: event Withdrawn(address wallet, address indexed user, address indexed token, address receiver, uint256 amount, uint256 feeAmount)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterWithdrawn(opts *bind.FilterOpts, user []common.Address, token []common.Address) (*TrustManagementRouterWithdrawnIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Withdrawn")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Withdrawn", userRule, tokenRule)
 	if err != nil {
 		return nil, err
 	}
@@ -3072,10 +3329,19 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterWithdrawn(opt
 
 // WatchWithdrawn is a free log subscription operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
 //
-// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchWithdrawn(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterWithdrawn) (event.Subscription, error) {
+// Solidity: event Withdrawn(address wallet, address indexed user, address indexed token, address receiver, uint256 amount, uint256 feeAmount)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchWithdrawn(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterWithdrawn, user []common.Address, token []common.Address) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Withdrawn")
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Withdrawn", userRule, tokenRule)
 	if err != nil {
 		return nil, err
 	}
@@ -3109,7 +3375,7 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchWithdrawn(opts
 
 // ParseWithdrawn is a log parse operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
 //
-// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
+// Solidity: event Withdrawn(address wallet, address indexed user, address indexed token, address receiver, uint256 amount, uint256 feeAmount)
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseWithdrawn(log types.Log) (*TrustManagementRouterWithdrawn, error) {
 	event := new(TrustManagementRouterWithdrawn)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Withdrawn", log); err != nil {
