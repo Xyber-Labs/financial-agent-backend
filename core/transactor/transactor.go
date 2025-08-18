@@ -103,19 +103,19 @@ func (t *Transactor) InitializeOnChainSession() error {
 func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtypes.Transaction, error) {
 
 	// Prepare arguments for TrustManagementRouter.execute multicall
-	transactionsArg := make([]TrustManagementRouter.ITrustManagementStructsTransaction, len(innerTxs))
+	transactionsArg := make([]TrustManagementRouter.IXyberTrustManagementStructsTransaction, len(innerTxs))
 	for i, tx := range innerTxs {
 		if tx.To() == nil {
 			return nil, fmt.Errorf("BatchAndExecute: transaction %d has nil To field", i)
 		}
-		transactionsArg[i] = TrustManagementRouter.ITrustManagementStructsTransaction{
+		transactionsArg[i] = TrustManagementRouter.IXyberTrustManagementStructsTransaction{
 			Target: *tx.To(),
 			Value:  tx.Value(),
 			Data:   tx.Data(),
 		}
 	}
 
-	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, t.teeSessionAddress, transactionsArg)
+	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, nil, nil) // TODO(ak): fix signature and deadline
 	if err != nil {
 		return nil, fmt.Errorf("failed to send transaction: %w", err)
 	}
