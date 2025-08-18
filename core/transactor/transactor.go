@@ -5,6 +5,8 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
@@ -115,7 +117,10 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 		}
 	}
 
-	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, nil, nil) // TODO(ak): fix signature and deadline
+	deadline := time.Now().Add(10 * time.Minute)
+	signature := []byte{}
+
+	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to send transaction: %w", err)
 	}
