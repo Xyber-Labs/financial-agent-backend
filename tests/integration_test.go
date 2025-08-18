@@ -20,6 +20,7 @@ import (
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TEEWallet"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
@@ -74,6 +75,14 @@ func TestDeposit(t *testing.T) {
 	)
 	r.NoError(err)
 
+	// Create onchain provider instance
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+	)
+
 	// Create HTTP server
 	serverConfig := config.HttpServerConfig{
 		Port: 8080,
@@ -81,8 +90,7 @@ func TestDeposit(t *testing.T) {
 	agentServer := server.NewHttpAgentServer(
 		&serverConfig,
 		testTransactor,
-		trustManagementRouter,
-		aavePool,
+		trustManagementProvider,
 	)
 
 	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
