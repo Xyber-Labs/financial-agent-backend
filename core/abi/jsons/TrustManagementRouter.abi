@@ -801,7 +801,7 @@
     "inputs":[
       {
         "internalType":"address",
-        "name":"wallet",
+        "name":"user",
         "type":"address"
       },
       {
@@ -1711,7 +1711,7 @@
     "inputs":[
       {
         "internalType":"address",
-        "name":"wallet",
+        "name":"user",
         "type":"address"
       },
       {

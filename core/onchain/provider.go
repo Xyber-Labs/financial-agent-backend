@@ -5,6 +5,7 @@ import (
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/transactor"
+	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -19,6 +20,7 @@ type TrustManagementProvider struct {
 	AavePool              *AavePool.AavePool
 	Transactor            *transactor.Transactor
 	createTxOpts          *bind.TransactOpts
+	callOpts              *bind.CallOpts
 }
 
 func NewTrustManagementProvider(
@@ -26,6 +28,7 @@ func NewTrustManagementProvider(
 	transactor *transactor.Transactor,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	aavePool *AavePool.AavePool,
+	callOpts *bind.CallOpts,
 ) *TrustManagementProvider {
 	// createTxOpts only used to consturct the calldata for the transactions
 	// to be later reconstructed in a batch transaction. Therefore we don't actually
@@ -45,6 +48,7 @@ func NewTrustManagementProvider(
 		createTxOpts:          &createTxOpts,
 		TrustManagementRouter: trustManagementRouter,
 		AavePool:              aavePool,
+		callOpts:              callOpts,
 	}
 }
 
@@ -95,10 +99,12 @@ func (p *TrustManagementProvider) Withdraw(
 	tokenAddress ethcommon.Address,
 	amount *big.Int,
 	userAddress ethcommon.Address,
+	deadline *big.Int,
+	signature []byte,
 ) (*ethtypes.Transaction, error) {
 
 	// Call AavePool.withdraw
-	withdrawTx, err := p.AavePool.Withdraw(
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
 		p.createTxOpts,
 		tokenAddress,
 		amount,
@@ -108,8 +114,52 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
+	deposits, err := p.TrustManagementRouter.GetDeposits(
+		p.callOpts,
+		userAddress,
+		tokenAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var depositIds []*big.Int
+	var amountsWithYield []*big.Int
+	var totalDepositAmount *big.Int
+
+	// In this loop we need to identify deposits which we will have to liquidate.
+	// Deposits are qualified for liquidation when they are unlocked.
+	// We also need to verify here that amount of deposits are enough to cover
+	// the withdraw amount.
+	for i, deposit := range deposits {
+		if deposit.LockedUntil.Cmp(deadline) < 0 {
+			depositIds = append(depositIds, big.NewInt(int64(i)))
+			amountsWithYield = append(amountsWithYield, deposit.Amount)
+		}
+		totalDepositAmount = totalDepositAmount.Add(totalDepositAmount, deposit.Amount)
+	}
+
+	if totalDepositAmount.Cmp(amount) < 0 {
+		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", totalDepositAmount, amount)
+	}
+
+	// Call TrustManagementRouter.withdraw
+	routerWithdrawTx, err := p.TrustManagementRouter.Withdraw(
+		p.createTxOpts,
+		userAddress,
+		tokenAddress,
+		userAddress,
+		depositIds,
+		amountsWithYield,
+		signature,
+		deadline,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{withdrawTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveWithdrawTx, routerWithdrawTx})
 	if err != nil {
 		return nil, err
 	}

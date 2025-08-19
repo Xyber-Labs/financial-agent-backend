@@ -6,6 +6,7 @@ import (
 	"math/big"
 	"net/http"
 	"regexp"
+	"time"
 
 	ethcommon "github.com/ethereum/go-ethereum/common"
 
@@ -201,10 +202,38 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			return
 		}
 
+		if req.Amount == "" || req.Amount == "0" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
+			return
+		}
+
+		withdrawAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
+		if !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
+			return
+		}
+
+		// Parse signature, it should be in the format of 0x[a-ZA-Z0-9]{65}
+		var signature []byte
+		if req.Signature == "" {
+			signature = nil
+		} else {
+			signature = ethcommon.FromHex(req.Signature)
+		}
+
+		if len(signature) != 65 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "signature must be 65 bytes long"})
+			return
+		}
+
+		deadline := big.NewInt(time.Now().Unix())
+
 		tx, err := s.trustManagementProvider.Withdraw(
 			ethcommon.HexToAddress(req.TokenAddress),
-			big.NewInt(0), // TODO
+			withdrawAmount,
 			ethcommon.HexToAddress(req.UserAddress),
+			deadline,
+			signature,
 		)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
@@ -237,7 +266,9 @@ type ClaimRequest struct {
 type WithdrawRequest struct {
 	UserAddress  string `json:"userAddress"`
 	ChainId      uint64 `json:"chainId"`
+	Amount       string `json:"amount"`
 	TokenAddress string `json:"tokenAddress"`
+	Signature    string `json:"signature"`
 }
 
 type WithdrawResponse struct {

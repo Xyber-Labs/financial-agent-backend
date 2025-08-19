@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
@@ -75,6 +76,7 @@ func TestDeposit(t *testing.T) {
 		testTransactor,
 		trustManagementRouter,
 		aavePool,
+		&bind.CallOpts{},
 	)
 
 	// Create HTTP server
