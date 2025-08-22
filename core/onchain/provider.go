@@ -125,7 +125,7 @@ func (p *TrustManagementProvider) Withdraw(
 
 	var depositIds []*big.Int
 	var amountsWithYield []*big.Int
-	var totalDepositAmount *big.Int
+	totalDepositAmount := big.NewInt(0)
 
 	// In this loop we need to identify deposits which we will have to liquidate.
 	// Deposits are qualified for liquidation when they are unlocked.

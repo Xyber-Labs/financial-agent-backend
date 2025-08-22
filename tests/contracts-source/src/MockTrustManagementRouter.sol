@@ -17,6 +17,16 @@ contract MockTrustManagementRouter {
         bytes32 s;
     }
 
+    struct Deposit {
+        uint256 amount;
+        uint256 lockedUntil;
+    }
+
+
+    /*
+     * Below are function from the original TrustManagementRouter contract
+     */
+
     function execute(Transaction[] calldata txs, bytes calldata signature, uint256 deadline) external {}
 
     function deposit(
@@ -43,5 +53,24 @@ contract MockTrustManagementRouter {
         bytes calldata signature,
         uint256 deadline
     ) external {}
+
+    function getDeposits(address user, address token) external view returns(Deposit[] memory) {
+        return mockDeposits;
+    }
+
+
+    /*
+     * Below are internal mock-functions to help replicating needed functionality from the original TrustManagementRouter contract
+     */
+
+     Deposit[] mockDeposits;
+     function mockSetDeposits(Deposit[] calldata deposits) external {
+        while (mockDeposits.length > 0) {
+            mockDeposits.pop();
+        }
+        for (uint256 i = 0; i < deposits.length; i++) {
+            mockDeposits.push(deposits[i]);
+        }
+     }
 
 }
