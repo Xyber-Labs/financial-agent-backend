@@ -9,4 +9,17 @@ contract MockAavePool {
         address onBehalfOf,
         uint16 referralCode
     ) external {}
+
+    function getReserveAToken(address asset) external view returns (address) {
+        return mockAToken;
+    }
+
+    /*
+     * Below are function from the original TrustManagementRouter contract
+     */
+
+    address mockAToken;
+    function mockSetReserveAToken(address aToken) external {
+        mockAToken = aToken;
+    }
 }

@@ -164,12 +164,10 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
-	if userATokenBalance.Cmp(totalDepositAmount) < 0 {
-		return nil, fmt.Errorf("INTERNAL ERROR: aToken balance is less than total deposit amount, aToken balance: %s, total deposit amount: %s", userATokenBalance, totalDepositAmount)
+	amountWithYield, err := calculateAmountWithYield(amount, totalDepositAmount, userATokenBalance)
+	if err != nil {
+		return nil, err
 	}
-
-	yieldAmount := new(big.Int).Sub(userATokenBalance, totalDepositAmount)
-	amountWithYield := yieldAmount.Add(yieldAmount, amount)
 
 	// Call TrustManagementRouter.withdraw
 	routerWithdrawTx, err := p.TrustManagementRouter.Withdraw(
@@ -193,4 +191,22 @@ func (p *TrustManagementProvider) Withdraw(
 	}
 
 	return tx, nil
+}
+
+func calculateAmountWithYield(
+	amount *big.Int,
+	totalDepositAmount *big.Int,
+	aTokenBalance *big.Int,
+) (*big.Int, error) {
+
+	if aTokenBalance.Cmp(totalDepositAmount) < 0 {
+		return nil, fmt.Errorf(
+			"INTERNAL ERROR: aToken balance is less than total deposit amount, aToken balance: %s, total deposit amount: %s",
+			aTokenBalance, totalDepositAmount,
+		)
+	}
+
+	yieldAmount := new(big.Int).Sub(aTokenBalance, totalDepositAmount)
+	amountWithYield := yieldAmount.Add(yieldAmount, amount)
+	return amountWithYield, nil
 }

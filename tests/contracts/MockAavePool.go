@@ -31,8 +31,8 @@ var (
 
 // MockAavePoolMetaData contains all meta data concerning the MockAavePool contract.
 var MockAavePoolMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"supply\",\"inputs\":[{\"name\":\"asset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"onBehalfOf\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"referralCode\",\"type\":\"uint16\",\"internalType\":\"uint16\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
-	Bin: "0x6080604052348015600e575f5ffd5b506101b18061001c5f395ff3fe608060405234801561000f575f5ffd5b5060043610610029575f3560e01c8063617ba0371461002d575b5f5ffd5b61004760048036038101906100429190610117565b610049565b005b50505050565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61007c82610053565b9050919050565b61008c81610072565b8114610096575f5ffd5b50565b5f813590506100a781610083565b92915050565b5f819050919050565b6100bf816100ad565b81146100c9575f5ffd5b50565b5f813590506100da816100b6565b92915050565b5f61ffff82169050919050565b6100f6816100e0565b8114610100575f5ffd5b50565b5f81359050610111816100ed565b92915050565b5f5f5f5f6080858703121561012f5761012e61004f565b5b5f61013c87828801610099565b945050602061014d878288016100cc565b935050604061015e87828801610099565b925050606061016f87828801610103565b9150509295919450925056fea264697066735822122066d3fc3f239f59442357a3c510b4dc8e692dce35b7ab42ee177d5d164c0a212264736f6c634300081e0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"getReserveAToken\",\"inputs\":[{\"name\":\"asset\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"mockSetReserveAToken\",\"inputs\":[{\"name\":\"aToken\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"supply\",\"inputs\":[{\"name\":\"asset\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"onBehalfOf\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"referralCode\",\"type\":\"uint16\",\"internalType\":\"uint16\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
+	Bin: "0x6080604052348015600e575f5ffd5b506102d18061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061003f575f3560e01c80635b92e47114610043578063617ba0371461005f578063cff027d91461007b575b5f5ffd5b61005d6004803603810190610058919061017a565b6100ab565b005b6100796004803603810190610074919061020f565b6100ed565b005b6100956004803603810190610090919061017a565b6100f3565b6040516100a29190610282565b60405180910390f35b805f5f6101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff16021790555050565b50505050565b5f5f5f9054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61014982610120565b9050919050565b6101598161013f565b8114610163575f5ffd5b50565b5f8135905061017481610150565b92915050565b5f6020828403121561018f5761018e61011c565b5b5f61019c84828501610166565b91505092915050565b5f819050919050565b6101b7816101a5565b81146101c1575f5ffd5b50565b5f813590506101d2816101ae565b92915050565b5f61ffff82169050919050565b6101ee816101d8565b81146101f8575f5ffd5b50565b5f81359050610209816101e5565b92915050565b5f5f5f5f608085870312156102275761022661011c565b5b5f61023487828801610166565b9450506020610245878288016101c4565b935050604061025687828801610166565b9250506060610267878288016101fb565b91505092959194509250565b61027c8161013f565b82525050565b5f6020820190506102955f830184610273565b9291505056fea264697066735822122006f1fb6a05f77e80a2338fe983345ddb4af29310cb17864c68391011a5185c3f64736f6c634300081e0033",
 }
 
 // MockAavePoolABI is the input ABI used to generate the binding from.
@@ -200,6 +200,58 @@ func (_MockAavePool *MockAavePoolTransactorRaw) Transfer(opts *bind.TransactOpts
 // Transact invokes the (paid) contract method with params as input values.
 func (_MockAavePool *MockAavePoolTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
 	return _MockAavePool.Contract.contract.Transact(opts, method, params...)
+}
+
+// GetReserveAToken is a free data retrieval call binding the contract method 0xcff027d9.
+//
+// Solidity: function getReserveAToken(address asset) view returns(address)
+func (_MockAavePool *MockAavePoolCaller) GetReserveAToken(opts *bind.CallOpts, asset common.Address) (common.Address, error) {
+	var out []interface{}
+	err := _MockAavePool.contract.Call(opts, &out, "getReserveAToken", asset)
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// GetReserveAToken is a free data retrieval call binding the contract method 0xcff027d9.
+//
+// Solidity: function getReserveAToken(address asset) view returns(address)
+func (_MockAavePool *MockAavePoolSession) GetReserveAToken(asset common.Address) (common.Address, error) {
+	return _MockAavePool.Contract.GetReserveAToken(&_MockAavePool.CallOpts, asset)
+}
+
+// GetReserveAToken is a free data retrieval call binding the contract method 0xcff027d9.
+//
+// Solidity: function getReserveAToken(address asset) view returns(address)
+func (_MockAavePool *MockAavePoolCallerSession) GetReserveAToken(asset common.Address) (common.Address, error) {
+	return _MockAavePool.Contract.GetReserveAToken(&_MockAavePool.CallOpts, asset)
+}
+
+// MockSetReserveAToken is a paid mutator transaction binding the contract method 0x5b92e471.
+//
+// Solidity: function mockSetReserveAToken(address aToken) returns()
+func (_MockAavePool *MockAavePoolTransactor) MockSetReserveAToken(opts *bind.TransactOpts, aToken common.Address) (*types.Transaction, error) {
+	return _MockAavePool.contract.Transact(opts, "mockSetReserveAToken", aToken)
+}
+
+// MockSetReserveAToken is a paid mutator transaction binding the contract method 0x5b92e471.
+//
+// Solidity: function mockSetReserveAToken(address aToken) returns()
+func (_MockAavePool *MockAavePoolSession) MockSetReserveAToken(aToken common.Address) (*types.Transaction, error) {
+	return _MockAavePool.Contract.MockSetReserveAToken(&_MockAavePool.TransactOpts, aToken)
+}
+
+// MockSetReserveAToken is a paid mutator transaction binding the contract method 0x5b92e471.
+//
+// Solidity: function mockSetReserveAToken(address aToken) returns()
+func (_MockAavePool *MockAavePoolTransactorSession) MockSetReserveAToken(aToken common.Address) (*types.Transaction, error) {
+	return _MockAavePool.Contract.MockSetReserveAToken(&_MockAavePool.TransactOpts, aToken)
 }
 
 // Supply is a paid mutator transaction binding the contract method 0x617ba037.
