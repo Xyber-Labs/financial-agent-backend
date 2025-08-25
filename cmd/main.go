@@ -69,6 +69,7 @@ var (
 			teeService := sgx_quote.NewTeeService(false)
 			transactor, err := transactor.NewTransactor(
 				ethClient,
+				chainId,
 				transactOpts,
 				trustManagementRouter,
 				teeService,

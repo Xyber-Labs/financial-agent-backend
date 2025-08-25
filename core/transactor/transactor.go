@@ -21,6 +21,7 @@ import (
 
 type Transactor struct {
 	client                bind.ContractBackend
+	ChainId               *big.Int
 	teeService            TeeService
 	teeSessionKey         *ecdsa.PrivateKey
 	teeSessionAddress     ethcommon.Address
@@ -30,13 +31,14 @@ type Transactor struct {
 
 func NewTransactor(
 	client bind.ContractBackend,
+	chainId *big.Int,
 	transactOpts *bind.TransactOpts,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	teeService TeeService,
 ) (*Transactor, error) {
-
 	return &Transactor{
 		client:                client,
+		ChainId:               chainId,
 		teeService:            teeService,
 		transactOpts:          transactOpts,
 		TrustManagementRouter: trustManagementRouter,
@@ -114,7 +116,10 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 	}
 
 	deadline := time.Now().Add(10 * time.Minute)
-	signature := []byte{} // TODO
+	signature, err := t.createTeeSessionSignature(t.transactOpts.From, big.NewInt(deadline.Unix()), transactionsArg)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create tee session signature: %w", err)
+	}
 
 	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
 	if err != nil {
@@ -128,6 +133,14 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 func (t *Transactor) extractQuote(sessionKey ethcommon.Address) ([]byte, error) {
 	return t.teeService.GetQuote(sessionKey[:])
 	// return []byte("quote"), nil
+}
+
+func (t *Transactor) createTeeSessionSignature(
+	address ethcommon.Address,
+	deadline *big.Int,
+	transactions []TrustManagementRouter.Transaction,
+) ([]byte, error) {
+	return []byte{}, nil
 }
 
 // Creates a new ECDSA private key using the secp256k1 curve

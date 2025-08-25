@@ -86,7 +86,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 			// Build Transactor via constructor with minimal deps
 			client := backend.Client()
-			transactor, nerr := NewTransactor(client, txOpts, trustManagementRouter, mteeService)
+			transactor, nerr := NewTransactor(client, chainId, txOpts, trustManagementRouter, mteeService)
 			r.NoError(nerr)
 
 			// Assert

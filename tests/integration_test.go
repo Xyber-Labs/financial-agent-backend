@@ -67,6 +67,7 @@ func TestDeposit(t *testing.T) {
 
 	testTransactor, err := transactor.NewTransactor(
 		ethBackend.Client(),
+		chainId,
 		transactOpts,
 		trustManagementRouter,
 		mteeService,
@@ -172,6 +173,7 @@ func TestWithdraw(t *testing.T) {
 
 	testTransactor, err := transactor.NewTransactor(
 		ethBackend.Client(),
+		chainId,
 		transactOpts,
 		trustManagementRouter,
 		mteeService,
@@ -311,5 +313,97 @@ func TestWithdraw(t *testing.T) {
 }
 
 func TestClaim(t *testing.T) {
+	r := require.New(t)
+	ctx := context.Background()
+
+	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+
+	chainId, err := ethBackend.Client().ChainID(ctx)
+	r.NoError(err)
+	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+	r.NoError(err)
+
+	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
+	mteeService := mocks.NewMockTeeService(t)
+	r.NoError(err)
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	testTransactor, err := transactor.NewTransactor(
+		ethBackend.Client(),
+		chainId,
+		transactOpts,
+		trustManagementRouter,
+		mteeService,
+	)
+	r.NoError(err)
+
+	aavePool, err := AavePool.NewAavePool(
+		mockedContracts.AavePool,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+		&bind.CallOpts{},
+	)
+
+	serverConfig := config.HttpServerConfig{
+		Port: 8082,
+	}
+	agentServer := server.NewHttpAgentServer(
+		&serverConfig,
+		testTransactor,
+		trustManagementProvider,
+	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	// Make /claim HTTP request to server
+	claimUrl := fmt.Sprintf("http://127.0.0.1:%d/claim", serverConfig.Port)
+	claimReqBody := server.ClaimRequest{
+		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		ChainId:      1,
+		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		Amount:       "10000000000000000",
+		Deadline:     1700000000,
+		Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
+	}
+	reqBody, err := json.Marshal(claimReqBody)
+	r.NoError(err)
+	resp, err := http.Post(claimUrl, "application/json", bytes.NewBuffer(reqBody))
+	r.NoError(err)
+	r.Equal(http.StatusOK, resp.StatusCode)
+	defer resp.Body.Close()
+	ethBackend.Commit()
+
+	var claimResponse server.ClaimResponse
+	err = json.NewDecoder(resp.Body).Decode(&claimResponse)
+	r.NoError(err)
+	fmt.Println("claimResponse", claimResponse)
+	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(claimResponse.Tx))
+	r.NoError(err)
+	fmt.Println("sentTx", sentTx)
 
 }
