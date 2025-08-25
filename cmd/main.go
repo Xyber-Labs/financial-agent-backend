@@ -3,13 +3,17 @@ package main
 import (
 	"context"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
 	"financial-agent-backend/config"
+	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/onchain"
+	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
 
@@ -81,6 +85,36 @@ var (
 			}
 			if err := transactor.InitializeOnChainSession(); err != nil {
 				log.Error().Err(err).Msg("Error initializing transactor")
+				return
+			}
+
+			aavePool, err := AavePool.NewAavePool(
+				common.HexToAddress(cfg.Network.AavePoolAddress),
+				ethClient,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating aave pool")
+				return
+			}
+
+			trustManagementProvider := onchain.NewTrustManagementProvider(
+				ethClient,
+				transactor,
+				trustManagementRouter,
+				aavePool,
+				&bind.CallOpts{},
+			)
+
+			agentServer := server.NewHttpAgentServer(
+				&config.HttpServerConfig{
+					Port: cfg.Http.Port,
+				},
+				transactor,
+				trustManagementProvider,
+			)
+			err = agentServer.Start(context.Background())
+			if err != nil {
+				log.Error().Err(err).Msg("Error starting agent server")
 				return
 			}
 		},

@@ -22,6 +22,8 @@ type NetworkConfig struct {
 	SenderPrivateKey string
 	// Trust Management Router address
 	TrustManagementRouterAddress string
+	// Aave Pool address
+	AavePoolAddress string
 }
 
 type HttpServerConfig struct {
@@ -56,6 +58,14 @@ func (c *Config) Validate() error {
 
 	if !regexp.MustCompile(`^0x[0-9a-fA-F]{64}$`).MatchString(c.Network.SenderPrivateKey) {
 		return fmt.Errorf("invalid sender private key format: %s", c.Network.SenderPrivateKey)
+	}
+
+	if c.Network.TrustManagementRouterAddress == "" {
+		return errors.New("network trust management router address is empty")
+	}
+
+	if c.Network.AavePoolAddress == "" {
+		return errors.New("network aave pool address is empty")
 	}
 
 	return nil
