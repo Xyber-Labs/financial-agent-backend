@@ -1,0 +1,9 @@
+FROM financial-agent-backend-base
+
+RUN mkdir -p /app/prod
+COPY ./config.yaml /app/prod/config.yaml
+USER root
+
+ENTRYPOINT [ "/bin/financial-agent" ]
+
+CMD [ "/bin/financial-agent", "--config", "/app/prod/config.yaml" ]
