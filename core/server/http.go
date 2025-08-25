@@ -164,6 +164,7 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			},
 		)
 		if err != nil {
+			log.Error().Err(err).Msg("depositHandler: failed to send transaction")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
