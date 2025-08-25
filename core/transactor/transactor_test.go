@@ -86,7 +86,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 			// Build Transactor via constructor with minimal deps
 			client := backend.Client()
-			transactor, nerr := NewTransactor(client, chainId, txOpts, trustManagementRouter, mteeService)
+			transactor, nerr := NewTransactor(client, chainId, txOpts, mockedContracts.TrustManagementRouter, trustManagementRouter, mteeService)
 			r.NoError(nerr)
 
 			// Assert
@@ -96,9 +96,9 @@ func TestInitializeOnChainSession(t *testing.T) {
 				return
 			}
 			r.NoError(err)
-			r.NotNil(transactor.teeSessionKey)
-			r.NotEqualValues([20]byte{}, transactor.teeSessionAddress)
-			r.Equal(transactor.teeSessionAddress[:], captured)
+			r.NotNil(transactor.TeeSessionKey)
+			r.NotEqualValues([20]byte{}, transactor.TeeSessionAddress)
+			r.Equal(transactor.TeeSessionAddress[:], captured)
 		})
 	}
 }

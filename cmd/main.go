@@ -71,6 +71,7 @@ var (
 				ethClient,
 				chainId,
 				transactOpts,
+				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
 				trustManagementRouter,
 				teeService,
 			)
