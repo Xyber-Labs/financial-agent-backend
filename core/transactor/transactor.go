@@ -162,9 +162,9 @@ func (t *Transactor) createTeeSessionSignature(
 		return nil, fmt.Errorf("createTeeSessionSignature: failed to create address ABI type: %w", err)
 	}
 	txTupleArrayType, err := abi.NewType("tuple[]", "", []abi.ArgumentMarshaling{
-		{Type: "address"},
-		{Type: "uint256"},
-		{Type: "bytes"},
+		{Name: "target", Type: "address"},
+		{Name: "value", Type: "uint256"},
+		{Name: "data", Type: "bytes"},
 	})
 	if err != nil {
 		return nil, fmt.Errorf("createTeeSessionSignature: failed to create tx tuple[] ABI type: %w", err)
