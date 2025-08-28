@@ -103,6 +103,8 @@ var (
 				trustManagementRouter,
 				aavePool,
 				&bind.CallOpts{},
+				nil,
+				nil,
 			)
 
 			agentServer := server.NewHttpAgentServer(
