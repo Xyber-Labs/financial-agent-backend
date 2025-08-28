@@ -5,9 +5,11 @@ import (
 	"financial-agent-backend/core/abi/bindings/AaveAToken"
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/abi/bindings/WETH"
 	"financial-agent-backend/core/transactor"
 	"fmt"
 	"math/big"
+	"time"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
@@ -22,6 +24,10 @@ type TrustManagementProvider struct {
 	Transactor            *transactor.Transactor
 	createTxOpts          *bind.TransactOpts
 	callOpts              *bind.CallOpts
+
+	// Optinal wrapped ERC20 native token for the network. If provided, enables DepositNative function
+	NativeErc20Address *ethcommon.Address
+	NativeErc20        *WETH.WETH
 }
 
 func NewTrustManagementProvider(
@@ -30,6 +36,8 @@ func NewTrustManagementProvider(
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	aavePool *AavePool.AavePool,
 	callOpts *bind.CallOpts,
+	nativeErc20Address *ethcommon.Address,
+	nativeErc20 *WETH.WETH,
 ) *TrustManagementProvider {
 	// createTxOpts only used to consturct the calldata for the transactions
 	// to be later reconstructed in a batch transaction. Therefore we don't actually
@@ -50,6 +58,8 @@ func NewTrustManagementProvider(
 		TrustManagementRouter: trustManagementRouter,
 		AavePool:              aavePool,
 		callOpts:              callOpts,
+		NativeErc20Address:    nativeErc20Address,
+		NativeErc20:           nativeErc20,
 	}
 }
 
@@ -57,20 +67,7 @@ func (p *TrustManagementProvider) Deposit(
 	userAddress ethcommon.Address,
 	tokenAddress ethcommon.Address,
 	tokenAmount *big.Int,
-	deadline *big.Int,
-	permit TrustManagementRouter.Permit,
 ) (*ethtypes.Transaction, error) {
-	depositWithPermitTx, err := p.TrustManagementRouter.DepositWithPermit(
-		p.createTxOpts,
-		userAddress,
-		tokenAddress,
-		deadline,
-		permit,
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	log.Info().Msg("Creating AavePool.supply transaction")
 
 	// Create AavePool.supply transaction
@@ -88,7 +85,56 @@ func (p *TrustManagementProvider) Deposit(
 	log.Info().Msg("Batching and executing transactions")
 
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{depositWithPermitTx, aaveSupplyTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveSupplyTx})
+	if err != nil {
+		return nil, err
+	}
+
+	return tx, nil
+}
+
+func (p *TrustManagementProvider) DepositNative(
+	userAddress ethcommon.Address,
+	nativeAmount *big.Int,
+) (*ethtypes.Transaction, error) {
+
+	if p.NativeErc20Address == nil || p.NativeErc20 == nil {
+		return nil, fmt.Errorf("NativeErc20 is not set, DepositNative is not available")
+	}
+
+	nativeWrapOpts := bind.TransactOpts{
+		From:     userAddress,
+		NoSend:   true,
+		Value:    nativeAmount,
+		GasLimit: 1000000,
+		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
+			return tx, nil
+		},
+		Context: context.Background(),
+	}
+	nativeWrapTx, err := p.NativeErc20.Deposit(
+		&nativeWrapOpts,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create AavePool.supply transaction
+	aaveSupplyTx, err := p.AavePool.Supply(
+		p.createTxOpts,
+		*p.NativeErc20Address,
+		nativeAmount,
+		userAddress,
+		0,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Info().Msg("Batching and executing transactions")
+
+	// Batch and execute transactions
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{nativeWrapTx, aaveSupplyTx})
 	if err != nil {
 		return nil, err
 	}
@@ -100,8 +146,6 @@ func (p *TrustManagementProvider) Claim(
 	tokenAddress ethcommon.Address,
 	userAddress ethcommon.Address,
 	amount *big.Int,
-	signature []byte,
-	deadline *big.Int,
 ) (*ethtypes.Transaction, error) {
 	// Create aave transaction that withdraws yield to user
 	aaveWithdrawTx, err := p.AavePool.Withdraw(
@@ -121,8 +165,6 @@ func (p *TrustManagementProvider) Claim(
 		userAddress,
 		[]ethcommon.Address{tokenAddress},
 		[]*big.Int{amount},
-		signature,
-		deadline,
 	)
 	if err != nil {
 		return nil, err
@@ -141,8 +183,6 @@ func (p *TrustManagementProvider) Withdraw(
 	tokenAddress ethcommon.Address,
 	amount *big.Int,
 	userAddress ethcommon.Address,
-	deadline *big.Int,
-	signature []byte,
 ) (*ethtypes.Transaction, error) {
 
 	// Call AavePool.withdraw
@@ -166,23 +206,22 @@ func (p *TrustManagementProvider) Withdraw(
 	}
 
 	var depositIds []*big.Int
-	var amountsWithYield []*big.Int
-	totalDepositAmount := big.NewInt(0)
+	unlockedDepositAmount := big.NewInt(0)
+	currentTime := big.NewInt(time.Now().Unix())
 
 	// In this loop we need to identify deposits which we will have to liquidate.
 	// Deposits are qualified for liquidation when they are unlocked.
 	// We also need to verify here that amount of deposits are enough to cover
 	// the withdraw amount.
 	for i, deposit := range deposits {
-		if deposit.LockedUntil.Cmp(deadline) < 0 {
+		if deposit.LockedUntil.Cmp(currentTime) < 0 {
 			depositIds = append(depositIds, big.NewInt(int64(i)))
-			amountsWithYield = append(amountsWithYield, deposit.Amount)
+			unlockedDepositAmount = unlockedDepositAmount.Add(unlockedDepositAmount, deposit.Amount)
 		}
-		totalDepositAmount = totalDepositAmount.Add(totalDepositAmount, deposit.Amount)
 	}
 
-	if totalDepositAmount.Cmp(amount) < 0 {
-		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", totalDepositAmount, amount)
+	if unlockedDepositAmount.Cmp(amount) < 0 {
+		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", unlockedDepositAmount, amount)
 	}
 
 	// Calculate amount of token with yield considering compounded yield of atoken on Aave
@@ -205,7 +244,7 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
-	amountWithYield, err := calculateAmountWithYield(amount, totalDepositAmount, userATokenBalance)
+	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
 	if err != nil {
 		return nil, err
 	}
@@ -218,8 +257,6 @@ func (p *TrustManagementProvider) Withdraw(
 		userAddress,
 		depositIds,
 		amountWithYield,
-		signature,
-		deadline,
 	)
 	if err != nil {
 		return nil, err

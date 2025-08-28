@@ -40,6 +40,9 @@ contract MockTrustManagementRouter {
         bytes qeAuthenticationData;
     }
 
+    event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration);
+
+
     /*
      * Below are function from the original TrustManagementRouter contract
      */
@@ -58,7 +61,10 @@ contract MockTrustManagementRouter {
         address token, 
         uint256 amount, 
         uint256 lockDuration
-    ) external returns(address walletAddress) {}
+    ) external returns(address walletAddress) {
+        emit Deposited(receiver, receiver, token, amount, lockDuration);
+        return walletAddress;
+    }
 
     function depositWithPermit( 
         address receiver, 
