@@ -10,18 +10,12 @@ import (
 )
 
 type DeployedMockContracts struct {
-	TeeWallet             ethcommon.Address
 	AavePool              ethcommon.Address
 	TrustManagementRouter ethcommon.Address
 	ERC20                 ethcommon.Address
 }
 
 func DeployMockedContracts(client bind.ContractBackend, opts *bind.TransactOpts) DeployedMockContracts {
-	teeWalletAddress, _, _, err := contracts.DeployMockTEEWallet(opts, client)
-	if err != nil {
-		panic(err)
-	}
-
 	aavePoolAddress, _, _, err := contracts.DeployMockAavePool(opts, client)
 	if err != nil {
 		panic(err)
@@ -38,7 +32,6 @@ func DeployMockedContracts(client bind.ContractBackend, opts *bind.TransactOpts)
 	}
 
 	return DeployedMockContracts{
-		TeeWallet:             teeWalletAddress,
 		AavePool:              aavePoolAddress,
 		TrustManagementRouter: trustManagementRouterAddress,
 		ERC20:                 erc20Address,
