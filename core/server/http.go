@@ -112,7 +112,8 @@ func (s *HttpAgentServer) registerHandlers() {
 // @Description withdraw the provided amount of tokens + earned rewards from the protocol and pool where the token is staked
 // @Accept json
 // @Produce json
-// @Success 200
+// @Param request body WithdrawRequest true "Withdraw request payload"
+// @Success 200 {object} WithdrawResponse
 // @Router /withdraw [post]
 func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {

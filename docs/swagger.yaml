@@ -1,3 +1,20 @@
+definitions:
+  server.WithdrawRequest:
+    properties:
+      amount:
+        type: string
+      chainId:
+        type: integer
+      tokenAddress:
+        type: string
+      userAddress:
+        type: string
+    type: object
+  server.WithdrawResponse:
+    properties:
+      tx:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -7,10 +24,19 @@ paths:
       - application/json
       description: withdraw the provided amount of tokens + earned rewards from the
         protocol and pool where the token is staked
+      parameters:
+      - description: Withdraw request payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/server.WithdrawRequest'
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/server.WithdrawResponse'
       summary: withdraw assets on behalf of user, earned rewards included
 swagger: "2.0"

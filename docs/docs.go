@@ -25,10 +25,51 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "withdraw assets on behalf of user, earned rewards included",
+                "parameters": [
+                    {
+                        "description": "Withdraw request payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawResponse"
+                        }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "server.WithdrawRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "chainId": {
+                    "type": "integer"
+                },
+                "tokenAddress": {
+                    "type": "string"
+                },
+                "userAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.WithdrawResponse": {
+            "type": "object",
+            "properties": {
+                "tx": {
+                    "type": "string"
                 }
             }
         }
