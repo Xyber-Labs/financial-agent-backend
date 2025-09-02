@@ -11,6 +11,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/onchain"
@@ -62,51 +64,56 @@ func (s *HttpAgentServer) Start(ctx context.Context) error {
 }
 
 func (s *HttpAgentServer) registerHandlers() {
-	s.Gin.POST("/claim", s.claimHandler())
+	// s.Gin.POST("/claim", s.claimHandler())
 	s.Gin.POST("/withdraw", s.withdrawHandler())
+	s.Gin.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
 
-// Claims the incrued rewards on behalf of the user
-// Claim works the following way:
-// 1.
-func (s *HttpAgentServer) claimHandler() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var req ClaimRequest
-		if err := c.ShouldBindJSON(&req); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
+// func (s *HttpAgentServer) claimHandler() gin.HandlerFunc {
+// 	return func(c *gin.Context) {
+// 		var req ClaimRequest
+// 		if err := c.ShouldBindJSON(&req); err != nil {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+// 			return
+// 		}
 
-		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
-			return
-		}
+// 		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
+// 			return
+// 		}
 
-		if req.Amount == "" || req.Amount == "0" {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
-			return
-		}
+// 		if req.Amount == "" || req.Amount == "0" {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
+// 			return
+// 		}
 
-		claimAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
-		if !ok {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
-			return
-		}
+// 		claimAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
+// 		if !ok {
+// 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
+// 			return
+// 		}
 
-		tx, err := s.trustManagementProvider.Claim(
-			ethcommon.HexToAddress(req.TokenAddress),
-			ethcommon.HexToAddress(req.UserAddress),
-			claimAmount,
-		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
+// 		tx, err := s.trustManagementProvider.Claim(
+// 			ethcommon.HexToAddress(req.TokenAddress),
+// 			ethcommon.HexToAddress(req.UserAddress),
+// 			claimAmount,
+// 		)
+// 		if err != nil {
+// 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 			return
+// 		}
 
-		c.JSON(http.StatusOK, ClaimResponse{Tx: tx.Hash().String()})
-	}
-}
+// 		c.JSON(http.StatusOK, ClaimResponse{Tx: tx.Hash().String()})
+// 	}
+// }
 
+// @Summary withdraw assets on behalf of user, earned rewards included
+// @Schemes
+// @Description withdraw the provided amount of tokens + earned rewards from the protocol and pool where the token is staked
+// @Accept json
+// @Produce json
+// @Success 200
+// @Router /withdraw [post]
 func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		log.Info().Msg("withdrawHandler: received request")

@@ -1,0 +1,16 @@
+info:
+  contact: {}
+paths:
+  /withdraw:
+    post:
+      consumes:
+      - application/json
+      description: withdraw the provided amount of tokens + earned rewards from the
+        protocol and pool where the token is staked
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: withdraw assets on behalf of user, earned rewards included
+swagger: "2.0"

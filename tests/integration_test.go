@@ -315,104 +315,103 @@ func TestWithdraw(t *testing.T) {
 	}
 }
 
-func TestClaim(t *testing.T) {
-	r := require.New(t)
-	ctx := context.Background()
+// func TestClaim(t *testing.T) {
+// 	r := require.New(t)
+// 	ctx := context.Background()
 
-	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
-	r.NoError(err)
-	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
-	r.True(ok)
-	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
-	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
-		adminPubkey: {Balance: big.NewInt(10000000000000000)},
-	})
+// 	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+// 	r.NoError(err)
+// 	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+// 	r.True(ok)
+// 	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+// 	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+// 		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+// 	})
 
-	chainId, err := ethBackend.Client().ChainID(ctx)
-	r.NoError(err)
-	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
-	r.NoError(err)
+// 	chainId, err := ethBackend.Client().ChainID(ctx)
+// 	r.NoError(err)
+// 	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+// 	r.NoError(err)
 
-	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
-	ethBackend.Commit()
-	mteeService := mocks.NewMockTeeService(t)
-	r.NoError(err)
-	quoteMock := ethcommon.Hex2Bytes(teeQuoteStrMock)
-	mteeService.EXPECT().GetQuote(mock.Anything).Return(quoteMock, nil)
+// 	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+// 	ethBackend.Commit()
+// 	mteeService := mocks.NewMockTeeService(t)
+// 	r.NoError(err)
+// 	quoteMock := ethcommon.Hex2Bytes(teeQuoteStrMock)
+// 	mteeService.EXPECT().GetQuote(mock.Anything).Return(quoteMock, nil)
 
-	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
-		mockedContracts.TrustManagementRouter,
-		ethBackend.Client(),
-	)
-	r.NoError(err)
+// 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+// 		mockedContracts.TrustManagementRouter,
+// 		ethBackend.Client(),
+// 	)
+// 	r.NoError(err)
 
-	testTransactor, err := transactor.NewTransactor(
-		ethBackend.Client(),
-		chainId,
-		transactOpts,
-		mockedContracts.TrustManagementRouter,
-		trustManagementRouter,
-		mteeService,
-	)
-	r.NoError(err)
-	err = testTransactor.InitializeOnChainSession()
-	r.NoError(err)
+// 	testTransactor, err := transactor.NewTransactor(
+// 		ethBackend.Client(),
+// 		chainId,
+// 		transactOpts,
+// 		mockedContracts.TrustManagementRouter,
+// 		trustManagementRouter,
+// 		mteeService,
+// 	)
+// 	r.NoError(err)
+// 	err = testTransactor.InitializeOnChainSession()
+// 	r.NoError(err)
 
-	aavePool, err := AavePool.NewAavePool(
-		mockedContracts.AavePool,
-		ethBackend.Client(),
-	)
-	r.NoError(err)
+// 	aavePool, err := AavePool.NewAavePool(
+// 		mockedContracts.AavePool,
+// 		ethBackend.Client(),
+// 	)
+// 	r.NoError(err)
 
-	trustManagementProvider := onchain.NewTrustManagementProvider(
-		ethBackend.Client(),
-		testTransactor,
-		trustManagementRouter,
-		mockedContracts.AavePool,
-		aavePool,
-		&bind.CallOpts{},
-		nil,
-		nil,
-	)
+// 	trustManagementProvider := onchain.NewTrustManagementProvider(
+// 		ethBackend.Client(),
+// 		testTransactor,
+// 		trustManagementRouter,
+// 		mockedContracts.AavePool,
+// 		aavePool,
+// 		&bind.CallOpts{},
+// 		nil,
+// 		nil,
+// 	)
 
-	serverConfig := config.HttpServerConfig{
-		Port: 8082,
-	}
-	agentServer := server.NewHttpAgentServer(
-		&serverConfig,
-		testTransactor,
-		trustManagementProvider,
-	)
+// 	serverConfig := config.HttpServerConfig{
+// 		Port: 8082,
+// 	}
+// 	agentServer := server.NewHttpAgentServer(
+// 		&serverConfig,
+// 		testTransactor,
+// 		trustManagementProvider,
+// 	)
 
-	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
-	defer cancel()
-	go agentServer.Start(ginCtx)
+// 	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+// 	defer cancel()
+// 	go agentServer.Start(ginCtx)
 
-	// Arbitrary wait for server to startup
-	time.Sleep(time.Second)
+// 	// Arbitrary wait for server to startup
+// 	time.Sleep(time.Second)
 
-	// Make /claim HTTP request to server
-	claimUrl := fmt.Sprintf("http://127.0.0.1:%d/claim", serverConfig.Port)
-	claimReqBody := server.ClaimRequest{
-		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		ChainId:      1,
-		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		Amount:       "10000000000000000",
-	}
-	reqBody, err := json.Marshal(claimReqBody)
-	r.NoError(err)
-	resp, err := http.Post(claimUrl, "application/json", bytes.NewBuffer(reqBody))
-	r.NoError(err)
-	r.Equal(http.StatusOK, resp.StatusCode)
-	defer resp.Body.Close()
-	ethBackend.Commit()
+// 	// Make /claim HTTP request to server
+// 	claimUrl := fmt.Sprintf("http://127.0.0.1:%d/claim", serverConfig.Port)
+// 	claimReqBody := server.ClaimRequest{
+// 		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+// 		ChainId:      1,
+// 		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+// 		Amount:       "10000000000000000",
+// 	}
+// 	reqBody, err := json.Marshal(claimReqBody)
+// 	r.NoError(err)
+// 	resp, err := http.Post(claimUrl, "application/json", bytes.NewBuffer(reqBody))
+// 	r.NoError(err)
+// 	r.Equal(http.StatusOK, resp.StatusCode)
+// 	defer resp.Body.Close()
+// 	ethBackend.Commit()
 
-	var claimResponse server.ClaimResponse
-	err = json.NewDecoder(resp.Body).Decode(&claimResponse)
-	r.NoError(err)
-	fmt.Println("claimResponse", claimResponse)
-	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(claimResponse.Tx))
-	r.NoError(err)
-	fmt.Println("sentTx", sentTx)
-
-}
+// 	var claimResponse server.ClaimResponse
+// 	err = json.NewDecoder(resp.Body).Decode(&claimResponse)
+// 	r.NoError(err)
+// 	fmt.Println("claimResponse", claimResponse)
+// 	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(claimResponse.Tx))
+// 	r.NoError(err)
+// 	fmt.Println("sentTx", sentTx)
+// }

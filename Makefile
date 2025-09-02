@@ -9,3 +9,5 @@ coverage:
 	### Export to html
 	$(GO) tool cover -html=coverage.out -o coverage.html
 
+swagger:
+	swag init -g ./cmd/main.go -d .

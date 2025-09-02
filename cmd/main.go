@@ -15,6 +15,7 @@ import (
 	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
+	_ "financial-agent-backend/docs"
 
 	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
