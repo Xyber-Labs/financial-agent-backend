@@ -1,8 +1,6 @@
 package main
 
 import (
-	"context"
-
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/rs/zerolog/log"
@@ -12,6 +10,7 @@ import (
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/network"
 	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
@@ -29,6 +28,7 @@ var (
 		Short: "Financial Agent Backend",
 		Long:  `Financial Agent Backend`,
 		Run: func(cmd *cobra.Command, args []string) {
+			ctx := cmd.Context()
 			cfg, err := config.LoadConfig()
 			if err != nil {
 				log.Error().Err(err).Msg("Error loading config")
@@ -48,7 +48,7 @@ var (
 			}
 			log.Info().Str("rpc_url", cfg.Network.HttpRpcUrl).Msg("Connected to node")
 
-			chainId, err := ethClient.ChainID(context.Background())
+			chainId, err := ethClient.ChainID(ctx)
 			if err != nil {
 				log.Error().Err(err).Msg("Error getting chain id")
 				return
@@ -60,6 +60,7 @@ var (
 				log.Error().Err(err).Msg("Error creating transactor")
 				return
 			}
+			transactOpts.GasLimit = 1000000
 
 			trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
 				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
@@ -101,11 +102,22 @@ var (
 				ethClient,
 				transactor,
 				trustManagementRouter,
+				common.HexToAddress(cfg.Network.AavePoolAddress),
 				aavePool,
 				&bind.CallOpts{},
 				nil,
 				nil,
 			)
+
+			blockLimit := 100
+			eventHandler := network.NewEvmEventHandler(
+				trustManagementProvider,
+				trustManagementRouter,
+				ethClient,
+				uint64(blockLimit),
+				-1,
+			)
+			go eventHandler.Start(ctx)
 
 			agentServer := server.NewHttpAgentServer(
 				&config.HttpServerConfig{
@@ -114,7 +126,7 @@ var (
 				transactor,
 				trustManagementProvider,
 			)
-			err = agentServer.Start(context.Background())
+			err = agentServer.Start(ctx)
 			if err != nil {
 				log.Error().Err(err).Msg("Error starting agent server")
 				return

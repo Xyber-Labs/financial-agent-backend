@@ -4,6 +4,7 @@ import (
 	"context"
 	"financial-agent-backend/core/abi/bindings/AaveAToken"
 	"financial-agent-backend/core/abi/bindings/AavePool"
+	"financial-agent-backend/core/abi/bindings/ERC20"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/abi/bindings/WETH"
 	"financial-agent-backend/core/transactor"
@@ -20,6 +21,7 @@ import (
 type TrustManagementProvider struct {
 	client                bind.ContractBackend
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
+	AavePoolAddress       ethcommon.Address
 	AavePool              *AavePool.AavePool
 	Transactor            *transactor.Transactor
 	createTxOpts          *bind.TransactOpts
@@ -34,6 +36,7 @@ func NewTrustManagementProvider(
 	client bind.ContractBackend,
 	transactor *transactor.Transactor,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
+	aavePoolAddress ethcommon.Address,
 	aavePool *AavePool.AavePool,
 	callOpts *bind.CallOpts,
 	nativeErc20Address *ethcommon.Address,
@@ -56,6 +59,7 @@ func NewTrustManagementProvider(
 		Transactor:            transactor,
 		createTxOpts:          &createTxOpts,
 		TrustManagementRouter: trustManagementRouter,
+		AavePoolAddress:       aavePoolAddress,
 		AavePool:              aavePool,
 		callOpts:              callOpts,
 		NativeErc20Address:    nativeErc20Address,
@@ -68,7 +72,28 @@ func (p *TrustManagementProvider) Deposit(
 	tokenAddress ethcommon.Address,
 	tokenAmount *big.Int,
 ) (*ethtypes.Transaction, error) {
-	log.Info().Msg("Creating AavePool.supply transaction")
+	log.Info().
+		Str("userAddress", userAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Int64("tokenAmount", tokenAmount.Int64()).
+		Msg("Executing TrustManagementProvider.Deposit")
+
+	// Get user wallet address
+	// userWallet, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	// if err != nil {
+	// 	return nil, err
+	// }
+
+	token, err := ERC20.NewERC20(tokenAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create Token.Approve transaction
+	approveTx, err := token.Approve(p.createTxOpts, p.AavePoolAddress, tokenAmount)
+	if err != nil {
+		return nil, err
+	}
 
 	// Create AavePool.supply transaction
 	aaveSupplyTx, err := p.AavePool.Supply(
@@ -85,7 +110,7 @@ func (p *TrustManagementProvider) Deposit(
 	log.Info().Msg("Batching and executing transactions")
 
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveSupplyTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{approveTx, aaveSupplyTx})
 	if err != nil {
 		return nil, err
 	}
