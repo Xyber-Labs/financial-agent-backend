@@ -26,6 +26,8 @@ type NetworkConfig struct {
 	AavePoolAddress string
 	// Optional block number to start processing events from
 	StartBlock *uint64
+	// Address of ERC20 Wrapped native token on the network
+	NativeErc20Address string
 }
 
 type HttpServerConfig struct {

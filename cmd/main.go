@@ -10,6 +10,7 @@ import (
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/abi/bindings/WETH"
 	"financial-agent-backend/core/network"
 	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/server"
@@ -99,6 +100,13 @@ var (
 				return
 			}
 
+			nativeErc20Address := common.HexToAddress(cfg.Network.NativeErc20Address)
+			nativeErc20, err := WETH.NewWETH(nativeErc20Address, ethClient)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating native erc20")
+				return
+			}
+
 			trustManagementProvider := onchain.NewTrustManagementProvider(
 				ethClient,
 				transactor,
@@ -106,8 +114,8 @@ var (
 				common.HexToAddress(cfg.Network.AavePoolAddress),
 				aavePool,
 				&bind.CallOpts{},
-				nil,
-				nil,
+				&nativeErc20Address,
+				nativeErc20,
 			)
 
 			blockLimit := 100

@@ -119,8 +119,9 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 	for depositsIter.Next() {
 		depositedEvent := depositsIter.Event
 
+		p.logger.Info().Interface("event", depositedEvent).Msg("Deposited event catched")
+
 		if depositedEvent.Token == ethcommon.HexToAddress(onchain.TrustManagementNativeTokenLabel) {
-			p.logger.Info().Interface("event", depositedEvent).Msg("Native deposit event catched")
 			tx, err := p.Provider.DepositNative(
 				depositedEvent.User,
 				depositedEvent.Amount,
@@ -129,7 +130,7 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 				p.logger.Error().Err(err).Msg("error handling native deposit event")
 				continue
 			}
-			p.logger.Info().Interface("tx", tx).Msg("Native deposit event processed")
+			p.logger.Info().Interface("tx", tx.Hash()).Msg("Native deposit event processed")
 		} else {
 			tx, err := p.Provider.Deposit(
 				depositedEvent.User,
@@ -140,7 +141,7 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 				p.logger.Error().Err(err).Msg("error handling deposit event")
 				continue
 			}
-			p.logger.Info().Interface("tx", tx).Msg("Deposit event processed")
+			p.logger.Info().Interface("tx", tx.Hash()).Msg("Deposit event processed")
 		}
 	}
 	return nil
