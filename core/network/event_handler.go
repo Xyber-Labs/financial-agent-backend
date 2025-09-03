@@ -9,6 +9,7 @@ import (
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -37,6 +38,7 @@ type EvmEventHandler struct {
 	StartBlock            int64
 	Provider              *onchain.TrustManagementProvider
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
+	logger                zerolog.Logger
 }
 
 // BlockNumberReader abstracts obtaining the latest block number from an EVM
@@ -77,11 +79,12 @@ func NewEvmEventHandler(
 		StartBlock:            startBlock,
 		Provider:              provider,
 		TrustManagementRouter: trustManagementRouter,
+		logger:                log.With().Str("component", "EvmEventHandler").Logger(),
 	}
 }
 
 func (p *EvmEventHandler) Start(ctx context.Context) error {
-	log.Info().Msg("Executing EvmEventHandler.Start()")
+	p.logger.Info().Msg("Executing EvmEventHandler.Start()")
 	ticker := time.NewTicker(10 * time.Second)
 	var startBlock uint64
 	if p.StartBlock < 0 {
@@ -94,11 +97,11 @@ func (p *EvmEventHandler) Start(ctx context.Context) error {
 		startBlock = uint64(p.StartBlock)
 	}
 
-	log.Info().Uint64("start_block", startBlock).Msg("Start block resolved")
+	p.logger.Info().Uint64("start_block", startBlock).Msg("Start block resolved")
 	for r := range ListenBlocks(ctx, p.Client, startBlock, p.BlockLimit, ticker) {
-		log.Info().Uint64("start", r.Start).Uint64("end", r.End).Msg("Processing block range")
+		p.logger.Info().Uint64("start", r.Start).Uint64("end", r.End).Msg("Processing block range")
 		if err := p.HandleDepositedEvents(r); err != nil {
-			log.Error().Err(err).Msg("handleDepositedEvents: error handling deposited events")
+			p.logger.Error().Err(err).Msg("handleDepositedEvents: error handling deposited events")
 		}
 	}
 
@@ -115,18 +118,18 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 	}
 	for depositsIter.Next() {
 		depositedEvent := depositsIter.Event
-		log.Info().Interface("event", depositedEvent).Msg("Deposited event catched")
 
 		if depositedEvent.Token == ethcommon.HexToAddress(onchain.TrustManagementNativeTokenLabel) {
+			p.logger.Info().Interface("event", depositedEvent).Msg("Native deposit event catched")
 			tx, err := p.Provider.DepositNative(
 				depositedEvent.User,
 				depositedEvent.Amount,
 			)
 			if err != nil {
-				log.Error().Err(err).Msg("handleDepositedEvents: error executing deposit native")
+				p.logger.Error().Err(err).Msg("error handling native deposit event")
 				continue
 			}
-			log.Info().Interface("tx", tx).Msg("Deposited event processed")
+			p.logger.Info().Interface("tx", tx).Msg("Native deposit event processed")
 		} else {
 			tx, err := p.Provider.Deposit(
 				depositedEvent.User,
@@ -134,10 +137,10 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 				depositedEvent.Amount,
 			)
 			if err != nil {
-				log.Error().Err(err).Msg("handleDepositedEvents: error executing deposit")
+				p.logger.Error().Err(err).Msg("error handling deposit event")
 				continue
 			}
-			log.Info().Interface("tx", tx).Msg("Deposited event processed")
+			p.logger.Info().Interface("tx", tx).Msg("Deposit event processed")
 		}
 	}
 	return nil
