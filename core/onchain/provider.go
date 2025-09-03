@@ -89,16 +89,16 @@ func (p *TrustManagementProvider) Deposit(
 		Msg("Executing TrustManagementProvider.Deposit")
 
 	// Get user wallet address
-	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	userWalletData, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	if !userWalletAddress.IsDeployed {
-		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletAddress.WalletAddress.String())
+	if !userWalletData.IsDeployed {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletData.WalletAddress.String())
 	}
 
-	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletData.WalletAddress, p.client)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +132,7 @@ func (p *TrustManagementProvider) Deposit(
 		p.createTxOpts,
 		tokenAddress,
 		tokenAmount,
-		userWalletAddress.WalletAddress,
+		userWalletData.WalletAddress,
 		0,
 	)
 	if err != nil {
@@ -156,7 +156,7 @@ func (p *TrustManagementProvider) Deposit(
 
 	p.logger.Info().
 		Str("userAddress", userAddress.String()).
-		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("userWallet", userWalletData.WalletAddress.String()).
 		Str("tokenAddress", tokenAddress.String()).
 		Str("tokenAmount", tokenAmount.String()).
 		Str("aavePool", p.AavePoolAddress.String()).
@@ -213,7 +213,7 @@ func (p *TrustManagementProvider) DepositNative(
 		p.createTxOpts,
 		*p.NativeErc20Address,
 		nativeAmount,
-		userAddress,
+		userWalletData.WalletAddress,
 		0,
 	)
 	if err != nil {
