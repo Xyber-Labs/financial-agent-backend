@@ -19,6 +19,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// In TrustManagement systems operations with native use this address to indicate that.
+// We parse things such as events with this address to determine that it's a native token
+// operation.
+const TrustManagementNativeTokenLabel = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
+
 type TrustManagementProvider struct {
 	client                bind.ContractBackend
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
@@ -165,19 +170,26 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, fmt.Errorf("NativeErc20 is not set, DepositNative is not available")
 	}
 
-	nativeWrapOpts := bind.TransactOpts{
-		From:     userAddress,
-		NoSend:   true,
-		Value:    nativeAmount,
-		GasLimit: 1000000,
-		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
-			return tx, nil
-		},
-		Context: context.Background(),
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
 	}
-	nativeWrapTx, err := p.NativeErc20.Deposit(
-		&nativeWrapOpts,
-	)
+
+	if !userWalletAddress.IsDeployed {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletAddress.WalletAddress.String())
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	nativeDepositTx, err := p.NativeErc20.Deposit(p.createTxOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	nativeApproveTx, err := p.NativeErc20.Approve(p.createTxOpts, p.AavePoolAddress, nativeAmount)
 	if err != nil {
 		return nil, err
 	}
@@ -194,10 +206,35 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, err
 	}
 
+	walletExecuteTxs := []TrustManagementWallet.Transaction{
+		{
+			Target: *nativeDepositTx.To(),
+			Data:   nativeDepositTx.Data(),
+			Value:  nativeDepositTx.Value(),
+		},
+		{
+			Target: *nativeApproveTx.To(),
+			Data:   nativeApproveTx.Data(),
+			Value:  nativeApproveTx.Value(),
+		},
+		{
+			Target: *aaveSupplyTx.To(),
+			Data:   aaveSupplyTx.Data(),
+			Value:  aaveSupplyTx.Value(),
+		},
+	}
+
+	walletExecuteTx, err := userWallet.Execute(
+		p.createTxOpts,
+		walletExecuteTxs,
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	log.Info().Msg("Batching and executing transactions")
 
-	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{nativeWrapTx, aaveSupplyTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
 	if err != nil {
 		return nil, err
 	}

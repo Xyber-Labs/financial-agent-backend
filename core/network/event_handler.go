@@ -8,6 +8,7 @@ import (
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	"github.com/rs/zerolog/log"
 )
 
@@ -115,16 +116,29 @@ func (p *EvmEventHandler) HandleDepositedEvents(r BlockRange) error {
 	for depositsIter.Next() {
 		depositedEvent := depositsIter.Event
 		log.Info().Interface("event", depositedEvent).Msg("Deposited event catched")
-		tx, err := p.Provider.Deposit(
-			depositedEvent.User,
-			depositedEvent.Token,
-			depositedEvent.Amount,
-		)
-		if err != nil {
-			log.Error().Err(err).Msg("handleDepositedEvents: error executing deposit")
-			continue
+
+		if depositedEvent.Token == ethcommon.HexToAddress(onchain.TrustManagementNativeTokenLabel) {
+			tx, err := p.Provider.DepositNative(
+				depositedEvent.User,
+				depositedEvent.Amount,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("handleDepositedEvents: error executing deposit native")
+				continue
+			}
+			log.Info().Interface("tx", tx).Msg("Deposited event processed")
+		} else {
+			tx, err := p.Provider.Deposit(
+				depositedEvent.User,
+				depositedEvent.Token,
+				depositedEvent.Amount,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("handleDepositedEvents: error executing deposit")
+				continue
+			}
+			log.Info().Interface("tx", tx).Msg("Deposited event processed")
 		}
-		log.Info().Interface("tx", tx).Msg("Deposited event processed")
 	}
 	return nil
 }
