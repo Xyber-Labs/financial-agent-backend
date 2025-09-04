@@ -118,6 +118,23 @@ func TestDeposit(t *testing.T) {
 	r.NoError(err)
 	ethBackend.Commit()
 
+	//
+	//  Setup contracts
+	//
+
+	mockedTrustManagementRouter, err := contracts.NewMockTrustManagementRouter(mockedContracts.TrustManagementRouter, ethBackend.Client())
+	r.NoError(err)
+
+	// Set wallet address
+	userWalletAddress := ethcommon.HexToAddress("0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478")
+	_, err = mockedTrustManagementRouter.MockSetWalletAddress(transactOpts, userWalletAddress, true)
+	r.NoError(err)
+	ethBackend.Commit()
+
+	//
+	// Perform tests
+	//
+
 	blockAfterDeposit, err := ethBackend.Client().BlockNumber(ctx)
 	r.NoError(err)
 
@@ -227,6 +244,12 @@ func TestWithdraw(t *testing.T) {
 
 	mockedErc20, err := contracts.NewMockERC20(mockedContracts.ERC20, ethBackend.Client())
 	r.NoError(err)
+
+	// Set wallet address
+	userWalletAddress := ethcommon.HexToAddress("0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478")
+	_, err = mockedTrustManagementRouter.MockSetWalletAddress(transactOpts, userWalletAddress, true)
+	r.NoError(err)
+	ethBackend.Commit()
 
 	testCases := []struct {
 		desc          string
