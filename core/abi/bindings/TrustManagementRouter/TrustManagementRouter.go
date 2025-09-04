@@ -73,7 +73,7 @@ type Transaction struct {
 
 // TrustManagementRouterMetaData contains all meta data concerning the TrustManagementRouter contract.
 var TrustManagementRouterMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"walletBeacon\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2EmptyBytecode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2FailedDeployment\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"needed\",\"type\":\"uint256\"}],\"name\":\"Create2InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EllipticCurve__InvalidNumber\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidEnclaveSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidIntermediateCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidLeafCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeReportDataHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__ReportMustBe384Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__SignatureMustBe64Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__DeadlineExpired\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__EthereumTransferFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__ExecuteCallFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"perfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"XyberTrustManagementRouter__FeeRateExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"msgValue\",\"type\":\"uint256\"}],\"name\":\"XyberTrustManagementRouter__InvalidAmount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCallTarget\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCaller\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__InvalidHashedData\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidSigner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__UnallowedToken\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__UnauthorizedMrEnclave\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__UsedSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__WalletCallFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroAddress\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroSessionKey\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberUpgradeChecker__E0\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"AllowedTokenSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"Executed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"FeeCollectorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"PerformanceFeeRateSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"SessionInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"WalletCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"feeAmount\",\"type\":\"uint256\"}],\"name\":\"Withdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ETH_ADDRESS\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SESSION_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WALLET_BEACON\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"allowedToken\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structPermit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"ecdsaOnKeccak256r1\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structTransaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeCollectorAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"}],\"name\":\"getBalances\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"balances\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getDeposits\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockedUntil\",\"type\":\"uint256\"}],\"internalType\":\"structDeposit[]\",\"name\":\"deposits\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getWalletAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isDeployed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawableAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableDeposits\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"withdrawableDepositsIds\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"leaf\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"intermediate\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"header\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"attestationKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeAuthenticationData\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedSGXQuote\",\"name\":\"quote\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"initSessionKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"defaultAdmin\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"rootCert\",\"type\":\"tuple\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"perfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"performanceFeeRateValue\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rootCert\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"sessions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"name\":\"setAllowedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"}],\"name\":\"setFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"isAuthorized\",\"type\":\"bool\"}],\"name\":\"setMrEnclave\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"totalDeposited\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalDepositedTokens\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"signatureHash\",\"type\":\"bytes32\"}],\"name\":\"usedSignature\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isUsed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"cert\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"verifyCert\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256\",\"name\":\"amountWithYield\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"xyberContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"contractName\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"walletBeacon\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2EmptyBytecode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2FailedDeployment\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"needed\",\"type\":\"uint256\"}],\"name\":\"Create2InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EllipticCurve__InvalidNumber\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidEnclaveSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidIntermediateCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidLeafCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeReportDataHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__ReportMustBe384Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__SignatureMustBe64Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__DeadlineExpired\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__ExecuteCallFailed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"perfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"XyberTrustManagementRouter__FeeRateExceeded\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCallTarget\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidCaller\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__InvalidHashedData\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"signer\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidSigner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__UnallowedToken\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"}],\"name\":\"XyberTrustManagementRouter__UnauthorizedMrEnclave\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__UsedSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__WalletCallFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroAddress\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__ZeroSessionKey\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberUpgradeChecker__E0\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"AllowedTokenSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"Executed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"FeeCollectorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isAuthorized\",\"type\":\"bool\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"MrEnclaveSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"PerformanceFeeRateSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"RootCertSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"SessionInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"WalletCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"feeAmount\",\"type\":\"uint256\"}],\"name\":\"Withdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"ETH_ADDRESS\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SESSION_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WALLET_BEACON\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"allowedToken\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structPermit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"ecdsaOnKeccak256r1\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isValid\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structTransaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeCollectorAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"}],\"name\":\"getBalances\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"balances\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getDeposits\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockedUntil\",\"type\":\"uint256\"}],\"internalType\":\"structDeposit[]\",\"name\":\"deposits\",\"type\":\"tuple[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getWalletAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isDeployed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableAmount\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"withdrawableAmount\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"getWithdrawableDeposits\",\"outputs\":[{\"internalType\":\"uint256[]\",\"name\":\"withdrawableDepositsIds\",\"type\":\"uint256[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"leaf\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"intermediate\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"header\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"attestationKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeAuthenticationData\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedSGXQuote\",\"name\":\"quote\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"initSessionKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"defaultAdmin\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"rootCert\",\"type\":\"tuple\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"}],\"name\":\"mrEnclaveAuthorized\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAuthorized\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"perfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"performanceFeeRateValue\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rootCert\",\"outputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"rootCertificate\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"sessions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"name\":\"setAllowedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"}],\"name\":\"setFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"internalType\":\"bool\",\"name\":\"isAuthorized\",\"type\":\"bool\"}],\"name\":\"setMrEnclave\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"totalDeposited\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"totalDepositedTokens\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"signatureHash\",\"type\":\"bytes32\"}],\"name\":\"usedSignature\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isUsed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"cert\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"verifyCert\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isValid\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256\",\"name\":\"baseAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amountWithYield\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"xyberContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"contractName\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
 }
 
 // TrustManagementRouterABI is the input ABI used to generate the binding from.
@@ -410,7 +410,7 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) AllowedToken(t
 
 // EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
 //
-// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterCaller) EcdsaOnKeccak256r1(opts *bind.CallOpts, message []byte, signature []byte, publicKey []byte) (bool, error) {
 	var out []interface{}
 	err := _TrustManagementRouter.contract.Call(opts, &out, "ecdsaOnKeccak256r1", message, signature, publicKey)
@@ -427,14 +427,14 @@ func (_TrustManagementRouter *TrustManagementRouterCaller) EcdsaOnKeccak256r1(op
 
 // EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
 //
-// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterSession) EcdsaOnKeccak256r1(message []byte, signature []byte, publicKey []byte) (bool, error) {
 	return _TrustManagementRouter.Contract.EcdsaOnKeccak256r1(&_TrustManagementRouter.CallOpts, message, signature, publicKey)
 }
 
 // EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
 //
-// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterCallerSession) EcdsaOnKeccak256r1(message []byte, signature []byte, publicKey []byte) (bool, error) {
 	return _TrustManagementRouter.Contract.EcdsaOnKeccak256r1(&_TrustManagementRouter.CallOpts, message, signature, publicKey)
 }
@@ -701,6 +701,37 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) HasRole(role [
 	return _TrustManagementRouter.Contract.HasRole(&_TrustManagementRouter.CallOpts, role, account)
 }
 
+// MrEnclaveAuthorized is a free data retrieval call binding the contract method 0x9a16def0.
+//
+// Solidity: function mrEnclaveAuthorized(bytes32 mrEnclave) view returns(bool isAuthorized)
+func (_TrustManagementRouter *TrustManagementRouterCaller) MrEnclaveAuthorized(opts *bind.CallOpts, mrEnclave [32]byte) (bool, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "mrEnclaveAuthorized", mrEnclave)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// MrEnclaveAuthorized is a free data retrieval call binding the contract method 0x9a16def0.
+//
+// Solidity: function mrEnclaveAuthorized(bytes32 mrEnclave) view returns(bool isAuthorized)
+func (_TrustManagementRouter *TrustManagementRouterSession) MrEnclaveAuthorized(mrEnclave [32]byte) (bool, error) {
+	return _TrustManagementRouter.Contract.MrEnclaveAuthorized(&_TrustManagementRouter.CallOpts, mrEnclave)
+}
+
+// MrEnclaveAuthorized is a free data retrieval call binding the contract method 0x9a16def0.
+//
+// Solidity: function mrEnclaveAuthorized(bytes32 mrEnclave) view returns(bool isAuthorized)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) MrEnclaveAuthorized(mrEnclave [32]byte) (bool, error) {
+	return _TrustManagementRouter.Contract.MrEnclaveAuthorized(&_TrustManagementRouter.CallOpts, mrEnclave)
+}
+
 // PerfomanceFeeRate is a free data retrieval call binding the contract method 0x2571eb15.
 //
 // Solidity: function perfomanceFeeRate() view returns(uint256 performanceFeeRateValue)
@@ -765,56 +796,32 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) ProxiableUUID(
 
 // RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
 //
-// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
-func (_TrustManagementRouter *TrustManagementRouterCaller) RootCert(opts *bind.CallOpts) (struct {
-	BodyPartOne []byte
-	PublicKey   []byte
-	BodyPartTwo []byte
-	Signature   []byte
-}, error) {
+// Solidity: function rootCert() view returns((bytes,bytes,bytes,bytes) rootCertificate)
+func (_TrustManagementRouter *TrustManagementRouterCaller) RootCert(opts *bind.CallOpts) (ChunkedX509Cert, error) {
 	var out []interface{}
 	err := _TrustManagementRouter.contract.Call(opts, &out, "rootCert")
 
-	outstruct := new(struct {
-		BodyPartOne []byte
-		PublicKey   []byte
-		BodyPartTwo []byte
-		Signature   []byte
-	})
 	if err != nil {
-		return *outstruct, err
+		return *new(ChunkedX509Cert), err
 	}
 
-	outstruct.BodyPartOne = *abi.ConvertType(out[0], new([]byte)).(*[]byte)
-	outstruct.PublicKey = *abi.ConvertType(out[1], new([]byte)).(*[]byte)
-	outstruct.BodyPartTwo = *abi.ConvertType(out[2], new([]byte)).(*[]byte)
-	outstruct.Signature = *abi.ConvertType(out[3], new([]byte)).(*[]byte)
+	out0 := *abi.ConvertType(out[0], new(ChunkedX509Cert)).(*ChunkedX509Cert)
 
-	return *outstruct, err
+	return out0, err
 
 }
 
 // RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
 //
-// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
-func (_TrustManagementRouter *TrustManagementRouterSession) RootCert() (struct {
-	BodyPartOne []byte
-	PublicKey   []byte
-	BodyPartTwo []byte
-	Signature   []byte
-}, error) {
+// Solidity: function rootCert() view returns((bytes,bytes,bytes,bytes) rootCertificate)
+func (_TrustManagementRouter *TrustManagementRouterSession) RootCert() (ChunkedX509Cert, error) {
 	return _TrustManagementRouter.Contract.RootCert(&_TrustManagementRouter.CallOpts)
 }
 
 // RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
 //
-// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
-func (_TrustManagementRouter *TrustManagementRouterCallerSession) RootCert() (struct {
-	BodyPartOne []byte
-	PublicKey   []byte
-	BodyPartTwo []byte
-	Signature   []byte
-}, error) {
+// Solidity: function rootCert() view returns((bytes,bytes,bytes,bytes) rootCertificate)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) RootCert() (ChunkedX509Cert, error) {
 	return _TrustManagementRouter.Contract.RootCert(&_TrustManagementRouter.CallOpts)
 }
 
@@ -944,7 +951,7 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) UsedSignature(
 
 // VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterCaller) VerifyCert(opts *bind.CallOpts, cert ChunkedX509Cert, publicKey []byte) (bool, error) {
 	var out []interface{}
 	err := _TrustManagementRouter.contract.Call(opts, &out, "verifyCert", cert, publicKey)
@@ -961,14 +968,14 @@ func (_TrustManagementRouter *TrustManagementRouterCaller) VerifyCert(opts *bind
 
 // VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterSession) VerifyCert(cert ChunkedX509Cert, publicKey []byte) (bool, error) {
 	return _TrustManagementRouter.Contract.VerifyCert(&_TrustManagementRouter.CallOpts, cert, publicKey)
 }
 
 // VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool isValid)
 func (_TrustManagementRouter *TrustManagementRouterCallerSession) VerifyCert(cert ChunkedX509Cert, publicKey []byte) (bool, error) {
 	return _TrustManagementRouter.Contract.VerifyCert(&_TrustManagementRouter.CallOpts, cert, publicKey)
 }
@@ -1319,25 +1326,25 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) UpgradeToA
 	return _TrustManagementRouter.Contract.UpgradeToAndCall(&_TrustManagementRouter.TransactOpts, newImplementation, data)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x54f3f0b5.
+// Withdraw is a paid mutator transaction binding the contract method 0x9b40e41e.
 //
-// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 amountWithYield) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Withdraw(opts *bind.TransactOpts, user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "withdraw", user, token, receiver, depositIds, amountWithYield)
+// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 baseAmount, uint256 amountWithYield) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Withdraw(opts *bind.TransactOpts, user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, baseAmount *big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "withdraw", user, token, receiver, depositIds, baseAmount, amountWithYield)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x54f3f0b5.
+// Withdraw is a paid mutator transaction binding the contract method 0x9b40e41e.
 //
-// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 amountWithYield) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Withdraw(user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, user, token, receiver, depositIds, amountWithYield)
+// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 baseAmount, uint256 amountWithYield) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Withdraw(user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, baseAmount *big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, user, token, receiver, depositIds, baseAmount, amountWithYield)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x54f3f0b5.
+// Withdraw is a paid mutator transaction binding the contract method 0x9b40e41e.
 //
-// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 amountWithYield) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Withdraw(user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, user, token, receiver, depositIds, amountWithYield)
+// Solidity: function withdraw(address user, address token, address receiver, uint256[] depositIds, uint256 baseAmount, uint256 amountWithYield) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Withdraw(user common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, baseAmount *big.Int, amountWithYield *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, user, token, receiver, depositIds, baseAmount, amountWithYield)
 }
 
 // TrustManagementRouterAllowedTokenSetIterator is returned from FilterAllowedTokenSet and is used to iterate over the raw logs and unpacked data for AllowedTokenSet events raised by the TrustManagementRouter contract.
@@ -2212,6 +2219,152 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseInitialized(lo
 	return event, nil
 }
 
+// TrustManagementRouterMrEnclaveSetIterator is returned from FilterMrEnclaveSet and is used to iterate over the raw logs and unpacked data for MrEnclaveSet events raised by the TrustManagementRouter contract.
+type TrustManagementRouterMrEnclaveSetIterator struct {
+	Event *TrustManagementRouterMrEnclaveSet // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterMrEnclaveSetIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterMrEnclaveSet)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterMrEnclaveSet)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterMrEnclaveSetIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterMrEnclaveSetIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterMrEnclaveSet represents a MrEnclaveSet event raised by the TrustManagementRouter contract.
+type TrustManagementRouterMrEnclaveSet struct {
+	MrEnclave    [32]byte
+	IsAuthorized bool
+	Caller       common.Address
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterMrEnclaveSet is a free log retrieval operation binding the contract event 0xf2ec1200fd7533c710e00ced1a72001aba7b6d3eec4a7c6e281de2ad16910598.
+//
+// Solidity: event MrEnclaveSet(bytes32 mrEnclave, bool isAuthorized, address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterMrEnclaveSet(opts *bind.FilterOpts, caller []common.Address) (*TrustManagementRouterMrEnclaveSetIterator, error) {
+
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "MrEnclaveSet", callerRule)
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterMrEnclaveSetIterator{contract: _TrustManagementRouter.contract, event: "MrEnclaveSet", logs: logs, sub: sub}, nil
+}
+
+// WatchMrEnclaveSet is a free log subscription operation binding the contract event 0xf2ec1200fd7533c710e00ced1a72001aba7b6d3eec4a7c6e281de2ad16910598.
+//
+// Solidity: event MrEnclaveSet(bytes32 mrEnclave, bool isAuthorized, address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchMrEnclaveSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterMrEnclaveSet, caller []common.Address) (event.Subscription, error) {
+
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "MrEnclaveSet", callerRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterMrEnclaveSet)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "MrEnclaveSet", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseMrEnclaveSet is a log parse operation binding the contract event 0xf2ec1200fd7533c710e00ced1a72001aba7b6d3eec4a7c6e281de2ad16910598.
+//
+// Solidity: event MrEnclaveSet(bytes32 mrEnclave, bool isAuthorized, address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseMrEnclaveSet(log types.Log) (*TrustManagementRouterMrEnclaveSet, error) {
+	event := new(TrustManagementRouterMrEnclaveSet)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "MrEnclaveSet", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
 // TrustManagementRouterPerformanceFeeRateSetIterator is returned from FilterPerformanceFeeRateSet and is used to iterate over the raw logs and unpacked data for PerformanceFeeRateSet events raised by the TrustManagementRouter contract.
 type TrustManagementRouterPerformanceFeeRateSetIterator struct {
 	Event *TrustManagementRouterPerformanceFeeRateSet // Event containing the contract specifics and raw log
@@ -2827,6 +2980,150 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchRoleRevoked(op
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseRoleRevoked(log types.Log) (*TrustManagementRouterRoleRevoked, error) {
 	event := new(TrustManagementRouterRoleRevoked)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "RoleRevoked", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterRootCertSetIterator is returned from FilterRootCertSet and is used to iterate over the raw logs and unpacked data for RootCertSet events raised by the TrustManagementRouter contract.
+type TrustManagementRouterRootCertSetIterator struct {
+	Event *TrustManagementRouterRootCertSet // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterRootCertSetIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterRootCertSet)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterRootCertSet)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterRootCertSetIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterRootCertSetIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterRootCertSet represents a RootCertSet event raised by the TrustManagementRouter contract.
+type TrustManagementRouterRootCertSet struct {
+	Caller common.Address
+	Raw    types.Log // Blockchain specific contextual infos
+}
+
+// FilterRootCertSet is a free log retrieval operation binding the contract event 0xd941fc17d44329a3280c0dfd2da1fc4a0e7fb2337b63abff947578411d678e9c.
+//
+// Solidity: event RootCertSet(address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterRootCertSet(opts *bind.FilterOpts, caller []common.Address) (*TrustManagementRouterRootCertSetIterator, error) {
+
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "RootCertSet", callerRule)
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterRootCertSetIterator{contract: _TrustManagementRouter.contract, event: "RootCertSet", logs: logs, sub: sub}, nil
+}
+
+// WatchRootCertSet is a free log subscription operation binding the contract event 0xd941fc17d44329a3280c0dfd2da1fc4a0e7fb2337b63abff947578411d678e9c.
+//
+// Solidity: event RootCertSet(address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchRootCertSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterRootCertSet, caller []common.Address) (event.Subscription, error) {
+
+	var callerRule []interface{}
+	for _, callerItem := range caller {
+		callerRule = append(callerRule, callerItem)
+	}
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "RootCertSet", callerRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterRootCertSet)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "RootCertSet", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseRootCertSet is a log parse operation binding the contract event 0xd941fc17d44329a3280c0dfd2da1fc4a0e7fb2337b63abff947578411d678e9c.
+//
+// Solidity: event RootCertSet(address indexed caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseRootCertSet(log types.Log) (*TrustManagementRouterRootCertSet, error) {
+	event := new(TrustManagementRouterRootCertSet)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "RootCertSet", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log

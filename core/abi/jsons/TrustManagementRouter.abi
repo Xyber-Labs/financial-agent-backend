@@ -218,13 +218,6 @@
   },
   {
     "inputs":[
-      
-    ],
-    "name":"XyberTrustManagementRouter__EthereumTransferFailed",
-    "type":"error"
-  },
-  {
-    "inputs":[
       {
         "internalType":"address",
         "name":"target",
@@ -243,22 +236,6 @@
       }
     ],
     "name":"XyberTrustManagementRouter__FeeRateExceeded",
-    "type":"error"
-  },
-  {
-    "inputs":[
-      {
-        "internalType":"uint256",
-        "name":"amount",
-        "type":"uint256"
-      },
-      {
-        "internalType":"uint256",
-        "name":"msgValue",
-        "type":"uint256"
-      }
-    ],
-    "name":"XyberTrustManagementRouter__InvalidAmount",
     "type":"error"
   },
   {
@@ -517,6 +494,31 @@
     "inputs":[
       {
         "indexed":false,
+        "internalType":"bytes32",
+        "name":"mrEnclave",
+        "type":"bytes32"
+      },
+      {
+        "indexed":false,
+        "internalType":"bool",
+        "name":"isAuthorized",
+        "type":"bool"
+      },
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"caller",
+        "type":"address"
+      }
+    ],
+    "name":"MrEnclaveSet",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":false,
         "internalType":"uint256",
         "name":"newPerfomanceFeeRate",
         "type":"uint256"
@@ -604,6 +606,19 @@
       }
     ],
     "name":"RoleRevoked",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"caller",
+        "type":"address"
+      }
+    ],
+    "name":"RootCertSet",
     "type":"event"
   },
   {
@@ -977,7 +992,7 @@
     "outputs":[
       {
         "internalType":"bool",
-        "name":"",
+        "name":"isValid",
         "type":"bool"
       }
     ],
@@ -1391,6 +1406,25 @@
   },
   {
     "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"mrEnclave",
+        "type":"bytes32"
+      }
+    ],
+    "name":"mrEnclaveAuthorized",
+    "outputs":[
+      {
+        "internalType":"bool",
+        "name":"isAuthorized",
+        "type":"bool"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
       
     ],
     "name":"perfomanceFeeRate",
@@ -1466,24 +1500,31 @@
     "name":"rootCert",
     "outputs":[
       {
-        "internalType":"bytes",
-        "name":"bodyPartOne",
-        "type":"bytes"
-      },
-      {
-        "internalType":"bytes",
-        "name":"publicKey",
-        "type":"bytes"
-      },
-      {
-        "internalType":"bytes",
-        "name":"bodyPartTwo",
-        "type":"bytes"
-      },
-      {
-        "internalType":"bytes",
-        "name":"signature",
-        "type":"bytes"
+        "components":[
+          {
+            "internalType":"bytes",
+            "name":"bodyPartOne",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"publicKey",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"bodyPartTwo",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"signature",
+            "type":"bytes"
+          }
+        ],
+        "internalType":"struct ChunkedX509Cert",
+        "name":"rootCertificate",
+        "type":"tuple"
       }
     ],
     "stateMutability":"view",
@@ -1699,7 +1740,7 @@
     "outputs":[
       {
         "internalType":"bool",
-        "name":"",
+        "name":"isValid",
         "type":"bool"
       }
     ],
@@ -1727,6 +1768,11 @@
         "internalType":"uint256[]",
         "name":"depositIds",
         "type":"uint256[]"
+      },
+      {
+        "internalType":"uint256",
+        "name":"baseAmount",
+        "type":"uint256"
       },
       {
         "internalType":"uint256",

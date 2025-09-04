@@ -404,6 +404,7 @@ func (p *TrustManagementProvider) Withdraw(
 		tokenAddress,
 		userAddress,
 		depositIds,
+		amount,
 		amountWithYield,
 	)
 	if err != nil {
@@ -548,6 +549,7 @@ func (p *TrustManagementProvider) WithdrawNative(
 		trustManagementNativeTokenLabel,
 		userAddress,
 		depositIds,
+		amount,
 		amountWithYield,
 	)
 	if err != nil {
