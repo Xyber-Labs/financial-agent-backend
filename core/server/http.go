@@ -121,13 +121,17 @@ func (s *HttpAgentServer) registerHandlers() {
 // @Router /withdraw [post]
 func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		s.logger.Info().Msg("withdrawHandler: received request")
 		var req WithdrawRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			s.logger.Error().Err(err).Msg("withdrawHandler: failed to parse request body")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+		s.logger.Info().
+			Str("userAddress", req.UserAddress).
+			Str("tokenAddress", req.TokenAddress).
+			Str("amount", req.Amount).
+			Msg("withdrawHandler: received request")
 
 		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
 			s.logger.Error().Str("userAddress", req.UserAddress).Msg("withdrawHandler: userAddress is required")
@@ -183,6 +187,10 @@ func (s *HttpAgentServer) withdrawNativeHandler() gin.HandlerFunc {
 		if err := c.ShouldBindJSON(&req); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		}
+		s.logger.Info().
+			Str("userAddress", req.UserAddress).
+			Str("amount", req.Amount).
+			Msg("withdrawNativeHandler: received request")
 
 		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
