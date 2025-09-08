@@ -118,13 +118,17 @@ var (
 				nativeErc20,
 			)
 
+			startBlock := -1
+			if cfg.Network.StartBlock != nil {
+				startBlock = int(*cfg.Network.StartBlock)
+			}
 			blockLimit := 100
 			eventHandler := network.NewEvmEventHandler(
 				trustManagementProvider,
 				trustManagementRouter,
 				ethClient,
 				uint64(blockLimit),
-				-1,
+				int64(startBlock),
 			)
 			go eventHandler.Start(ctx)
 
