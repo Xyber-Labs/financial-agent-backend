@@ -37,7 +37,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
 
 	backend := testutils.CreateSimulatedNode(ethtypes.GenesisAlloc{
-		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+		adminPubkey: {Balance: big.NewInt(100000000000000000)},
 	})
 	chainId, err := backend.Client().ChainID(context.Background())
 	require.NoError(t, err)

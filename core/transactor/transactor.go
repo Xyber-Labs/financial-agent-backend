@@ -3,6 +3,7 @@ package transactor
 import (
 	"crypto/ecdsa"
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
 	"math/big"
 	"time"
@@ -13,6 +14,7 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/rs/zerolog/log"
+	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 )
@@ -60,41 +62,61 @@ func (t *Transactor) InitializeOnChainSession() error {
 		Str("address", t.TeeSessionAddress.String()).
 		Msg("NewTeeSession: generated session key for TeeSession")
 
-	// // Extract SGX quote from the environment
-	// quote, err := t.extractQuote(t.TeeSessionAddress)
-	// if err != nil {
-	// 	return err
-	// }
-	// log.Info().
-	// 	Str("quote", string(quote)).
-	// 	Str("quoteHex", hex.EncodeToString(quote)).
-	// 	Msg("NewTeeSession: extracted quote for TeeSession")
+	// Extract SGX quote from the environment
+	quote, err := t.extractQuote(t.TeeSessionAddress)
+	if err != nil {
+		return err
+	}
+	log.Info().
+		Str("quote", hex.EncodeToString(quote)).
+		Msg("NewTeeSession: extracted quote for TeeSession")
 
-	// // Prepare SGX quote
-	// sgxParser := sgx_quote.NewSgxParser()
-	// parsedQuote, err := sgxParser.ParseQuote(quote)
-	// if err != nil {
-	// 	return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
-	// }
+	// Prepare SGX quote
+	sgxParser := sgx_quote.NewSgxParser()
+	parsedQuote, err := sgxParser.ParseQuote(quote)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
+	}
 
-	// teeXyberProof, err := FromSgxQuoteToProof(parsedQuote)
-	// if err != nil {
-	// 	return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
-	// }
+	teeXyberProof, err := FromSgxQuoteToProof(parsedQuote)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
+	}
 
-	// // Initialize onchain tee session session
-	// tx, err := t.TrustManagementRouter.InitSessionKey(
-	// 	t.TransactOpts,
-	// 	teeXyberProof.Leaf,
-	// 	teeXyberProof.Intermediate,
-	// 	teeXyberProof.Quote,
-	// 	t.TeeSessionAddress,
-	// )
-	// if err != nil {
-	// 	return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
-	// }
+	log.Info().
+		Str("proof.leaf.bodyPartOne", hex.EncodeToString(teeXyberProof.Leaf.BodyPartOne)).
+		Str("proof.leaf.publicKey", hex.EncodeToString(teeXyberProof.Leaf.PublicKey)).
+		Str("proof.leaf.bodyPartTwo", hex.EncodeToString(teeXyberProof.Leaf.BodyPartTwo)).
+		Str("proof.leaf.signature", hex.EncodeToString(teeXyberProof.Leaf.Signature)).
+		Str("proof.intermediate.bodyPartOne", hex.EncodeToString(teeXyberProof.Intermediate.BodyPartOne)).
+		Str("proof.intermediate.publicKey", hex.EncodeToString(teeXyberProof.Intermediate.PublicKey)).
+		Str("proof.intermediate.bodyPartTwo", hex.EncodeToString(teeXyberProof.Intermediate.BodyPartTwo)).
+		Str("proof.intermediate.signature", hex.EncodeToString(teeXyberProof.Intermediate.Signature)).
+		Str("proof.quote.Header", hex.EncodeToString(teeXyberProof.Quote.Header)).
+		Str("proof.quote.IsvReport", hex.EncodeToString(teeXyberProof.Quote.IsvReport)).
+		Str("proof.quote.IsvReportSignature", hex.EncodeToString(teeXyberProof.Quote.IsvReportSignature)).
+		Str("proof.quote.AttestationKey", hex.EncodeToString(teeXyberProof.Quote.AttestationKey)).
+		Str("proof.quote.QeReport", hex.EncodeToString(teeXyberProof.Quote.QeReport)).
+		Str("proof.quote.QeReportSignature", hex.EncodeToString(teeXyberProof.Quote.QeReportSignature)).
+		Str("proof.quote.QeAuthenticationData", hex.EncodeToString(teeXyberProof.Quote.QeAuthenticationData)).
+		Msg("TeeSession: Prepared quote for initSessionKey transaction")
 
-	// log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TrustManagementRouter")
+	opts := *t.TransactOpts
+	opts.GasLimit = 10000000 // 10M
+
+	// Initialize onchain tee session session
+	tx, err := t.TrustManagementRouter.InitSessionKey(
+		&opts,
+		teeXyberProof.Leaf,
+		teeXyberProof.Intermediate,
+		teeXyberProof.Quote,
+		t.TeeSessionAddress,
+	)
+	if err != nil {
+		return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
+	}
+
+	log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TrustManagementRouter")
 
 	return nil
 }

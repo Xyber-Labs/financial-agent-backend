@@ -44,7 +44,7 @@ func TestDeposit(t *testing.T) {
 	r.True(ok)
 	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
 	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
-		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+		adminPubkey: {Balance: big.NewInt(100000000000000000)},
 	})
 
 	chainId, err := ethBackend.Client().ChainID(context.Background())
@@ -166,7 +166,7 @@ func TestWithdraw(t *testing.T) {
 	r.True(ok)
 	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
 	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
-		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+		adminPubkey: {Balance: big.NewInt(100000000000000000)},
 	})
 
 	chainId, err := ethBackend.Client().ChainID(ctx)
