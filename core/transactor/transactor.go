@@ -101,12 +101,9 @@ func (t *Transactor) InitializeOnChainSession() error {
 		Str("proof.quote.QeAuthenticationData", hex.EncodeToString(teeXyberProof.Quote.QeAuthenticationData)).
 		Msg("TeeSession: Prepared quote for initSessionKey transaction")
 
-	opts := *t.TransactOpts
-	opts.GasLimit = 10000000 // 10M
-
 	// Initialize onchain tee session session
 	tx, err := t.TrustManagementRouter.InitSessionKey(
-		&opts,
+		t.TransactOpts,
 		teeXyberProof.Leaf,
 		teeXyberProof.Intermediate,
 		teeXyberProof.Quote,
@@ -138,15 +135,22 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 		}
 	}
 
-	deadline := time.Now().Add(10 * time.Minute)
-	signature, err := t.createTeeSessionSignature(big.NewInt(deadline.Unix()), transactionsArg)
+	deadline := big.NewInt(time.Now().Add(10 * time.Minute).Unix())
+	signature, err := t.createTeeSessionSignature(deadline, transactionsArg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create tee session signature: %w", err)
 	}
 
-	tx, err := t.TrustManagementRouter.Execute(t.TransactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
+	tx, err := t.TrustManagementRouter.Execute(t.TransactOpts, transactionsArg, signature, deadline)
 	if err != nil {
-		return nil, fmt.Errorf("failed to send transaction: %w", err)
+		log.Info().Str("error", err.Error()).Msg("Transactor.BatchAndExecute: failed to send transaction, trying with custom gas limit")
+		// If tx failed, try again with custom gas limit
+		opts := *t.TransactOpts
+		opts.GasLimit = 5000000
+		tx, err = t.TrustManagementRouter.Execute(&opts, transactionsArg, signature, deadline)
+		if err != nil {
+			return nil, fmt.Errorf("failed to send transaction: %w", err)
+		}
 	}
 
 	log.Info().Str("tx", tx.Hash().String()).Int("tx_count", len(innerTxs)).Msg("Transactor.BatchAndExecute: sent batched transaction")
@@ -154,8 +158,10 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 }
 
 func (t *Transactor) extractQuote(sessionKey ethcommon.Address) ([]byte, error) {
-	return t.TeeService.GetQuote(sessionKey[:])
-	// return []byte("quote"), nil
+	// On-chain contract expects userData to be `keccak256(abi.encodePacked(sessionKey))`.
+	// Convert it in that format here.
+	userData := ethcrypto.Keccak256(sessionKey[:])
+	return t.TeeService.GetQuote(userData)
 }
 
 // Generates signature using t.sessionKey with the following message format:
@@ -201,7 +207,7 @@ func (t *Transactor) createTeeSessionSignature(
 		return nil, fmt.Errorf("createTeeSessionSignature: ABI pack failed: %w", err)
 	}
 
-	// Solidity: keccak256(abi.encode(chainid, address(this), deadline, txs))
+	// Solidity: keccak256(abi.encode(chainid, address(router), deadline, txs))
 	msgHash := ethcrypto.Keccak256(packed)
 
 	signature, err := ethcrypto.Sign(msgHash, t.TeeSessionKey)
