@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/ethereum/go-ethereum/accounts"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
@@ -20,14 +21,15 @@ import (
 )
 
 type Transactor struct {
-	Client                       bind.ContractBackend
-	ChainId                      *big.Int
-	TeeService                   TeeService
-	TeeSessionKey                *ecdsa.PrivateKey
-	TeeSessionAddress            ethcommon.Address
-	TransactOpts                 *bind.TransactOpts
-	TrustManagementRouterAddress ethcommon.Address
-	TrustManagementRouter        *TrustManagementRouter.TrustManagementRouter
+	Client                           bind.ContractBackend
+	ChainId                          *big.Int
+	TeeService                       TeeService
+	TeeSessionKey                    *ecdsa.PrivateKey
+	TeeSessionAddress                ethcommon.Address
+	TransactOpts                     *bind.TransactOpts
+	TrustManagementRouterAddress     ethcommon.Address
+	TrustManagementRouterImplAddress ethcommon.Address
+	TrustManagementRouter            *TrustManagementRouter.TrustManagementRouter
 }
 
 func NewTransactor(
@@ -38,13 +40,18 @@ func NewTransactor(
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	teeService TeeService,
 ) (*Transactor, error) {
+	trustManagementRouterImplAddress, err := trustManagementRouter.WALLETBEACON(&bind.CallOpts{})
+	if err != nil {
+		return nil, err
+	}
 	return &Transactor{
-		Client:                       client,
-		ChainId:                      chainId,
-		TeeService:                   teeService,
-		TransactOpts:                 transactOpts,
-		TrustManagementRouterAddress: trustManagementRouterAddress,
-		TrustManagementRouter:        trustManagementRouter,
+		Client:                           client,
+		ChainId:                          chainId,
+		TeeService:                       teeService,
+		TransactOpts:                     transactOpts,
+		TrustManagementRouterAddress:     trustManagementRouterAddress,
+		TrustManagementRouterImplAddress: trustManagementRouterImplAddress,
+		TrustManagementRouter:            trustManagementRouter,
 	}, nil
 }
 
@@ -170,7 +177,7 @@ func (t *Transactor) createTeeSessionSignature(
 	deadline *big.Int,
 	transactions []TrustManagementRouter.Transaction,
 ) ([]byte, error) {
-	sig, _, err := CreateTeeSessionSignature(t.ChainId, t.TeeSessionKey, t.TrustManagementRouterAddress, deadline, transactions)
+	sig, _, err := CreateTeeSessionSignature(t.ChainId, t.TeeSessionKey, t.TrustManagementRouterImplAddress, deadline, transactions)
 	if err != nil {
 		return nil, err
 	}
@@ -243,11 +250,12 @@ func CreateTeeSessionSignature(
 	// Solidity: keccak256(abi.encode(chainid, address(router), deadline, txs))
 	msgHash := ethcrypto.Keccak256(packed)
 	fmt.Println("hashedData:", hex.EncodeToString(msgHash))
-
-	signature, err := ethcrypto.Sign(msgHash, teeSessionKey)
+	eip712MsgHash := accounts.TextHash(msgHash)
+	fmt.Println("eip712MsgHash:", hex.EncodeToString(eip712MsgHash))
+	signature, err := ethcrypto.Sign(eip712MsgHash, teeSessionKey)
 	if err != nil {
 		return nil, nil, fmt.Errorf("createTeeSessionSignature: sign failed: %w", err)
 	}
 
-	return signature, msgHash, nil
+	return signature, eip712MsgHash, nil
 }

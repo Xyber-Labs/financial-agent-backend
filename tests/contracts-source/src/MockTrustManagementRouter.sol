@@ -90,6 +90,10 @@ contract MockTrustManagementRouter {
         return (mockWalletAddress, mockIsDeployed);
     }
 
+    function WALLET_BEACON() public view returns(address) {
+        return address(this);
+    }
+
 
     /*
      * Below are internal mock-functions to help replicating needed functionality from the original TrustManagementRouter contract

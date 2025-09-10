@@ -43,6 +43,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 	txOpts, err := bind.NewKeyedTransactorWithChainID(adminKey, chainId)
 	require.NoError(t, err)
 	mockedContracts := testutils.DeployMockedContracts(backend.Client(), txOpts)
+	backend.Commit()
 
 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
 		mockedContracts.TrustManagementRouter,
@@ -112,7 +113,7 @@ func TestCreateTeeSessionSignature(t *testing.T) {
 		},
 	}
 	trustManagementRouterAddress := ethcommon.HexToAddress("0x9C868614ffca7da36B36330b1f317B117c7834dE")
-	expectedMsgHash := ethcommon.FromHex("627fd8adf20484e0fa193746fe430ec1658107245731b8c8bcfa7dee70744b2b")
+	expectedMsgHash := ethcommon.FromHex("b18d4c1af7f4427b6de61b5244263937f228b4cb003e932744f6491264d8158d")
 	sig, msgHash, err := CreateTeeSessionSignature(chainId, teeSessionKey, trustManagementRouterAddress, deadline, transactions)
 	r.NoError(err)
 	r.NotEmpty(sig)
