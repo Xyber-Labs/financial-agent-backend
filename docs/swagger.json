@@ -1,0 +1,108 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/withdraw": {
+            "post": {
+                "description": "withdraw the provided amount of tokens + earned rewards from the protocol and pool where the token is staked",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "withdraw assets on behalf of user",
+                "parameters": [
+                    {
+                        "description": "Withdraw request payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/withdraw-native": {
+            "post": {
+                "description": "withdraw the provided amount of native tokens from the protocol, unwrap them to native and send to user address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "withdraw native tokens on behalf of user",
+                "parameters": [
+                    {
+                        "description": "Withdraw native request payload",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawNativeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/server.WithdrawResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "server.WithdrawNativeRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "userAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.WithdrawRequest": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "string"
+                },
+                "chainId": {
+                    "type": "integer"
+                },
+                "tokenAddress": {
+                    "type": "string"
+                },
+                "userAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "server.WithdrawResponse": {
+            "type": "object",
+            "properties": {
+                "tx": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

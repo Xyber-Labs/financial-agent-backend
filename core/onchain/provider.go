@@ -4,7 +4,9 @@ import (
 	"context"
 	"financial-agent-backend/core/abi/bindings/AaveAToken"
 	"financial-agent-backend/core/abi/bindings/AavePool"
+	"financial-agent-backend/core/abi/bindings/ERC20"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/abi/bindings/TrustManagementWallet"
 	"financial-agent-backend/core/abi/bindings/WETH"
 	"financial-agent-backend/core/transactor"
 	"fmt"
@@ -14,16 +16,25 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
+
+// In TrustManagement systems operations with native use this address to indicate that.
+// We parse things such as events with this address to determine that it's a native token
+// operation.
+const TrustManagementNativeTokenLabel = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
 
 type TrustManagementProvider struct {
 	client                bind.ContractBackend
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
+	AavePoolAddress       ethcommon.Address
 	AavePool              *AavePool.AavePool
 	Transactor            *transactor.Transactor
 	createTxOpts          *bind.TransactOpts
 	callOpts              *bind.CallOpts
+
+	logger zerolog.Logger
 
 	// Optinal wrapped ERC20 native token for the network. If provided, enables DepositNative function
 	NativeErc20Address *ethcommon.Address
@@ -34,6 +45,7 @@ func NewTrustManagementProvider(
 	client bind.ContractBackend,
 	transactor *transactor.Transactor,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
+	aavePoolAddress ethcommon.Address,
 	aavePool *AavePool.AavePool,
 	callOpts *bind.CallOpts,
 	nativeErc20Address *ethcommon.Address,
@@ -56,10 +68,12 @@ func NewTrustManagementProvider(
 		Transactor:            transactor,
 		createTxOpts:          &createTxOpts,
 		TrustManagementRouter: trustManagementRouter,
+		AavePoolAddress:       aavePoolAddress,
 		AavePool:              aavePool,
 		callOpts:              callOpts,
 		NativeErc20Address:    nativeErc20Address,
 		NativeErc20:           nativeErc20,
+		logger:                log.With().Str("component", "TrustManagementProvider").Logger(),
 	}
 }
 
@@ -68,24 +82,88 @@ func (p *TrustManagementProvider) Deposit(
 	tokenAddress ethcommon.Address,
 	tokenAmount *big.Int,
 ) (*ethtypes.Transaction, error) {
-	log.Info().Msg("Creating AavePool.supply transaction")
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Int64("tokenAmount", tokenAmount.Int64()).
+		Msg("Executing TrustManagementProvider.Deposit")
+
+	// Get user wallet address
+	userWalletData, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if !userWalletData.IsDeployed {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletData.WalletAddress.String())
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletData.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := ERC20.NewERC20(tokenAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create Token.Approve transaction
+	approveTx, err := token.Approve(p.createTxOpts, p.AavePoolAddress, tokenAmount)
+	if err != nil {
+		return nil, err
+	}
+
+	if approveTx.To() == nil {
+		return nil, fmt.Errorf("INTERNAL ERROR: approve transaction has no recipient")
+	}
+
+	// Since we need to call approve from wallet's context, we need to wrap the
+	// approve transaction with Wallet.execute and pass it to Router. In this case
+	// Router.execute executes Wallet.execute which calls Token.Approve from wallet's context.
+	wrappedApproveTx := TrustManagementWallet.Transaction{
+		Target: *approveTx.To(),
+		Data:   approveTx.Data(),
+		Value:  approveTx.Value(),
+	}
 
 	// Create AavePool.supply transaction
 	aaveSupplyTx, err := p.AavePool.Supply(
 		p.createTxOpts,
 		tokenAddress,
 		tokenAmount,
-		userAddress,
+		userWalletData.WalletAddress,
 		0,
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Info().Msg("Batching and executing transactions")
+	if aaveSupplyTx.To() == nil {
+		return nil, fmt.Errorf("INTERNAL ERROR: supply transaction has no recipient")
+	}
+
+	wrappedSupplyTx := TrustManagementWallet.Transaction{
+		Target: *aaveSupplyTx.To(),
+		Data:   aaveSupplyTx.Data(),
+		Value:  aaveSupplyTx.Value(),
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, []TrustManagementWallet.Transaction{wrappedApproveTx, wrappedSupplyTx})
+	if err != nil {
+		return nil, err
+	}
+
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("userWallet", userWalletData.WalletAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Str("tokenAmount", tokenAmount.String()).
+		Str("aavePool", p.AavePoolAddress.String()).
+		Msg("Executing batched transaction for deposit")
 
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveSupplyTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
 	if err != nil {
 		return nil, err
 	}
@@ -102,19 +180,30 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, fmt.Errorf("NativeErc20 is not set, DepositNative is not available")
 	}
 
-	nativeWrapOpts := bind.TransactOpts{
-		From:     userAddress,
-		NoSend:   true,
-		Value:    nativeAmount,
-		GasLimit: 1000000,
-		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
-			return tx, nil
-		},
-		Context: context.Background(),
+	userWalletData, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
 	}
-	nativeWrapTx, err := p.NativeErc20.Deposit(
-		&nativeWrapOpts,
-	)
+
+	if !userWalletData.IsDeployed {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletData.WalletAddress.String())
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletData.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// On native deposit value, we need to pass Value as the amount we want to wrap.
+	// For this purpose, recreate createWethDepositTxOpts with Value set
+	createWethDepositTxOpts := *p.createTxOpts
+	createWethDepositTxOpts.Value = nativeAmount
+	nativeDepositTx, err := p.NativeErc20.Deposit(&createWethDepositTxOpts)
+	if err != nil {
+		return nil, err
+	}
+
+	nativeApproveTx, err := p.NativeErc20.Approve(p.createTxOpts, p.AavePoolAddress, nativeAmount)
 	if err != nil {
 		return nil, err
 	}
@@ -124,17 +213,47 @@ func (p *TrustManagementProvider) DepositNative(
 		p.createTxOpts,
 		*p.NativeErc20Address,
 		nativeAmount,
-		userAddress,
+		userWalletData.WalletAddress,
 		0,
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Info().Msg("Batching and executing transactions")
+	walletExecuteTxs := []TrustManagementWallet.Transaction{
+		{
+			Target: *nativeDepositTx.To(),
+			Data:   nativeDepositTx.Data(),
+			Value:  nativeDepositTx.Value(),
+		},
+		{
+			Target: *nativeApproveTx.To(),
+			Data:   nativeApproveTx.Data(),
+			Value:  nativeApproveTx.Value(),
+		},
+		{
+			Target: *aaveSupplyTx.To(),
+			Data:   aaveSupplyTx.Data(),
+			Value:  aaveSupplyTx.Value(),
+		},
+	}
 
-	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{nativeWrapTx, aaveSupplyTx})
+	walletExecuteTx, err := userWallet.Execute(
+		p.createTxOpts,
+		walletExecuteTxs,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("userWallet", userWalletData.WalletAddress.String()).
+		Str("nativeAmount", nativeAmount.String()).
+		Str("aavePool", p.AavePoolAddress.String()).
+		Msg("Executing batched transaction for native deposit")
+
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
 	if err != nil {
 		return nil, err
 	}
@@ -185,17 +304,6 @@ func (p *TrustManagementProvider) Withdraw(
 	userAddress ethcommon.Address,
 ) (*ethtypes.Transaction, error) {
 
-	// Call AavePool.withdraw
-	aaveWithdrawTx, err := p.AavePool.Withdraw(
-		p.createTxOpts,
-		tokenAddress,
-		amount,
-		userAddress,
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	deposits, err := p.TrustManagementRouter.GetDeposits(
 		p.callOpts,
 		userAddress,
@@ -239,12 +347,52 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
-	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userAddress)
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
+	if !userWalletAddress.IsDeployed {
+		return nil, fmt.Errorf("wallet is not deployed")
+	}
+
+	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userWalletAddress.WalletAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	withdrawAmounts, err := calculateWithdrawAmounts(amount, unlockedDepositAmount, userATokenBalance)
+	if err != nil {
+		return nil, err
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call AavePool.withdraw
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
+		p.createTxOpts,
+		tokenAddress,
+		withdrawAmounts.AmountWithYield,
+		userWalletAddress.WalletAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if aaveWithdrawTx.To() == nil {
+		return nil, fmt.Errorf("aave withdraw tx to is nil")
+	}
+
+	wrappedAaveWithdrawTx := TrustManagementWallet.Transaction{
+		Target: *aaveWithdrawTx.To(),
+		Data:   aaveWithdrawTx.Data(),
+		Value:  aaveWithdrawTx.Value(),
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, []TrustManagementWallet.Transaction{wrappedAaveWithdrawTx})
 	if err != nil {
 		return nil, err
 	}
@@ -256,14 +404,172 @@ func (p *TrustManagementProvider) Withdraw(
 		tokenAddress,
 		userAddress,
 		depositIds,
-		amountWithYield,
+		withdrawAmounts.BaseAmount,
+		withdrawAmounts.AmountWithYield,
 	)
 	if err != nil {
 		return nil, err
 	}
 
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("withdrawAmounts.BaseAmount", withdrawAmounts.BaseAmount.String()).
+		Str("withdrawAmounts.AmountWithYield", withdrawAmounts.AmountWithYield.String()).
+		Int("depositIdsCount", len(depositIds)).
+		Msg("Executing batched transaction for withdraw")
+
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveWithdrawTx, routerWithdrawTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx, routerWithdrawTx})
+	if err != nil {
+		return nil, err
+	}
+
+	return tx, nil
+}
+
+func (p *TrustManagementProvider) WithdrawNative(
+	amount *big.Int,
+	userAddress ethcommon.Address,
+) (*ethtypes.Transaction, error) {
+
+	if p.NativeErc20Address == nil || p.NativeErc20 == nil {
+		return nil, fmt.Errorf("NativeErc20 is not set, WithdrawNative is not available")
+	}
+
+	trustManagementNativeTokenLabel := ethcommon.HexToAddress(TrustManagementNativeTokenLabel)
+
+	deposits, err := p.TrustManagementRouter.GetDeposits(
+		p.callOpts,
+		userAddress,
+		trustManagementNativeTokenLabel,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var depositIds []*big.Int
+	unlockedDepositAmount := big.NewInt(0)
+	currentTime := big.NewInt(time.Now().Unix())
+
+	// In this loop we need to identify deposits which we will have to liquidate.
+	// Deposits are qualified for liquidation when they are unlocked.
+	// We also need to verify here that amount of deposits are enough to cover
+	// the withdraw amount.
+	for i, deposit := range deposits {
+		if deposit.LockedUntil.Cmp(currentTime) < 0 {
+			depositIds = append(depositIds, big.NewInt(int64(i)))
+			unlockedDepositAmount = unlockedDepositAmount.Add(unlockedDepositAmount, deposit.Amount)
+		}
+	}
+
+	if unlockedDepositAmount.Cmp(amount) < 0 {
+		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", unlockedDepositAmount, amount)
+	}
+
+	// Calculate amount of token with yield considering compounded yield of atoken on Aave
+	aTokenAddress, err := p.AavePool.GetReserveAToken(p.callOpts, *p.NativeErc20Address)
+	if err != nil {
+		return nil, err
+	}
+
+	if (aTokenAddress == ethcommon.Address{}) {
+		return nil, fmt.Errorf("aToken is nil or zero address")
+	}
+
+	aToken, err := AaveAToken.NewAaveAToken(aTokenAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if !userWalletAddress.IsDeployed {
+		return nil, fmt.Errorf("wallet is not deployed")
+	}
+
+	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userWalletAddress.WalletAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	withdrawAmounts, err := calculateWithdrawAmounts(amount, unlockedDepositAmount, userATokenBalance)
+	if err != nil {
+		return nil, err
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call AavePool.withdraw
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
+		p.createTxOpts,
+		*p.NativeErc20Address,
+		withdrawAmounts.AmountWithYield,
+		userWalletAddress.WalletAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unwrap ERC20 native into native tokens
+	unwrapNativeTx, err := p.NativeErc20.Withdraw(p.createTxOpts, withdrawAmounts.AmountWithYield)
+	if err != nil {
+		return nil, err
+	}
+
+	walletExecuteTxs := []TrustManagementWallet.Transaction{
+		{
+			Target: *aaveWithdrawTx.To(),
+			Data:   aaveWithdrawTx.Data(),
+			Value:  aaveWithdrawTx.Value(),
+		},
+		{
+			Target: *unwrapNativeTx.To(),
+			Data:   unwrapNativeTx.Data(),
+			Value:  unwrapNativeTx.Value(),
+		},
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, walletExecuteTxs)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call TrustManagementRouter.withdraw
+	routerWithdrawTx, err := p.TrustManagementRouter.Withdraw(
+		p.createTxOpts,
+		userAddress,
+		trustManagementNativeTokenLabel,
+		userAddress,
+		depositIds,
+		withdrawAmounts.BaseAmount,
+		withdrawAmounts.AmountWithYield,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("erc20Native", p.NativeErc20Address.String()).
+		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("requestedAmount", amount.String()).
+		Str("withdrawAmounts.BaseAmount", withdrawAmounts.BaseAmount.String()).
+		Str("withdrawAmounts.AmountWithYield", withdrawAmounts.AmountWithYield.String()).
+		Str("userATokenBalance", userATokenBalance.String()).
+		Str("aTokenAddress", aTokenAddress.String()).
+		Int("depositIdsCount", len(depositIds)).
+		Msg("Executing batched transaction for withdraw")
+
+	// Batch and execute transactions
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx, routerWithdrawTx})
 	if err != nil {
 		return nil, err
 	}
@@ -287,4 +593,53 @@ func calculateAmountWithYield(
 	yieldAmount := new(big.Int).Sub(aTokenBalance, totalDepositAmount)
 	amountWithYield := yieldAmount.Add(yieldAmount, amount)
 	return amountWithYield, nil
+}
+
+type CalculatedWithdrawAmounts struct {
+	BaseAmount      *big.Int
+	AmountWithYield *big.Int
+}
+
+// IMPORTANT: WON'T WORK IF LOCKS ARE ENABLED
+// This function calculates the amounts to be passed to Router.withdraw function.
+// It prioritizes user's yield, meaning it will subtract withdraw amount from the yield first,
+// only touching the deposit when yield is not enough to cover withdraw amount.
+// If withdrawAmount is lower than user's yield (atokenBalance - unlockedDepositAmount),
+// baseAmount is equal to 0, and userWithdrawAmount is subtracted fully from user's yield.
+// Below are couple of examples
+// 1. User withdraw amount higher than he's yield:
+// * User has 100 tokens deposited, and has 20 tokens of yield
+// * User withdraws 50 tokens
+// * baseAmount is 30 tokens, and amountWithYield is 50 tokens (20 is subtracted from yield)
+// 2. User withdraw amount lower than he's yield:
+// * User has 100 tokens deposited, and has 20 tokens of yield
+// * User withdraws 15 tokens
+// * baseAmount is 0 tokens, and amountWithYield is 15 tokens (note that only yield will be subtracted)
+func calculateWithdrawAmounts(
+	userWithdrawAmount *big.Int,
+	unlockedDepositAmount *big.Int,
+	aTokenBalance *big.Int,
+) (CalculatedWithdrawAmounts, error) {
+
+	if aTokenBalance.Cmp(unlockedDepositAmount) < 0 {
+		return CalculatedWithdrawAmounts{}, fmt.Errorf(
+			"INTERNAL ERROR: aToken balance is less than unlocked deposit amount, aToken balance: %s, unlocked deposit amount: %s",
+			aTokenBalance, unlockedDepositAmount,
+		)
+	}
+
+	yieldAmount := new(big.Int).Sub(aTokenBalance, unlockedDepositAmount)
+	// Default: withdraw entirely from yield if sufficient
+	baseAmount := big.NewInt(0)
+	amountWithYield := new(big.Int).Set(userWithdrawAmount)
+
+	// If requested > yield, the excess must be taken from base deposits
+	if userWithdrawAmount.Cmp(yieldAmount) > 0 {
+		baseAmount = new(big.Int).Sub(userWithdrawAmount, yieldAmount)
+	}
+
+	return CalculatedWithdrawAmounts{
+		BaseAmount:      baseAmount,
+		AmountWithYield: amountWithYield,
+	}, nil
 }
