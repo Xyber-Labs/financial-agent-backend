@@ -47,6 +47,7 @@ The interface allows you to explore all REST endpoints, view their schemas, and 
     ```bash
     git clone <repository-url>
     cd financial-agent-backend
+    git submodule update --init
     # Edit config.yaml with your settings (RPC URL, private key, contract addresses)
     ```
 
@@ -67,7 +68,7 @@ go build -o financial-agent cmd/main.go
 ./financial-agent
 
 # Run with custom config path
-./financial-agent --config path/to/config.yaml
+./financial-agent --config ./config.yaml
 ```
 
 ### Using Docker
