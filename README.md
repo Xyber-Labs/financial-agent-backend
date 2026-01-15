@@ -162,48 +162,6 @@ financial-agent-backend/
 └── README.md
 ```
 
-## Architecture Overview
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                    HTTP REST API                         │
-│                   (Gin, Port 8081)                       │
-│           POST /withdraw  POST /withdraw-native          │
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│              TrustManagementProvider                     │
-│  • Fetches user deposits from router contract           │
-│  • Calculates yield-adjusted amounts via Aave aTokens   │
-│  • Wraps operations into batched transactions           │
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│                     Transactor                           │
-│  • Generates TEE session keys (ECDSA)                   │
-│  • Extracts SGX quotes for attestation                  │
-│  • Signs transaction bundles                            │
-│  • Executes via Router.execute() multicall              │
-└────────────────────────┬────────────────────────────────┘
-                         │
-                         ▼
-┌─────────────────────────────────────────────────────────┐
-│               Ethereum Network                           │
-│  • TrustManagementRouter (user management)              │
-│  • TrustManagementWallet (proxy wallets)                │
-│  • AavePool (lending protocol)                          │
-└─────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────┐
-│              Event Listener (Background)                 │
-│  • Polls for new blocks every 10 seconds                │
-│  • Processes Deposited events                           │
-│  • Auto-supplies tokens to Aave                         │
-└─────────────────────────────────────────────────────────┘
-```
-
 ## Contributing
 
 1. Fork the repository
