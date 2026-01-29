@@ -20,6 +20,7 @@ import (
 )
 
 var addressRegex = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+var signatureRegex = regexp.MustCompile("^0x[0-9a-fA-F]{130}$")
 
 type HttpAgentServer struct {
 	Config                  *config.HttpServerConfig
@@ -181,6 +182,48 @@ func (s *HttpAgentServer) claimHandler() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
+			return
+		}
+
+		if req.Amount == "" || req.Amount == "0" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
+			return
+		}
+
+		if req.Deadline == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "deadline is required"})
+			return
+		}
+
+		if req.Signature == "" || !signatureRegex.MatchString(req.Signature) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "deadline is required"})
+			return
+		}
+
+		claimAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
+		if !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
+			return
+		}
+		deadline := big.NewInt(int64(req.Deadline))
+		signature := ethcommon.FromHex(req.Signature)
+
+		tx, err := s.trustManagementProvider.Claim(
+			ethcommon.HexToAddress(req.TokenAddress),
+			ethcommon.HexToAddress(req.UserAddress),
+			claimAmount,
+			signature,
+			deadline,
+		)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, ClaimResponse{Tx: tx.Hash().String()})
 	}
 }
 
@@ -212,6 +255,12 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			return
 		}
 
+		if req.Signature == "" || !signatureRegex.MatchString(req.Signature) {
+			log.Error().Str("signature", req.Signature).Msg("withdrawHandler: signature is required")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "signature is required"})
+			return
+		}
+
 		withdrawAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
 		if !ok {
 			log.Error().Str("amount", req.Amount).Msg("withdrawHandler: unable to convert amount to *big.Int")
@@ -219,13 +268,8 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			return
 		}
 
-		// Parse signature, it should be in the format of 0x[a-ZA-Z0-9]{65}
-		var signature []byte
-		if req.Signature == "" {
-			signature = nil
-		} else {
-			signature = ethcommon.FromHex(req.Signature)
-		}
+		// Parse signature, it should be in the format of 0x[a-ZA-Z0-9]{130}
+		signature := ethcommon.FromHex(req.Signature)
 
 		if len(signature) != 65 {
 			log.Error().Str("signature", req.Signature).Msg("withdrawHandler: signature must be 65 bytes long")
@@ -267,7 +311,12 @@ type DepositResponse struct {
 }
 
 type ClaimRequest struct {
-	ChainId uint64 `json:"chainId"`
+	UserAddress  string `json:"userAddress"`
+	ChainId      uint64 `json:"chainId"`
+	Amount       string `json:"amount"`
+	TokenAddress string `json:"tokenAddress"`
+	Signature    string `json:"signature"`
+	Deadline     uint64 `json:"deadline"`
 }
 
 type WithdrawRequest struct {
@@ -279,5 +328,9 @@ type WithdrawRequest struct {
 }
 
 type WithdrawResponse struct {
+	Tx string `json:"tx"`
+}
+
+type ClaimResponse struct {
 	Tx string `json:"tx"`
 }

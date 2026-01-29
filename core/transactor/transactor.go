@@ -114,7 +114,7 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 	}
 
 	deadline := time.Now().Add(10 * time.Minute)
-	signature := []byte{}
+	signature := []byte{} // TODO
 
 	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
 	if err != nil {

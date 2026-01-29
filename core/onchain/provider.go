@@ -96,6 +96,47 @@ func (p *TrustManagementProvider) Deposit(
 	return tx, nil
 }
 
+func (p *TrustManagementProvider) Claim(
+	tokenAddress ethcommon.Address,
+	userAddress ethcommon.Address,
+	amount *big.Int,
+	signature []byte,
+	deadline *big.Int,
+) (*ethtypes.Transaction, error) {
+	// Create aave transaction that withdraws yield to user
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
+		p.createTxOpts,
+		tokenAddress,
+		amount,
+		userAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Create tx that executes TrustManagementRouter.claim
+	claimTx, err := p.TrustManagementRouter.Claim(
+		p.createTxOpts,
+		userAddress,
+		userAddress,
+		[]ethcommon.Address{tokenAddress},
+		[]*big.Int{amount},
+		signature,
+		deadline,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Batch and execute transactions
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveWithdrawTx, claimTx})
+	if err != nil {
+		return nil, err
+	}
+
+	return tx, nil
+}
+
 func (p *TrustManagementProvider) Withdraw(
 	tokenAddress ethcommon.Address,
 	amount *big.Int,

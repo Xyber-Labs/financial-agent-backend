@@ -309,3 +309,7 @@ func TestWithdraw(t *testing.T) {
 		})
 	}
 }
+
+func TestClaim(t *testing.T) {
+
+}
