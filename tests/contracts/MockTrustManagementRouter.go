@@ -29,6 +29,15 @@ var (
 	_ = abi.ConvertType
 )
 
+// MockTrustManagementRouterPermit is an auto generated low-level Go binding around an user-defined struct.
+type MockTrustManagementRouterPermit struct {
+	Amount   *big.Int
+	Deadline *big.Int
+	V        uint8
+	R        [32]byte
+	S        [32]byte
+}
+
 // MockTrustManagementRouterTransaction is an auto generated low-level Go binding around an user-defined struct.
 type MockTrustManagementRouterTransaction struct {
 	Target common.Address
@@ -38,8 +47,8 @@ type MockTrustManagementRouterTransaction struct {
 
 // MockTrustManagementRouterMetaData contains all meta data concerning the MockTrustManagementRouter contract.
 var MockTrustManagementRouterMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"execute\",\"inputs\":[{\"name\":\"target\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"_transcations\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Transaction[]\",\"components\":[{\"name\":\"target\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
-	Bin: "0x6080604052348015600e575f5ffd5b506101a48061001c5f395ff3fe608060405234801561000f575f5ffd5b5060043610610029575f3560e01c806342cc1b841461002d575b5f5ffd5b61004760048036038101906100429190610111565b610049565b005b505050565b5f5ffd5b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61007f82610056565b9050919050565b61008f81610075565b8114610099575f5ffd5b50565b5f813590506100aa81610086565b92915050565b5f5ffd5b5f5ffd5b5f5ffd5b5f5f83601f8401126100d1576100d06100b0565b5b8235905067ffffffffffffffff8111156100ee576100ed6100b4565b5b60208301915083602082028301111561010a576101096100b8565b5b9250929050565b5f5f5f604084860312156101285761012761004e565b5b5f6101358682870161009c565b935050602084013567ffffffffffffffff81111561015657610155610052565b5b610162868287016100bc565b9250925050925092509256fea2646970667358221220e2e2b466b33f3a20b71d71594b699f4220fc0320ba67529d57a238fddea1df4564736f6c634300081e0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"depositWithPermit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"permit\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.Permit\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"v\",\"type\":\"uint8\",\"internalType\":\"uint8\"},{\"name\":\"r\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}]}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"execute\",\"inputs\":[{\"name\":\"txs\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Transaction[]\",\"components\":[{\"name\":\"target\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"depositIds\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"amountsWithYield\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
+	Bin: "0x6080604052348015600e575f5ffd5b506105828061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061004a575f3560e01c806320e8c5651461004e5780632f37da741461007e578063c860efa81461009a578063d3413cac146100ca575b5f5ffd5b610068600480360381019061006391906101a0565b6100e6565b6040516100759190610213565b60405180910390f35b610098600480360381019061009391906102e2565b6100ef565b005b6100b460048036038101906100af9190610395565b6100f6565b6040516100c19190610213565b60405180910390f35b6100e460048036038101906100df919061044f565b6100ff565b005b5f949350505050565b5050505050565b5f949350505050565b50505050505050505050565b5f5ffd5b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61013c82610113565b9050919050565b61014c81610132565b8114610156575f5ffd5b50565b5f8135905061016781610143565b92915050565b5f819050919050565b61017f8161016d565b8114610189575f5ffd5b50565b5f8135905061019a81610176565b92915050565b5f5f5f5f608085870312156101b8576101b761010b565b5b5f6101c587828801610159565b94505060206101d687828801610159565b93505060406101e78782880161018c565b92505060606101f88782880161018c565b91505092959194509250565b61020d81610132565b82525050565b5f6020820190506102265f830184610204565b92915050565b5f5ffd5b5f5ffd5b5f5ffd5b5f5f83601f84011261024d5761024c61022c565b5b8235905067ffffffffffffffff81111561026a57610269610230565b5b60208301915083602082028301111561028657610285610234565b5b9250929050565b5f5f83601f8401126102a2576102a161022c565b5b8235905067ffffffffffffffff8111156102bf576102be610230565b5b6020830191508360018202830111156102db576102da610234565b5b9250929050565b5f5f5f5f5f606086880312156102fb576102fa61010b565b5b5f86013567ffffffffffffffff8111156103185761031761010f565b5b61032488828901610238565b9550955050602086013567ffffffffffffffff8111156103475761034661010f565b5b6103538882890161028d565b935093505060406103668882890161018c565b9150509295509295909350565b5f5ffd5b5f60a0828403121561038c5761038b610373565b5b81905092915050565b5f5f5f5f61010085870312156103ae576103ad61010b565b5b5f6103bb87828801610159565b94505060206103cc87828801610159565b93505060406103dd8782880161018c565b92505060606103ee87828801610377565b91505092959194509250565b5f5f83601f84011261040f5761040e61022c565b5b8235905067ffffffffffffffff81111561042c5761042b610230565b5b60208301915083602082028301111561044857610447610234565b5b9250929050565b5f5f5f5f5f5f5f5f5f5f60e08b8d03121561046d5761046c61010b565b5b5f61047a8d828e01610159565b9a5050602061048b8d828e01610159565b995050604061049c8d828e01610159565b98505060608b013567ffffffffffffffff8111156104bd576104bc61010f565b5b6104c98d828e016103fa565b975097505060808b013567ffffffffffffffff8111156104ec576104eb61010f565b5b6104f88d828e016103fa565b955095505060a08b013567ffffffffffffffff81111561051b5761051a61010f565b5b6105278d828e0161028d565b935093505060c061053a8d828e0161018c565b9150509295989b9194979a509295985056fea264697066735822122031859329241f91d756646ce2f1c9f86b8bb4d66143b075a7d1efc0ae2928788664736f6c634300081e0033",
 }
 
 // MockTrustManagementRouterABI is the input ABI used to generate the binding from.
@@ -209,23 +218,86 @@ func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorRaw) Transa
 	return _MockTrustManagementRouter.Contract.contract.Transact(opts, method, params...)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function execute(address target, (address,uint256,bytes)[] _transcations) returns()
-func (_MockTrustManagementRouter *MockTrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, target common.Address, _transcations []MockTrustManagementRouterTransaction) (*types.Transaction, error) {
-	return _MockTrustManagementRouter.contract.Transact(opts, "execute", target, _transcations)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactor) Deposit(opts *bind.TransactOpts, receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.contract.Transact(opts, "deposit", receiver, token, amount, lockDuration)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function execute(address target, (address,uint256,bytes)[] _transcations) returns()
-func (_MockTrustManagementRouter *MockTrustManagementRouterSession) Execute(target common.Address, _transcations []MockTrustManagementRouterTransaction) (*types.Transaction, error) {
-	return _MockTrustManagementRouter.Contract.Execute(&_MockTrustManagementRouter.TransactOpts, target, _transcations)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterSession) Deposit(receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Deposit(&_MockTrustManagementRouter.TransactOpts, receiver, token, amount, lockDuration)
 }
 
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function execute(address target, (address,uint256,bytes)[] _transcations) returns()
-func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) Execute(target common.Address, _transcations []MockTrustManagementRouterTransaction) (*types.Transaction, error) {
-	return _MockTrustManagementRouter.Contract.Execute(&_MockTrustManagementRouter.TransactOpts, target, _transcations)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) Deposit(receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Deposit(&_MockTrustManagementRouter.TransactOpts, receiver, token, amount, lockDuration)
+}
+
+// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
+//
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactor) DepositWithPermit(opts *bind.TransactOpts, receiver common.Address, token common.Address, lockDuration *big.Int, permit MockTrustManagementRouterPermit) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.contract.Transact(opts, "depositWithPermit", receiver, token, lockDuration, permit)
+}
+
+// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
+//
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit MockTrustManagementRouterPermit) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.DepositWithPermit(&_MockTrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
+}
+
+// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
+//
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit MockTrustManagementRouterPermit) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.DepositWithPermit(&_MockTrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
+//
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, txs []MockTrustManagementRouterTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.contract.Transact(opts, "execute", txs, signature, deadline)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
+//
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterSession) Execute(txs []MockTrustManagementRouterTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Execute(&_MockTrustManagementRouter.TransactOpts, txs, signature, deadline)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
+//
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) Execute(txs []MockTrustManagementRouterTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Execute(&_MockTrustManagementRouter.TransactOpts, txs, signature, deadline)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
+//
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactor) Withdraw(opts *bind.TransactOpts, wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.contract.Transact(opts, "withdraw", wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
+//
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterSession) Withdraw(wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Withdraw(&_MockTrustManagementRouter.TransactOpts, wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
+}
+
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
+//
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) Withdraw(wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _MockTrustManagementRouter.Contract.Withdraw(&_MockTrustManagementRouter.TransactOpts, wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
 }
