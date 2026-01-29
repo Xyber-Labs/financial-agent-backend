@@ -1,6 +1,7 @@
 package server
 
 import (
+	"context"
 	"fmt"
 	"math/big"
 	"net/http"
@@ -24,7 +25,7 @@ type HttpAgentServer struct {
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
 	AavePool              *AavePool.AavePool
 	createTxOpts          *bind.TransactOpts
-	gin                   *gin.Engine
+	Gin                   *gin.Engine
 }
 
 func NewHttpAgentServer(
@@ -45,22 +46,34 @@ func NewHttpAgentServer(
 		TrustManagementRouter: trustManagementRouter,
 		AavePool:              aavePool,
 		createTxOpts:          &createTxOpts,
-		gin:                   gin.New(),
+		Gin:                   gin.New(),
 	}
 	s.registerHandlers()
 	return s
 }
 
-func (s *HttpAgentServer) Start() error {
+func (s *HttpAgentServer) Start(ctx context.Context) error {
 	addr := fmt.Sprintf(":%d", s.Config.Port)
 	log.Info().Str("addr", addr).Msg("HttpAgentServer: starting server")
-	return s.gin.Run(addr)
+	var errCh chan error
+	go func() {
+		errCh <- s.Gin.Run(addr)
+	}()
+
+	select {
+	case err := <-errCh:
+		log.Error().Err(err).Msg("HttpAgentServer: server error")
+		return err
+	case <-ctx.Done():
+		log.Info().Msg("HttpAgentServer: context done")
+		return ctx.Err()
+	}
 }
 
 func (s *HttpAgentServer) registerHandlers() {
-	s.gin.POST("/deposit", s.depositHandler())
-	s.gin.POST("/claim", s.claimHandler())
-	s.gin.POST("/withdraw", s.withdrawHandler())
+	s.Gin.POST("/deposit", s.depositHandler())
+	s.Gin.POST("/claim", s.claimHandler())
+	s.Gin.POST("/withdraw", s.withdrawHandler())
 }
 
 // Deposit the tokens for the best-performing pool on behalf of the user.
