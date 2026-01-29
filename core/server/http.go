@@ -39,7 +39,12 @@ func NewHttpAgentServer(
 	// to be later reconstructed in a batch transaction. Therefore we don't actually
 	// want to sign, estimate or execute them.
 	createTxOpts := bind.TransactOpts{
+		From:   ethcommon.Address{},
 		NoSend: true,
+		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
+			return tx, nil
+		},
+		Context: context.Background(),
 	}
 	s := &HttpAgentServer{
 		Config:                config,
@@ -56,7 +61,7 @@ func NewHttpAgentServer(
 func (s *HttpAgentServer) Start(ctx context.Context) error {
 	addr := fmt.Sprintf(":%d", s.Config.Port)
 	log.Info().Str("addr", addr).Msg("HttpAgentServer: starting server")
-	var errCh chan error
+	errCh := make(chan error, 1)
 	go func() {
 		errCh <- s.Gin.Run(addr)
 	}()
@@ -85,7 +90,13 @@ func (s *HttpAgentServer) registerHandlers() {
 // 2.2. Calls TrustManagemtnRouter.execute with encoded AAVE deposit transaction
 func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Info().Interface("request", c.Request).Msg("depositHandler: received request")
+		// Avoid logging the entire *http.Request as it contains function fields (e.g., GetBody)
+		// which are not JSON serializable and cause marshaling errors.
+		log.Info().
+			Str("method", c.Request.Method).
+			Str("path", c.Request.URL.Path).
+			Str("content_type", c.ContentType()).
+			Msg("depositHandler: received request")
 		var req DepositRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
 			log.Error().Err(err).Msg("depositHandler: failed to bind request")
@@ -130,6 +141,8 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			return
 		}
 
+		log.Info().Msg("checks done, parsing request")
+
 		// Prepare TrustManagementRouter.depositWithPermit transaction
 		userAddress := ethcommon.HexToAddress(req.UserAddress)
 		tokenAddress := ethcommon.HexToAddress(req.TokenAddress)
@@ -140,6 +153,17 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 		}
 		sigR := ethcommon.HexToHash(req.SigR)
 		sigS := ethcommon.HexToHash(req.SigS)
+
+		log.Info().
+			Interface("userAddress", userAddress).
+			Interface("tokenAddress", tokenAddress).
+			Interface("tokenAmount", tokenAmount).
+			Interface("deadline", req.Deadline).
+			Interface("sigV", req.SigV).
+			Interface("sigR", sigR).
+			Interface("sigS", sigS).
+			Msg("Creating TrustManagementRouter.depositWithPermit transaction")
+
 		depositWithPermitTx, err := s.TrustManagementRouter.DepositWithPermit(
 			s.createTxOpts,
 			userAddress,
@@ -158,6 +182,8 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			return
 		}
 
+		log.Info().Msg("Creating AavePool.supply transaction")
+
 		// Create AavePool.supply transaction
 		aaveSupplyTx, err := s.AavePool.Supply(
 			s.createTxOpts,
@@ -170,6 +196,8 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
+
+		log.Info().Msg("Batching and executing transactions")
 
 		// Batch and execute transactions
 		tx, err := s.Transactor.BatchAndExecute([]*ethtypes.Transaction{depositWithPermitTx, aaveSupplyTx})
