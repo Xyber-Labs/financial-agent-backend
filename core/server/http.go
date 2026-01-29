@@ -39,8 +39,9 @@ func NewHttpAgentServer(
 	// to be later reconstructed in a batch transaction. Therefore we don't actually
 	// want to sign, estimate or execute them.
 	createTxOpts := bind.TransactOpts{
-		From:   ethcommon.Address{},
-		NoSend: true,
+		From:     ethcommon.Address{},
+		NoSend:   true,
+		GasLimit: 1000000,
 		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
 			return tx, nil
 		},
