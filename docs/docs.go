@@ -24,7 +24,7 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "withdraw assets on behalf of user, earned rewards included",
+                "summary": "withdraw assets on behalf of user",
                 "parameters": [
                     {
                         "description": "Withdraw request payload",

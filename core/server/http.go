@@ -111,7 +111,7 @@ func (s *HttpAgentServer) registerHandlers() {
 // 	}
 // }
 
-// @Summary withdraw assets on behalf of user, earned rewards included
+// @Summary withdraw assets on behalf of user
 // @Schemes
 // @Description withdraw the provided amount of tokens + earned rewards from the protocol and pool where the token is staked
 // @Accept json

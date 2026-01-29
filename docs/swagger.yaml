@@ -45,7 +45,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/server.WithdrawResponse'
-      summary: withdraw assets on behalf of user, earned rewards included
+      summary: withdraw assets on behalf of user
   /withdraw-native:
     post:
       consumes:
