@@ -3,7 +3,6 @@ package transactor
 import (
 	"crypto/ecdsa"
 	"crypto/rand"
-	"encoding/hex"
 	"fmt"
 	"math/big"
 	"time"
@@ -16,8 +15,6 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
-
-	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
 
 type Transactor struct {
@@ -63,41 +60,41 @@ func (t *Transactor) InitializeOnChainSession() error {
 		Str("address", t.TeeSessionAddress.String()).
 		Msg("NewTeeSession: generated session key for TeeSession")
 
-	// Extract SGX quote from the environment
-	quote, err := t.extractQuote(t.TeeSessionAddress)
-	if err != nil {
-		return err
-	}
-	log.Info().
-		Str("quote", string(quote)).
-		Str("quoteHex", hex.EncodeToString(quote)).
-		Msg("NewTeeSession: extracted quote for TeeSession")
+	// // Extract SGX quote from the environment
+	// quote, err := t.extractQuote(t.TeeSessionAddress)
+	// if err != nil {
+	// 	return err
+	// }
+	// log.Info().
+	// 	Str("quote", string(quote)).
+	// 	Str("quoteHex", hex.EncodeToString(quote)).
+	// 	Msg("NewTeeSession: extracted quote for TeeSession")
 
-	// Prepare SGX quote
-	sgxParser := sgx_quote.NewSgxParser()
-	parsedQuote, err := sgxParser.ParseQuote(quote)
-	if err != nil {
-		return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
-	}
+	// // Prepare SGX quote
+	// sgxParser := sgx_quote.NewSgxParser()
+	// parsedQuote, err := sgxParser.ParseQuote(quote)
+	// if err != nil {
+	// 	return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
+	// }
 
-	teeXyberProof, err := FromSgxQuoteToProof(parsedQuote)
-	if err != nil {
-		return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
-	}
+	// teeXyberProof, err := FromSgxQuoteToProof(parsedQuote)
+	// if err != nil {
+	// 	return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
+	// }
 
-	// Initialize onchain tee session session
-	tx, err := t.TrustManagementRouter.InitSessionKey(
-		t.TransactOpts,
-		teeXyberProof.Leaf,
-		teeXyberProof.Intermediate,
-		teeXyberProof.Quote,
-		t.TeeSessionAddress,
-	)
-	if err != nil {
-		return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
-	}
+	// // Initialize onchain tee session session
+	// tx, err := t.TrustManagementRouter.InitSessionKey(
+	// 	t.TransactOpts,
+	// 	teeXyberProof.Leaf,
+	// 	teeXyberProof.Intermediate,
+	// 	teeXyberProof.Quote,
+	// 	t.TeeSessionAddress,
+	// )
+	// if err != nil {
+	// 	return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
+	// }
 
-	log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TrustManagementRouter")
+	// log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TrustManagementRouter")
 
 	return nil
 }
