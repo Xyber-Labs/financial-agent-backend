@@ -8,6 +8,7 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
@@ -144,7 +145,52 @@ func (t *Transactor) createTeeSessionSignature(
 	deadline *big.Int,
 	transactions []TrustManagementRouter.Transaction,
 ) ([]byte, error) {
-	return []byte{}, nil
+	if t.TeeSessionKey == nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: TeeSessionKey is not initialized")
+	}
+	if t.ChainId == nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: ChainId is not set")
+	}
+
+	// Prepare ABI types: (uint256 chainId, address router, uint256 deadline, tuple(address,uint256,bytes)[] txs)
+	uint256Type, err := abi.NewType("uint256", "", nil)
+	if err != nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: failed to create uint256 ABI type: %w", err)
+	}
+	addressType, err := abi.NewType("address", "", nil)
+	if err != nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: failed to create address ABI type: %w", err)
+	}
+	txTupleArrayType, err := abi.NewType("tuple[]", "", []abi.ArgumentMarshaling{
+		{Type: "address"},
+		{Type: "uint256"},
+		{Type: "bytes"},
+	})
+	if err != nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: failed to create tx tuple[] ABI type: %w", err)
+	}
+
+	args := abi.Arguments{
+		{Type: uint256Type},      // chainId
+		{Type: addressType},      // router address
+		{Type: uint256Type},      // deadline
+		{Type: txTupleArrayType}, // transactions
+	}
+
+	packed, err := args.Pack(t.ChainId, t.TrustManagementRouterAddress, deadline, transactions)
+	if err != nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: ABI pack failed: %w", err)
+	}
+
+	// Solidity: keccak256(abi.encode(chainid, address(this), deadline, txs))
+	msgHash := ethcrypto.Keccak256(packed)
+
+	signature, err := ethcrypto.Sign(msgHash, t.TeeSessionKey)
+	if err != nil {
+		return nil, fmt.Errorf("createTeeSessionSignature: sign failed: %w", err)
+	}
+
+	return signature, nil
 }
 
 // Creates a new ECDSA private key using the secp256k1 curve
