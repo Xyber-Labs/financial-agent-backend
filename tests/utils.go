@@ -4,13 +4,15 @@ import (
 	"financial-agent-backend/tests/contracts"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
-	"github.com/ethereum/go-ethereum/common"
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethsim "github.com/ethereum/go-ethereum/ethclient/simulated"
 )
 
 type DeployedMockContracts struct {
-	TeeWallet common.Address
+	TeeWallet             ethcommon.Address
+	AavePool              ethcommon.Address
+	TrustManagementRouter ethcommon.Address
 }
 
 func DeployMockedContracts(client bind.ContractBackend, opts *bind.TransactOpts) DeployedMockContracts {
@@ -18,8 +20,20 @@ func DeployMockedContracts(client bind.ContractBackend, opts *bind.TransactOpts)
 	if err != nil {
 		panic(err)
 	}
+
+	aavePoolAddress, _, _, err := contracts.DeployMockAavePool(opts, client)
+	if err != nil {
+		panic(err)
+	}
+
+	trustManagementRouterAddress, _, _, err := contracts.DeployMockTrustManagementRouter(opts, client)
+	if err != nil {
+		panic(err)
+	}
 	return DeployedMockContracts{
-		TeeWallet: teeWalletAddress,
+		TeeWallet:             teeWalletAddress,
+		AavePool:              aavePoolAddress,
+		TrustManagementRouter: trustManagementRouterAddress,
 	}
 }
 
