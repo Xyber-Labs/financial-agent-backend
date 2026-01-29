@@ -29,8 +29,28 @@ var (
 	_ = abi.ConvertType
 )
 
-// ITrustManagementStructsPermit is an auto generated low-level Go binding around an user-defined struct.
-type ITrustManagementStructsPermit struct {
+// ChunkedSGXQuote is an auto generated low-level Go binding around an user-defined struct.
+type ChunkedSGXQuote struct {
+	Header               []byte
+	IsvReport            []byte
+	IsvReportSignature   []byte
+	AttestationKey       []byte
+	QeReport             []byte
+	QeReportSignature    []byte
+	QeAuthenticationData []byte
+}
+
+// ChunkedX509Cert is an auto generated low-level Go binding around an user-defined struct.
+type ChunkedX509Cert struct {
+	BodyPartOne []byte
+	PublicKey   []byte
+	BodyPartTwo []byte
+	Signature   []byte
+}
+
+// IXyberTrustManagementStructsPermit is an auto generated low-level Go binding around an user-defined struct.
+type IXyberTrustManagementStructsPermit struct {
+	Holder   common.Address
 	Amount   *big.Int
 	Deadline *big.Int
 	V        uint8
@@ -38,8 +58,8 @@ type ITrustManagementStructsPermit struct {
 	S        [32]byte
 }
 
-// ITrustManagementStructsTransaction is an auto generated low-level Go binding around an user-defined struct.
-type ITrustManagementStructsTransaction struct {
+// IXyberTrustManagementStructsTransaction is an auto generated low-level Go binding around an user-defined struct.
+type IXyberTrustManagementStructsTransaction struct {
 	Target common.Address
 	Value  *big.Int
 	Data   []byte
@@ -47,7 +67,7 @@ type ITrustManagementStructsTransaction struct {
 
 // TrustManagementRouterMetaData contains all meta data concerning the TrustManagementRouter contract.
 var TrustManagementRouterMetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__CallerDoesntHaveAgentRole\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TrustManagementRouter__CallerIsNotAgent\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__CallerIsNotUser\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__CallerIsNotUserOrWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__InvalidWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"callResponse\",\"type\":\"bytes\"}],\"name\":\"TrustManagementRouter__MsgValueSendingFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"providedAddress\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__ProvidedAddressDoesntHaveAgentRole\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"TrustManagementRouter__TokenNotAllowed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"unlockTimestamp\",\"type\":\"uint256\"}],\"name\":\"DepositEvent\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"AGENT_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"beaconAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256[]\",\"name\":\"_depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256\",\"name\":\"_amountWithYield\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256[]\",\"name\":\"_depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amountWithYield\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_agent\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_salt\",\"type\":\"bytes32\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"newWallet\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_agent\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_salt\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"_lockDuration\",\"type\":\"uint256\"}],\"name\":\"createWalletAndDeposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"newWallet\",\"type\":\"address\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_agent\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_salt\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_lockDuration\",\"type\":\"uint256\"}],\"name\":\"createWalletAndDeposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_agent\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"_salt\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_unlockTimestamp\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structITrustManagementStructs.Permit\",\"name\":\"_permit\",\"type\":\"tuple\"}],\"name\":\"createWalletAndDepositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_user\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_unlockTimestamp\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"_unlockTimestamp\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_unlockTimestamp\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"_unlockTimestamp\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structITrustManagementStructs.Permit\",\"name\":\"_permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"_tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[][]\",\"name\":\"_depositsIds\",\"type\":\"uint256[][]\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"}],\"name\":\"emergencyWithdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"_depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"}],\"name\":\"emergencyWithdraw\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structITrustManagementStructs.Transaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getFeeReceiver\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeReceiver\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPerfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"perfomanceFeeRate\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_initBlueprint\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newFeeReceiver\",\"type\":\"address\"}],\"name\":\"setFeeReceiver\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_newImplementation\",\"type\":\"address\"}],\"name\":\"upgradeTo\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_wallet\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"_signature\",\"type\":\"bytes\"},{\"internalType\":\"address\",\"name\":\"_token\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"_depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"_amountWithYield\",\"type\":\"uint256[]\"},{\"internalType\":\"address\",\"name\":\"_receiver\",\"type\":\"address\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"}]",
+	ABI: "[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"walletBeacon\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AccessControlBadConfirmation\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"neededRole\",\"type\":\"bytes32\"}],\"name\":\"AccessControlUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"}],\"name\":\"AddressEmptyCode\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AddressInsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2EmptyBytecode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"Create2FailedDeployment\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"balance\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"needed\",\"type\":\"uint256\"}],\"name\":\"Create2InsufficientBalance\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ECDSAInvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"ECDSAInvalidSignatureLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"ECDSAInvalidSignatureS\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"ERC1967InvalidImplementation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ERC1967NonPayable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EllipticCurve__InvalidNumber\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"FailedInnerCall\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidInitialization\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotInitializing\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"}],\"name\":\"SafeERC20FailedOperation\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidEnclaveSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidIntermediateCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidLeafCert\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeReportDataHash\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__InvalidQeSignature\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__ReportMustBe384Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TeeVerifier__SignatureMustBe64Bytes\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"UUPSUnauthorizedCallContext\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"slot\",\"type\":\"bytes32\"}],\"name\":\"UUPSUnsupportedProxiableUUID\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberTrustManagementRouter__CallerIsNotAgent\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__CallerIsNotOwnerOfWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"callerAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__CallerIsNotUserOrAgent\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__InvalidWallet\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"callResponse\",\"type\":\"bytes\"}],\"name\":\"XyberTrustManagementRouter__MsgValueSendingFail\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__NewImplementationIsInvalid\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__TokenNotAllowed\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"}],\"name\":\"XyberTrustManagementRouter__WalletAreadyExists\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"XyberUpgradeChecker__E0\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"AllowedTokenSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"}],\"name\":\"Claimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"Deposited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"Executed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"FeeCollectorSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint64\",\"name\":\"version\",\"type\":\"uint64\"}],\"name\":\"Initialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"PerformanceFeeRateSet\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"previousAdminRole\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"newAdminRole\",\"type\":\"bytes32\"}],\"name\":\"RoleAdminChanged\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleGranted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"}],\"name\":\"RoleRevoked\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"mrEnclave\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"bytes32\",\"name\":\"hashedData\",\"type\":\"bytes32\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"caller\",\"type\":\"address\"}],\"name\":\"SessionInitialized\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"implementation\",\"type\":\"address\"}],\"name\":\"Upgraded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"WalletCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"feeAmount\",\"type\":\"uint256\"}],\"name\":\"Withdrawn\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DEFAULT_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SESSION_ADMIN_ROLE\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"UPGRADE_INTERFACE_VERSION\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WALLET_BEACON\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"tokenAddress\",\"type\":\"address\"}],\"name\":\"allowedToken\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address[]\",\"name\":\"tokens\",\"type\":\"address[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amounts\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"claim\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"createWallet\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"}],\"name\":\"deposit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"lockDuration\",\"type\":\"uint256\"},{\"components\":[{\"internalType\":\"address\",\"name\":\"holder\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"},{\"internalType\":\"uint8\",\"name\":\"v\",\"type\":\"uint8\"},{\"internalType\":\"bytes32\",\"name\":\"r\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"internalType\":\"structIXyberTrustManagementStructs.Permit\",\"name\":\"permit\",\"type\":\"tuple\"}],\"name\":\"depositWithPermit\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes\",\"name\":\"message\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"ecdsaOnKeccak256r1\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structIXyberTrustManagementStructs.Transaction[]\",\"name\":\"txs\",\"type\":\"tuple[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"feeCollector\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"feeCollectorAddress\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"}],\"name\":\"getRoleAdmin\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getWalletAddress\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"walletAddress\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isDeployed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"grantRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"hasRole\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"leaf\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"intermediate\",\"type\":\"tuple\"},{\"components\":[{\"internalType\":\"bytes\",\"name\":\"header\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"isvReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"attestationKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReport\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeReportSignature\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"qeAuthenticationData\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedSGXQuote\",\"name\":\"quote\",\"type\":\"tuple\"},{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"initSessionKey\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"defaultAdmin\",\"type\":\"address\"}],\"name\":\"initialize\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"perfomanceFeeRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"performanceFeeRateValue\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"proxiableUUID\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"callerConfirmation\",\"type\":\"address\"}],\"name\":\"renounceRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"role\",\"type\":\"bytes32\"},{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"revokeRole\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"rootCert\",\"outputs\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"sessionKey\",\"type\":\"address\"}],\"name\":\"sessions\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isActive\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"isAllowed\",\"type\":\"bool\"}],\"name\":\"setAllowedToken\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newFeeCollector\",\"type\":\"address\"}],\"name\":\"setFeeCollector\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"newPerfomanceFeeRate\",\"type\":\"uint256\"}],\"name\":\"setPerfomanceFeeRate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes4\",\"name\":\"interfaceId\",\"type\":\"bytes4\"}],\"name\":\"supportsInterface\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newImplementation\",\"type\":\"address\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"upgradeToAndCall\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"signatureHash\",\"type\":\"bytes32\"}],\"name\":\"usedSignature\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"isUsed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"bytes\",\"name\":\"bodyPartOne\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"bodyPartTwo\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structChunkedX509Cert\",\"name\":\"cert\",\"type\":\"tuple\"},{\"internalType\":\"bytes\",\"name\":\"publicKey\",\"type\":\"bytes\"}],\"name\":\"verifyCert\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"wallet\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"receiver\",\"type\":\"address\"},{\"internalType\":\"uint256[]\",\"name\":\"depositIds\",\"type\":\"uint256[]\"},{\"internalType\":\"uint256[]\",\"name\":\"amountsWithYield\",\"type\":\"uint256[]\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"xyberContractName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"contractName\",\"type\":\"string\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
 }
 
 // TrustManagementRouterABI is the input ABI used to generate the binding from.
@@ -196,37 +216,6 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorRaw) Transact(opts 
 	return _TrustManagementRouter.Contract.contract.Transact(opts, method, params...)
 }
 
-// AGENTROLE is a free data retrieval call binding the contract method 0x22459e18.
-//
-// Solidity: function AGENT_ROLE() view returns(bytes32)
-func (_TrustManagementRouter *TrustManagementRouterCaller) AGENTROLE(opts *bind.CallOpts) ([32]byte, error) {
-	var out []interface{}
-	err := _TrustManagementRouter.contract.Call(opts, &out, "AGENT_ROLE")
-
-	if err != nil {
-		return *new([32]byte), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
-
-	return out0, err
-
-}
-
-// AGENTROLE is a free data retrieval call binding the contract method 0x22459e18.
-//
-// Solidity: function AGENT_ROLE() view returns(bytes32)
-func (_TrustManagementRouter *TrustManagementRouterSession) AGENTROLE() ([32]byte, error) {
-	return _TrustManagementRouter.Contract.AGENTROLE(&_TrustManagementRouter.CallOpts)
-}
-
-// AGENTROLE is a free data retrieval call binding the contract method 0x22459e18.
-//
-// Solidity: function AGENT_ROLE() view returns(bytes32)
-func (_TrustManagementRouter *TrustManagementRouterCallerSession) AGENTROLE() ([32]byte, error) {
-	return _TrustManagementRouter.Contract.AGENTROLE(&_TrustManagementRouter.CallOpts)
-}
-
 // DEFAULTADMINROLE is a free data retrieval call binding the contract method 0xa217fddf.
 //
 // Solidity: function DEFAULT_ADMIN_ROLE() view returns(bytes32)
@@ -256,6 +245,37 @@ func (_TrustManagementRouter *TrustManagementRouterSession) DEFAULTADMINROLE() (
 // Solidity: function DEFAULT_ADMIN_ROLE() view returns(bytes32)
 func (_TrustManagementRouter *TrustManagementRouterCallerSession) DEFAULTADMINROLE() ([32]byte, error) {
 	return _TrustManagementRouter.Contract.DEFAULTADMINROLE(&_TrustManagementRouter.CallOpts)
+}
+
+// SESSIONADMINROLE is a free data retrieval call binding the contract method 0x6f46b405.
+//
+// Solidity: function SESSION_ADMIN_ROLE() view returns(bytes32)
+func (_TrustManagementRouter *TrustManagementRouterCaller) SESSIONADMINROLE(opts *bind.CallOpts) ([32]byte, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "SESSION_ADMIN_ROLE")
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// SESSIONADMINROLE is a free data retrieval call binding the contract method 0x6f46b405.
+//
+// Solidity: function SESSION_ADMIN_ROLE() view returns(bytes32)
+func (_TrustManagementRouter *TrustManagementRouterSession) SESSIONADMINROLE() ([32]byte, error) {
+	return _TrustManagementRouter.Contract.SESSIONADMINROLE(&_TrustManagementRouter.CallOpts)
+}
+
+// SESSIONADMINROLE is a free data retrieval call binding the contract method 0x6f46b405.
+//
+// Solidity: function SESSION_ADMIN_ROLE() view returns(bytes32)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) SESSIONADMINROLE() ([32]byte, error) {
+	return _TrustManagementRouter.Contract.SESSIONADMINROLE(&_TrustManagementRouter.CallOpts)
 }
 
 // UPGRADEINTERFACEVERSION is a free data retrieval call binding the contract method 0xad3cb1cc.
@@ -289,12 +309,12 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) UPGRADEINTERFA
 	return _TrustManagementRouter.Contract.UPGRADEINTERFACEVERSION(&_TrustManagementRouter.CallOpts)
 }
 
-// BeaconAddress is a free data retrieval call binding the contract method 0x7e2ec6d0.
+// WALLETBEACON is a free data retrieval call binding the contract method 0x78efbba7.
 //
-// Solidity: function beaconAddress() view returns(address)
-func (_TrustManagementRouter *TrustManagementRouterCaller) BeaconAddress(opts *bind.CallOpts) (common.Address, error) {
+// Solidity: function WALLET_BEACON() view returns(address)
+func (_TrustManagementRouter *TrustManagementRouterCaller) WALLETBEACON(opts *bind.CallOpts) (common.Address, error) {
 	var out []interface{}
-	err := _TrustManagementRouter.contract.Call(opts, &out, "beaconAddress")
+	err := _TrustManagementRouter.contract.Call(opts, &out, "WALLET_BEACON")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -306,26 +326,88 @@ func (_TrustManagementRouter *TrustManagementRouterCaller) BeaconAddress(opts *b
 
 }
 
-// BeaconAddress is a free data retrieval call binding the contract method 0x7e2ec6d0.
+// WALLETBEACON is a free data retrieval call binding the contract method 0x78efbba7.
 //
-// Solidity: function beaconAddress() view returns(address)
-func (_TrustManagementRouter *TrustManagementRouterSession) BeaconAddress() (common.Address, error) {
-	return _TrustManagementRouter.Contract.BeaconAddress(&_TrustManagementRouter.CallOpts)
+// Solidity: function WALLET_BEACON() view returns(address)
+func (_TrustManagementRouter *TrustManagementRouterSession) WALLETBEACON() (common.Address, error) {
+	return _TrustManagementRouter.Contract.WALLETBEACON(&_TrustManagementRouter.CallOpts)
 }
 
-// BeaconAddress is a free data retrieval call binding the contract method 0x7e2ec6d0.
+// WALLETBEACON is a free data retrieval call binding the contract method 0x78efbba7.
 //
-// Solidity: function beaconAddress() view returns(address)
-func (_TrustManagementRouter *TrustManagementRouterCallerSession) BeaconAddress() (common.Address, error) {
-	return _TrustManagementRouter.Contract.BeaconAddress(&_TrustManagementRouter.CallOpts)
+// Solidity: function WALLET_BEACON() view returns(address)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) WALLETBEACON() (common.Address, error) {
+	return _TrustManagementRouter.Contract.WALLETBEACON(&_TrustManagementRouter.CallOpts)
 }
 
-// GetFeeReceiver is a free data retrieval call binding the contract method 0xe8a35392.
+// AllowedToken is a free data retrieval call binding the contract method 0x756742f8.
 //
-// Solidity: function getFeeReceiver() view returns(address feeReceiver)
-func (_TrustManagementRouter *TrustManagementRouterCaller) GetFeeReceiver(opts *bind.CallOpts) (common.Address, error) {
+// Solidity: function allowedToken(address tokenAddress) view returns(bool isAllowed)
+func (_TrustManagementRouter *TrustManagementRouterCaller) AllowedToken(opts *bind.CallOpts, tokenAddress common.Address) (bool, error) {
 	var out []interface{}
-	err := _TrustManagementRouter.contract.Call(opts, &out, "getFeeReceiver")
+	err := _TrustManagementRouter.contract.Call(opts, &out, "allowedToken", tokenAddress)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// AllowedToken is a free data retrieval call binding the contract method 0x756742f8.
+//
+// Solidity: function allowedToken(address tokenAddress) view returns(bool isAllowed)
+func (_TrustManagementRouter *TrustManagementRouterSession) AllowedToken(tokenAddress common.Address) (bool, error) {
+	return _TrustManagementRouter.Contract.AllowedToken(&_TrustManagementRouter.CallOpts, tokenAddress)
+}
+
+// AllowedToken is a free data retrieval call binding the contract method 0x756742f8.
+//
+// Solidity: function allowedToken(address tokenAddress) view returns(bool isAllowed)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) AllowedToken(tokenAddress common.Address) (bool, error) {
+	return _TrustManagementRouter.Contract.AllowedToken(&_TrustManagementRouter.CallOpts, tokenAddress)
+}
+
+// EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
+//
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterCaller) EcdsaOnKeccak256r1(opts *bind.CallOpts, message []byte, signature []byte, publicKey []byte) (bool, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "ecdsaOnKeccak256r1", message, signature, publicKey)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
+//
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterSession) EcdsaOnKeccak256r1(message []byte, signature []byte, publicKey []byte) (bool, error) {
+	return _TrustManagementRouter.Contract.EcdsaOnKeccak256r1(&_TrustManagementRouter.CallOpts, message, signature, publicKey)
+}
+
+// EcdsaOnKeccak256r1 is a free data retrieval call binding the contract method 0xce27ac17.
+//
+// Solidity: function ecdsaOnKeccak256r1(bytes message, bytes signature, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) EcdsaOnKeccak256r1(message []byte, signature []byte, publicKey []byte) (bool, error) {
+	return _TrustManagementRouter.Contract.EcdsaOnKeccak256r1(&_TrustManagementRouter.CallOpts, message, signature, publicKey)
+}
+
+// FeeCollector is a free data retrieval call binding the contract method 0xc415b95c.
+//
+// Solidity: function feeCollector() view returns(address feeCollectorAddress)
+func (_TrustManagementRouter *TrustManagementRouterCaller) FeeCollector(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "feeCollector")
 
 	if err != nil {
 		return *new(common.Address), err
@@ -337,49 +419,18 @@ func (_TrustManagementRouter *TrustManagementRouterCaller) GetFeeReceiver(opts *
 
 }
 
-// GetFeeReceiver is a free data retrieval call binding the contract method 0xe8a35392.
+// FeeCollector is a free data retrieval call binding the contract method 0xc415b95c.
 //
-// Solidity: function getFeeReceiver() view returns(address feeReceiver)
-func (_TrustManagementRouter *TrustManagementRouterSession) GetFeeReceiver() (common.Address, error) {
-	return _TrustManagementRouter.Contract.GetFeeReceiver(&_TrustManagementRouter.CallOpts)
+// Solidity: function feeCollector() view returns(address feeCollectorAddress)
+func (_TrustManagementRouter *TrustManagementRouterSession) FeeCollector() (common.Address, error) {
+	return _TrustManagementRouter.Contract.FeeCollector(&_TrustManagementRouter.CallOpts)
 }
 
-// GetFeeReceiver is a free data retrieval call binding the contract method 0xe8a35392.
+// FeeCollector is a free data retrieval call binding the contract method 0xc415b95c.
 //
-// Solidity: function getFeeReceiver() view returns(address feeReceiver)
-func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetFeeReceiver() (common.Address, error) {
-	return _TrustManagementRouter.Contract.GetFeeReceiver(&_TrustManagementRouter.CallOpts)
-}
-
-// GetPerfomanceFeeRate is a free data retrieval call binding the contract method 0x832675e4.
-//
-// Solidity: function getPerfomanceFeeRate() view returns(uint256 perfomanceFeeRate)
-func (_TrustManagementRouter *TrustManagementRouterCaller) GetPerfomanceFeeRate(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _TrustManagementRouter.contract.Call(opts, &out, "getPerfomanceFeeRate")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
-}
-
-// GetPerfomanceFeeRate is a free data retrieval call binding the contract method 0x832675e4.
-//
-// Solidity: function getPerfomanceFeeRate() view returns(uint256 perfomanceFeeRate)
-func (_TrustManagementRouter *TrustManagementRouterSession) GetPerfomanceFeeRate() (*big.Int, error) {
-	return _TrustManagementRouter.Contract.GetPerfomanceFeeRate(&_TrustManagementRouter.CallOpts)
-}
-
-// GetPerfomanceFeeRate is a free data retrieval call binding the contract method 0x832675e4.
-//
-// Solidity: function getPerfomanceFeeRate() view returns(uint256 perfomanceFeeRate)
-func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetPerfomanceFeeRate() (*big.Int, error) {
-	return _TrustManagementRouter.Contract.GetPerfomanceFeeRate(&_TrustManagementRouter.CallOpts)
+// Solidity: function feeCollector() view returns(address feeCollectorAddress)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) FeeCollector() (common.Address, error) {
+	return _TrustManagementRouter.Contract.FeeCollector(&_TrustManagementRouter.CallOpts)
 }
 
 // GetRoleAdmin is a free data retrieval call binding the contract method 0x248a9ca3.
@@ -413,6 +464,51 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetRoleAdmin(r
 	return _TrustManagementRouter.Contract.GetRoleAdmin(&_TrustManagementRouter.CallOpts, role)
 }
 
+// GetWalletAddress is a free data retrieval call binding the contract method 0x1fd9afa5.
+//
+// Solidity: function getWalletAddress(address user) view returns(address walletAddress, bool isDeployed)
+func (_TrustManagementRouter *TrustManagementRouterCaller) GetWalletAddress(opts *bind.CallOpts, user common.Address) (struct {
+	WalletAddress common.Address
+	IsDeployed    bool
+}, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "getWalletAddress", user)
+
+	outstruct := new(struct {
+		WalletAddress common.Address
+		IsDeployed    bool
+	})
+	if err != nil {
+		return *outstruct, err
+	}
+
+	outstruct.WalletAddress = *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+	outstruct.IsDeployed = *abi.ConvertType(out[1], new(bool)).(*bool)
+
+	return *outstruct, err
+
+}
+
+// GetWalletAddress is a free data retrieval call binding the contract method 0x1fd9afa5.
+//
+// Solidity: function getWalletAddress(address user) view returns(address walletAddress, bool isDeployed)
+func (_TrustManagementRouter *TrustManagementRouterSession) GetWalletAddress(user common.Address) (struct {
+	WalletAddress common.Address
+	IsDeployed    bool
+}, error) {
+	return _TrustManagementRouter.Contract.GetWalletAddress(&_TrustManagementRouter.CallOpts, user)
+}
+
+// GetWalletAddress is a free data retrieval call binding the contract method 0x1fd9afa5.
+//
+// Solidity: function getWalletAddress(address user) view returns(address walletAddress, bool isDeployed)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) GetWalletAddress(user common.Address) (struct {
+	WalletAddress common.Address
+	IsDeployed    bool
+}, error) {
+	return _TrustManagementRouter.Contract.GetWalletAddress(&_TrustManagementRouter.CallOpts, user)
+}
+
 // HasRole is a free data retrieval call binding the contract method 0x91d14854.
 //
 // Solidity: function hasRole(bytes32 role, address account) view returns(bool)
@@ -442,6 +538,37 @@ func (_TrustManagementRouter *TrustManagementRouterSession) HasRole(role [32]byt
 // Solidity: function hasRole(bytes32 role, address account) view returns(bool)
 func (_TrustManagementRouter *TrustManagementRouterCallerSession) HasRole(role [32]byte, account common.Address) (bool, error) {
 	return _TrustManagementRouter.Contract.HasRole(&_TrustManagementRouter.CallOpts, role, account)
+}
+
+// PerfomanceFeeRate is a free data retrieval call binding the contract method 0x2571eb15.
+//
+// Solidity: function perfomanceFeeRate() view returns(uint256 performanceFeeRateValue)
+func (_TrustManagementRouter *TrustManagementRouterCaller) PerfomanceFeeRate(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "perfomanceFeeRate")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// PerfomanceFeeRate is a free data retrieval call binding the contract method 0x2571eb15.
+//
+// Solidity: function perfomanceFeeRate() view returns(uint256 performanceFeeRateValue)
+func (_TrustManagementRouter *TrustManagementRouterSession) PerfomanceFeeRate() (*big.Int, error) {
+	return _TrustManagementRouter.Contract.PerfomanceFeeRate(&_TrustManagementRouter.CallOpts)
+}
+
+// PerfomanceFeeRate is a free data retrieval call binding the contract method 0x2571eb15.
+//
+// Solidity: function perfomanceFeeRate() view returns(uint256 performanceFeeRateValue)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) PerfomanceFeeRate() (*big.Int, error) {
+	return _TrustManagementRouter.Contract.PerfomanceFeeRate(&_TrustManagementRouter.CallOpts)
 }
 
 // ProxiableUUID is a free data retrieval call binding the contract method 0x52d1902d.
@@ -475,6 +602,92 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) ProxiableUUID(
 	return _TrustManagementRouter.Contract.ProxiableUUID(&_TrustManagementRouter.CallOpts)
 }
 
+// RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
+//
+// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
+func (_TrustManagementRouter *TrustManagementRouterCaller) RootCert(opts *bind.CallOpts) (struct {
+	BodyPartOne []byte
+	PublicKey   []byte
+	BodyPartTwo []byte
+	Signature   []byte
+}, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "rootCert")
+
+	outstruct := new(struct {
+		BodyPartOne []byte
+		PublicKey   []byte
+		BodyPartTwo []byte
+		Signature   []byte
+	})
+	if err != nil {
+		return *outstruct, err
+	}
+
+	outstruct.BodyPartOne = *abi.ConvertType(out[0], new([]byte)).(*[]byte)
+	outstruct.PublicKey = *abi.ConvertType(out[1], new([]byte)).(*[]byte)
+	outstruct.BodyPartTwo = *abi.ConvertType(out[2], new([]byte)).(*[]byte)
+	outstruct.Signature = *abi.ConvertType(out[3], new([]byte)).(*[]byte)
+
+	return *outstruct, err
+
+}
+
+// RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
+//
+// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
+func (_TrustManagementRouter *TrustManagementRouterSession) RootCert() (struct {
+	BodyPartOne []byte
+	PublicKey   []byte
+	BodyPartTwo []byte
+	Signature   []byte
+}, error) {
+	return _TrustManagementRouter.Contract.RootCert(&_TrustManagementRouter.CallOpts)
+}
+
+// RootCert is a free data retrieval call binding the contract method 0x7221e6fc.
+//
+// Solidity: function rootCert() view returns(bytes bodyPartOne, bytes publicKey, bytes bodyPartTwo, bytes signature)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) RootCert() (struct {
+	BodyPartOne []byte
+	PublicKey   []byte
+	BodyPartTwo []byte
+	Signature   []byte
+}, error) {
+	return _TrustManagementRouter.Contract.RootCert(&_TrustManagementRouter.CallOpts)
+}
+
+// Sessions is a free data retrieval call binding the contract method 0x431a1b97.
+//
+// Solidity: function sessions(address sessionKey) view returns(bool isActive)
+func (_TrustManagementRouter *TrustManagementRouterCaller) Sessions(opts *bind.CallOpts, sessionKey common.Address) (bool, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "sessions", sessionKey)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
+}
+
+// Sessions is a free data retrieval call binding the contract method 0x431a1b97.
+//
+// Solidity: function sessions(address sessionKey) view returns(bool isActive)
+func (_TrustManagementRouter *TrustManagementRouterSession) Sessions(sessionKey common.Address) (bool, error) {
+	return _TrustManagementRouter.Contract.Sessions(&_TrustManagementRouter.CallOpts, sessionKey)
+}
+
+// Sessions is a free data retrieval call binding the contract method 0x431a1b97.
+//
+// Solidity: function sessions(address sessionKey) view returns(bool isActive)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) Sessions(sessionKey common.Address) (bool, error) {
+	return _TrustManagementRouter.Contract.Sessions(&_TrustManagementRouter.CallOpts, sessionKey)
+}
+
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) view returns(bool)
@@ -506,277 +719,202 @@ func (_TrustManagementRouter *TrustManagementRouterCallerSession) SupportsInterf
 	return _TrustManagementRouter.Contract.SupportsInterface(&_TrustManagementRouter.CallOpts, interfaceId)
 }
 
-// Claim is a paid mutator transaction binding the contract method 0x78bffdec.
+// UsedSignature is a free data retrieval call binding the contract method 0x0f945e9f.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Claim(opts *bind.TransactOpts, _wallet common.Address, _signature []byte, _depositIds []*big.Int, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "claim", _wallet, _signature, _depositIds, _amountWithYield, _receiver)
+// Solidity: function usedSignature(bytes32 signatureHash) view returns(bool isUsed)
+func (_TrustManagementRouter *TrustManagementRouterCaller) UsedSignature(opts *bind.CallOpts, signatureHash [32]byte) (bool, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "usedSignature", signatureHash)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
-// Claim is a paid mutator transaction binding the contract method 0x78bffdec.
+// UsedSignature is a free data retrieval call binding the contract method 0x0f945e9f.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Claim(_wallet common.Address, _signature []byte, _depositIds []*big.Int, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Claim(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _depositIds, _amountWithYield, _receiver)
+// Solidity: function usedSignature(bytes32 signatureHash) view returns(bool isUsed)
+func (_TrustManagementRouter *TrustManagementRouterSession) UsedSignature(signatureHash [32]byte) (bool, error) {
+	return _TrustManagementRouter.Contract.UsedSignature(&_TrustManagementRouter.CallOpts, signatureHash)
 }
 
-// Claim is a paid mutator transaction binding the contract method 0x78bffdec.
+// UsedSignature is a free data retrieval call binding the contract method 0x0f945e9f.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Claim(_wallet common.Address, _signature []byte, _depositIds []*big.Int, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Claim(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _depositIds, _amountWithYield, _receiver)
+// Solidity: function usedSignature(bytes32 signatureHash) view returns(bool isUsed)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) UsedSignature(signatureHash [32]byte) (bool, error) {
+	return _TrustManagementRouter.Contract.UsedSignature(&_TrustManagementRouter.CallOpts, signatureHash)
 }
 
-// Claim0 is a paid mutator transaction binding the contract method 0x7bd4f668.
+// VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, address _token, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Claim0(opts *bind.TransactOpts, _wallet common.Address, _signature []byte, _depositIds []*big.Int, _token common.Address, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "claim0", _wallet, _signature, _depositIds, _token, _amountWithYield, _receiver)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterCaller) VerifyCert(opts *bind.CallOpts, cert ChunkedX509Cert, publicKey []byte) (bool, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "verifyCert", cert, publicKey)
+
+	if err != nil {
+		return *new(bool), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
+
+	return out0, err
+
 }
 
-// Claim0 is a paid mutator transaction binding the contract method 0x7bd4f668.
+// VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, address _token, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Claim0(_wallet common.Address, _signature []byte, _depositIds []*big.Int, _token common.Address, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Claim0(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _depositIds, _token, _amountWithYield, _receiver)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterSession) VerifyCert(cert ChunkedX509Cert, publicKey []byte) (bool, error) {
+	return _TrustManagementRouter.Contract.VerifyCert(&_TrustManagementRouter.CallOpts, cert, publicKey)
 }
 
-// Claim0 is a paid mutator transaction binding the contract method 0x7bd4f668.
+// VerifyCert is a free data retrieval call binding the contract method 0xbee94f11.
 //
-// Solidity: function claim(address _wallet, bytes _signature, uint256[] _depositIds, address _token, uint256 _amountWithYield, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Claim0(_wallet common.Address, _signature []byte, _depositIds []*big.Int, _token common.Address, _amountWithYield *big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Claim0(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _depositIds, _token, _amountWithYield, _receiver)
+// Solidity: function verifyCert((bytes,bytes,bytes,bytes) cert, bytes publicKey) pure returns(bool)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) VerifyCert(cert ChunkedX509Cert, publicKey []byte) (bool, error) {
+	return _TrustManagementRouter.Contract.VerifyCert(&_TrustManagementRouter.CallOpts, cert, publicKey)
 }
 
-// CreateWallet is a paid mutator transaction binding the contract method 0xe8eef270.
+// XyberContractName is a free data retrieval call binding the contract method 0xe60e9654.
 //
-// Solidity: function createWallet(address _user, address _agent, bytes32 _salt) returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterTransactor) CreateWallet(opts *bind.TransactOpts, _user common.Address, _agent common.Address, _salt [32]byte) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "createWallet", _user, _agent, _salt)
+// Solidity: function xyberContractName() pure returns(string contractName)
+func (_TrustManagementRouter *TrustManagementRouterCaller) XyberContractName(opts *bind.CallOpts) (string, error) {
+	var out []interface{}
+	err := _TrustManagementRouter.contract.Call(opts, &out, "xyberContractName")
+
+	if err != nil {
+		return *new(string), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(string)).(*string)
+
+	return out0, err
+
 }
 
-// CreateWallet is a paid mutator transaction binding the contract method 0xe8eef270.
+// XyberContractName is a free data retrieval call binding the contract method 0xe60e9654.
 //
-// Solidity: function createWallet(address _user, address _agent, bytes32 _salt) returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterSession) CreateWallet(_user common.Address, _agent common.Address, _salt [32]byte) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWallet(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt)
+// Solidity: function xyberContractName() pure returns(string contractName)
+func (_TrustManagementRouter *TrustManagementRouterSession) XyberContractName() (string, error) {
+	return _TrustManagementRouter.Contract.XyberContractName(&_TrustManagementRouter.CallOpts)
 }
 
-// CreateWallet is a paid mutator transaction binding the contract method 0xe8eef270.
+// XyberContractName is a free data retrieval call binding the contract method 0xe60e9654.
 //
-// Solidity: function createWallet(address _user, address _agent, bytes32 _salt) returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) CreateWallet(_user common.Address, _agent common.Address, _salt [32]byte) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWallet(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt)
+// Solidity: function xyberContractName() pure returns(string contractName)
+func (_TrustManagementRouter *TrustManagementRouterCallerSession) XyberContractName() (string, error) {
+	return _TrustManagementRouter.Contract.XyberContractName(&_TrustManagementRouter.CallOpts)
 }
 
-// CreateWalletAndDeposit is a paid mutator transaction binding the contract method 0x22a8adac.
+// Claim is a paid mutator transaction binding the contract method 0x099e700b.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, uint256 _lockDuration) payable returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterTransactor) CreateWalletAndDeposit(opts *bind.TransactOpts, _user common.Address, _agent common.Address, _salt [32]byte, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "createWalletAndDeposit", _user, _agent, _salt, _lockDuration)
+// Solidity: function claim(address wallet, address receiver, address[] tokens, uint256[] amounts, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Claim(opts *bind.TransactOpts, wallet common.Address, receiver common.Address, tokens []common.Address, amounts []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "claim", wallet, receiver, tokens, amounts, signature, deadline)
 }
 
-// CreateWalletAndDeposit is a paid mutator transaction binding the contract method 0x22a8adac.
+// Claim is a paid mutator transaction binding the contract method 0x099e700b.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, uint256 _lockDuration) payable returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterSession) CreateWalletAndDeposit(_user common.Address, _agent common.Address, _salt [32]byte, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDeposit(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _lockDuration)
+// Solidity: function claim(address wallet, address receiver, address[] tokens, uint256[] amounts, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Claim(wallet common.Address, receiver common.Address, tokens []common.Address, amounts []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Claim(&_TrustManagementRouter.TransactOpts, wallet, receiver, tokens, amounts, signature, deadline)
 }
 
-// CreateWalletAndDeposit is a paid mutator transaction binding the contract method 0x22a8adac.
+// Claim is a paid mutator transaction binding the contract method 0x099e700b.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, uint256 _lockDuration) payable returns(address newWallet)
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) CreateWalletAndDeposit(_user common.Address, _agent common.Address, _salt [32]byte, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDeposit(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _lockDuration)
+// Solidity: function claim(address wallet, address receiver, address[] tokens, uint256[] amounts, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Claim(wallet common.Address, receiver common.Address, tokens []common.Address, amounts []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Claim(&_TrustManagementRouter.TransactOpts, wallet, receiver, tokens, amounts, signature, deadline)
 }
 
-// CreateWalletAndDeposit0 is a paid mutator transaction binding the contract method 0xa41ee59c.
+// CreateWallet is a paid mutator transaction binding the contract method 0xb054a9e8.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, address _token, uint256 _amount, uint256 _lockDuration) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterTransactor) CreateWalletAndDeposit0(opts *bind.TransactOpts, _user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _amount *big.Int, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "createWalletAndDeposit0", _user, _agent, _salt, _token, _amount, _lockDuration)
+// Solidity: function createWallet(address user) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactor) CreateWallet(opts *bind.TransactOpts, user common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "createWallet", user)
 }
 
-// CreateWalletAndDeposit0 is a paid mutator transaction binding the contract method 0xa41ee59c.
+// CreateWallet is a paid mutator transaction binding the contract method 0xb054a9e8.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, address _token, uint256 _amount, uint256 _lockDuration) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterSession) CreateWalletAndDeposit0(_user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _amount *big.Int, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDeposit0(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _token, _amount, _lockDuration)
+// Solidity: function createWallet(address user) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterSession) CreateWallet(user common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.CreateWallet(&_TrustManagementRouter.TransactOpts, user)
 }
 
-// CreateWalletAndDeposit0 is a paid mutator transaction binding the contract method 0xa41ee59c.
+// CreateWallet is a paid mutator transaction binding the contract method 0xb054a9e8.
 //
-// Solidity: function createWalletAndDeposit(address _user, address _agent, bytes32 _salt, address _token, uint256 _amount, uint256 _lockDuration) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) CreateWalletAndDeposit0(_user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _amount *big.Int, _lockDuration *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDeposit0(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _token, _amount, _lockDuration)
+// Solidity: function createWallet(address user) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) CreateWallet(user common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.CreateWallet(&_TrustManagementRouter.TransactOpts, user)
 }
 
-// CreateWalletAndDepositWithPermit is a paid mutator transaction binding the contract method 0x781ea3be.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function createWalletAndDepositWithPermit(address _user, address _agent, bytes32 _salt, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterTransactor) CreateWalletAndDepositWithPermit(opts *bind.TransactOpts, _user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "createWalletAndDepositWithPermit", _user, _agent, _salt, _token, _unlockTimestamp, _permit)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Deposit(opts *bind.TransactOpts, receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "deposit", receiver, token, amount, lockDuration)
 }
 
-// CreateWalletAndDepositWithPermit is a paid mutator transaction binding the contract method 0x781ea3be.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function createWalletAndDepositWithPermit(address _user, address _agent, bytes32 _salt, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterSession) CreateWalletAndDepositWithPermit(_user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDepositWithPermit(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _token, _unlockTimestamp, _permit)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterSession) Deposit(receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Deposit(&_TrustManagementRouter.TransactOpts, receiver, token, amount, lockDuration)
 }
 
-// CreateWalletAndDepositWithPermit is a paid mutator transaction binding the contract method 0x781ea3be.
+// Deposit is a paid mutator transaction binding the contract method 0x20e8c565.
 //
-// Solidity: function createWalletAndDepositWithPermit(address _user, address _agent, bytes32 _salt, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns(address)
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) CreateWalletAndDepositWithPermit(_user common.Address, _agent common.Address, _salt [32]byte, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.CreateWalletAndDepositWithPermit(&_TrustManagementRouter.TransactOpts, _user, _agent, _salt, _token, _unlockTimestamp, _permit)
+// Solidity: function deposit(address receiver, address token, uint256 amount, uint256 lockDuration) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Deposit(receiver common.Address, token common.Address, amount *big.Int, lockDuration *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Deposit(&_TrustManagementRouter.TransactOpts, receiver, token, amount, lockDuration)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x02b9446c.
+// DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
-// Solidity: function deposit(address _user, address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Deposit(opts *bind.TransactOpts, _user common.Address, _wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "deposit", _user, _wallet, _token, _amount, _unlockTimestamp)
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactor) DepositWithPermit(opts *bind.TransactOpts, receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "depositWithPermit", receiver, token, lockDuration, permit)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x02b9446c.
+// DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
-// Solidity: function deposit(address _user, address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Deposit(_user common.Address, _wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit(&_TrustManagementRouter.TransactOpts, _user, _wallet, _token, _amount, _unlockTimestamp)
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
 }
 
-// Deposit is a paid mutator transaction binding the contract method 0x02b9446c.
+// DepositWithPermit is a paid mutator transaction binding the contract method 0x96931cf5.
 //
-// Solidity: function deposit(address _user, address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Deposit(_user common.Address, _wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit(&_TrustManagementRouter.TransactOpts, _user, _wallet, _token, _amount, _unlockTimestamp)
+// Solidity: function depositWithPermit(address receiver, address token, uint256 lockDuration, (address,uint256,uint256,uint8,bytes32,bytes32) permit) returns(address walletAddress)
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) DepositWithPermit(receiver common.Address, token common.Address, lockDuration *big.Int, permit IXyberTrustManagementStructsPermit) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, receiver, token, lockDuration, permit)
 }
 
-// Deposit0 is a paid mutator transaction binding the contract method 0x20e8c565.
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
-// Solidity: function deposit(address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Deposit0(opts *bind.TransactOpts, _wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "deposit0", _wallet, _token, _amount, _unlockTimestamp)
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "execute", txs, signature, deadline)
 }
 
-// Deposit0 is a paid mutator transaction binding the contract method 0x20e8c565.
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
-// Solidity: function deposit(address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Deposit0(_wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit0(&_TrustManagementRouter.TransactOpts, _wallet, _token, _amount, _unlockTimestamp)
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Execute(txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, txs, signature, deadline)
 }
 
-// Deposit0 is a paid mutator transaction binding the contract method 0x20e8c565.
+// Execute is a paid mutator transaction binding the contract method 0x2f37da74.
 //
-// Solidity: function deposit(address _wallet, address _token, uint256 _amount, uint256 _unlockTimestamp) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Deposit0(_wallet common.Address, _token common.Address, _amount *big.Int, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit0(&_TrustManagementRouter.TransactOpts, _wallet, _token, _amount, _unlockTimestamp)
-}
-
-// Deposit1 is a paid mutator transaction binding the contract method 0x47e7ef24.
-//
-// Solidity: function deposit(address _wallet, uint256 _unlockTimestamp) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Deposit1(opts *bind.TransactOpts, _wallet common.Address, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "deposit1", _wallet, _unlockTimestamp)
-}
-
-// Deposit1 is a paid mutator transaction binding the contract method 0x47e7ef24.
-//
-// Solidity: function deposit(address _wallet, uint256 _unlockTimestamp) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Deposit1(_wallet common.Address, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit1(&_TrustManagementRouter.TransactOpts, _wallet, _unlockTimestamp)
-}
-
-// Deposit1 is a paid mutator transaction binding the contract method 0x47e7ef24.
-//
-// Solidity: function deposit(address _wallet, uint256 _unlockTimestamp) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Deposit1(_wallet common.Address, _unlockTimestamp *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Deposit1(&_TrustManagementRouter.TransactOpts, _wallet, _unlockTimestamp)
-}
-
-// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
-//
-// Solidity: function depositWithPermit(address _wallet, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) DepositWithPermit(opts *bind.TransactOpts, _wallet common.Address, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "depositWithPermit", _wallet, _token, _unlockTimestamp, _permit)
-}
-
-// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
-//
-// Solidity: function depositWithPermit(address _wallet, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) DepositWithPermit(_wallet common.Address, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, _wallet, _token, _unlockTimestamp, _permit)
-}
-
-// DepositWithPermit is a paid mutator transaction binding the contract method 0xc860efa8.
-//
-// Solidity: function depositWithPermit(address _wallet, address _token, uint256 _unlockTimestamp, (uint256,uint256,uint8,bytes32,bytes32) _permit) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) DepositWithPermit(_wallet common.Address, _token common.Address, _unlockTimestamp *big.Int, _permit ITrustManagementStructsPermit) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.DepositWithPermit(&_TrustManagementRouter.TransactOpts, _wallet, _token, _unlockTimestamp, _permit)
-}
-
-// EmergencyWithdraw is a paid mutator transaction binding the contract method 0x62441c23.
-//
-// Solidity: function emergencyWithdraw(address _wallet, address[] _tokens, uint256[][] _depositsIds, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) EmergencyWithdraw(opts *bind.TransactOpts, _wallet common.Address, _tokens []common.Address, _depositsIds [][]*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "emergencyWithdraw", _wallet, _tokens, _depositsIds, _receiver)
-}
-
-// EmergencyWithdraw is a paid mutator transaction binding the contract method 0x62441c23.
-//
-// Solidity: function emergencyWithdraw(address _wallet, address[] _tokens, uint256[][] _depositsIds, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) EmergencyWithdraw(_wallet common.Address, _tokens []common.Address, _depositsIds [][]*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.EmergencyWithdraw(&_TrustManagementRouter.TransactOpts, _wallet, _tokens, _depositsIds, _receiver)
-}
-
-// EmergencyWithdraw is a paid mutator transaction binding the contract method 0x62441c23.
-//
-// Solidity: function emergencyWithdraw(address _wallet, address[] _tokens, uint256[][] _depositsIds, address _receiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) EmergencyWithdraw(_wallet common.Address, _tokens []common.Address, _depositsIds [][]*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.EmergencyWithdraw(&_TrustManagementRouter.TransactOpts, _wallet, _tokens, _depositsIds, _receiver)
-}
-
-// EmergencyWithdraw0 is a paid mutator transaction binding the contract method 0x62472394.
-//
-// Solidity: function emergencyWithdraw(address _wallet, uint256[] _depositIds, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) EmergencyWithdraw0(opts *bind.TransactOpts, _wallet common.Address, _depositIds []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "emergencyWithdraw0", _wallet, _depositIds, _receiver)
-}
-
-// EmergencyWithdraw0 is a paid mutator transaction binding the contract method 0x62472394.
-//
-// Solidity: function emergencyWithdraw(address _wallet, uint256[] _depositIds, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) EmergencyWithdraw0(_wallet common.Address, _depositIds []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.EmergencyWithdraw0(&_TrustManagementRouter.TransactOpts, _wallet, _depositIds, _receiver)
-}
-
-// EmergencyWithdraw0 is a paid mutator transaction binding the contract method 0x62472394.
-//
-// Solidity: function emergencyWithdraw(address _wallet, uint256[] _depositIds, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) EmergencyWithdraw0(_wallet common.Address, _depositIds []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.EmergencyWithdraw0(&_TrustManagementRouter.TransactOpts, _wallet, _depositIds, _receiver)
-}
-
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
-//
-// Solidity: function execute(address target, (address,uint256,bytes)[] txs) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Execute(opts *bind.TransactOpts, target common.Address, txs []ITrustManagementStructsTransaction) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "execute", target, txs)
-}
-
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
-//
-// Solidity: function execute(address target, (address,uint256,bytes)[] txs) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Execute(target common.Address, txs []ITrustManagementStructsTransaction) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, target, txs)
-}
-
-// Execute is a paid mutator transaction binding the contract method 0x42cc1b84.
-//
-// Solidity: function execute(address target, (address,uint256,bytes)[] txs) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Execute(target common.Address, txs []ITrustManagementStructsTransaction) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, target, txs)
+// Solidity: function execute((address,uint256,bytes)[] txs, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Execute(txs []IXyberTrustManagementStructsTransaction, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Execute(&_TrustManagementRouter.TransactOpts, txs, signature, deadline)
 }
 
 // GrantRole is a paid mutator transaction binding the contract method 0x2f2ff15d.
@@ -800,25 +938,46 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) GrantRole(
 	return _TrustManagementRouter.Contract.GrantRole(&_TrustManagementRouter.TransactOpts, role, account)
 }
 
-// Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
+// InitSessionKey is a paid mutator transaction binding the contract method 0x4c7c04c4.
 //
-// Solidity: function initialize(address _initBlueprint) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Initialize(opts *bind.TransactOpts, _initBlueprint common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "initialize", _initBlueprint)
+// Solidity: function initSessionKey((bytes,bytes,bytes,bytes) leaf, (bytes,bytes,bytes,bytes) intermediate, (bytes,bytes,bytes,bytes,bytes,bytes,bytes) quote, address sessionKey) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) InitSessionKey(opts *bind.TransactOpts, leaf ChunkedX509Cert, intermediate ChunkedX509Cert, quote ChunkedSGXQuote, sessionKey common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "initSessionKey", leaf, intermediate, quote, sessionKey)
+}
+
+// InitSessionKey is a paid mutator transaction binding the contract method 0x4c7c04c4.
+//
+// Solidity: function initSessionKey((bytes,bytes,bytes,bytes) leaf, (bytes,bytes,bytes,bytes) intermediate, (bytes,bytes,bytes,bytes,bytes,bytes,bytes) quote, address sessionKey) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) InitSessionKey(leaf ChunkedX509Cert, intermediate ChunkedX509Cert, quote ChunkedSGXQuote, sessionKey common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.InitSessionKey(&_TrustManagementRouter.TransactOpts, leaf, intermediate, quote, sessionKey)
+}
+
+// InitSessionKey is a paid mutator transaction binding the contract method 0x4c7c04c4.
+//
+// Solidity: function initSessionKey((bytes,bytes,bytes,bytes) leaf, (bytes,bytes,bytes,bytes) intermediate, (bytes,bytes,bytes,bytes,bytes,bytes,bytes) quote, address sessionKey) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) InitSessionKey(leaf ChunkedX509Cert, intermediate ChunkedX509Cert, quote ChunkedSGXQuote, sessionKey common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.InitSessionKey(&_TrustManagementRouter.TransactOpts, leaf, intermediate, quote, sessionKey)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
 //
-// Solidity: function initialize(address _initBlueprint) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Initialize(_initBlueprint common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, _initBlueprint)
+// Solidity: function initialize(address defaultAdmin) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Initialize(opts *bind.TransactOpts, defaultAdmin common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "initialize", defaultAdmin)
 }
 
 // Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
 //
-// Solidity: function initialize(address _initBlueprint) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Initialize(_initBlueprint common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, _initBlueprint)
+// Solidity: function initialize(address defaultAdmin) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Initialize(defaultAdmin common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin)
+}
+
+// Initialize is a paid mutator transaction binding the contract method 0xc4d66de8.
+//
+// Solidity: function initialize(address defaultAdmin) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Initialize(defaultAdmin common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Initialize(&_TrustManagementRouter.TransactOpts, defaultAdmin)
 }
 
 // RenounceRole is a paid mutator transaction binding the contract method 0x36568abe.
@@ -863,67 +1022,67 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) RevokeRole
 	return _TrustManagementRouter.Contract.RevokeRole(&_TrustManagementRouter.TransactOpts, role, account)
 }
 
-// SetFeeReceiver is a paid mutator transaction binding the contract method 0xefdcd974.
+// SetAllowedToken is a paid mutator transaction binding the contract method 0x8aaa2284.
 //
-// Solidity: function setFeeReceiver(address _newFeeReceiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) SetFeeReceiver(opts *bind.TransactOpts, _newFeeReceiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "setFeeReceiver", _newFeeReceiver)
+// Solidity: function setAllowedToken(address token, bool isAllowed) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) SetAllowedToken(opts *bind.TransactOpts, token common.Address, isAllowed bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "setAllowedToken", token, isAllowed)
 }
 
-// SetFeeReceiver is a paid mutator transaction binding the contract method 0xefdcd974.
+// SetAllowedToken is a paid mutator transaction binding the contract method 0x8aaa2284.
 //
-// Solidity: function setFeeReceiver(address _newFeeReceiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) SetFeeReceiver(_newFeeReceiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.SetFeeReceiver(&_TrustManagementRouter.TransactOpts, _newFeeReceiver)
+// Solidity: function setAllowedToken(address token, bool isAllowed) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) SetAllowedToken(token common.Address, isAllowed bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetAllowedToken(&_TrustManagementRouter.TransactOpts, token, isAllowed)
 }
 
-// SetFeeReceiver is a paid mutator transaction binding the contract method 0xefdcd974.
+// SetAllowedToken is a paid mutator transaction binding the contract method 0x8aaa2284.
 //
-// Solidity: function setFeeReceiver(address _newFeeReceiver) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetFeeReceiver(_newFeeReceiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.SetFeeReceiver(&_TrustManagementRouter.TransactOpts, _newFeeReceiver)
+// Solidity: function setAllowedToken(address token, bool isAllowed) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetAllowedToken(token common.Address, isAllowed bool) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetAllowedToken(&_TrustManagementRouter.TransactOpts, token, isAllowed)
+}
+
+// SetFeeCollector is a paid mutator transaction binding the contract method 0xa42dce80.
+//
+// Solidity: function setFeeCollector(address newFeeCollector) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) SetFeeCollector(opts *bind.TransactOpts, newFeeCollector common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "setFeeCollector", newFeeCollector)
+}
+
+// SetFeeCollector is a paid mutator transaction binding the contract method 0xa42dce80.
+//
+// Solidity: function setFeeCollector(address newFeeCollector) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) SetFeeCollector(newFeeCollector common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetFeeCollector(&_TrustManagementRouter.TransactOpts, newFeeCollector)
+}
+
+// SetFeeCollector is a paid mutator transaction binding the contract method 0xa42dce80.
+//
+// Solidity: function setFeeCollector(address newFeeCollector) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetFeeCollector(newFeeCollector common.Address) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetFeeCollector(&_TrustManagementRouter.TransactOpts, newFeeCollector)
 }
 
 // SetPerfomanceFeeRate is a paid mutator transaction binding the contract method 0x24402bba.
 //
-// Solidity: function setPerfomanceFeeRate(uint256 _newPerfomanceFeeRate) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) SetPerfomanceFeeRate(opts *bind.TransactOpts, _newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "setPerfomanceFeeRate", _newPerfomanceFeeRate)
+// Solidity: function setPerfomanceFeeRate(uint256 newPerfomanceFeeRate) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) SetPerfomanceFeeRate(opts *bind.TransactOpts, newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "setPerfomanceFeeRate", newPerfomanceFeeRate)
 }
 
 // SetPerfomanceFeeRate is a paid mutator transaction binding the contract method 0x24402bba.
 //
-// Solidity: function setPerfomanceFeeRate(uint256 _newPerfomanceFeeRate) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) SetPerfomanceFeeRate(_newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.SetPerfomanceFeeRate(&_TrustManagementRouter.TransactOpts, _newPerfomanceFeeRate)
+// Solidity: function setPerfomanceFeeRate(uint256 newPerfomanceFeeRate) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) SetPerfomanceFeeRate(newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetPerfomanceFeeRate(&_TrustManagementRouter.TransactOpts, newPerfomanceFeeRate)
 }
 
 // SetPerfomanceFeeRate is a paid mutator transaction binding the contract method 0x24402bba.
 //
-// Solidity: function setPerfomanceFeeRate(uint256 _newPerfomanceFeeRate) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetPerfomanceFeeRate(_newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.SetPerfomanceFeeRate(&_TrustManagementRouter.TransactOpts, _newPerfomanceFeeRate)
-}
-
-// UpgradeTo is a paid mutator transaction binding the contract method 0x3659cfe6.
-//
-// Solidity: function upgradeTo(address _newImplementation) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) UpgradeTo(opts *bind.TransactOpts, _newImplementation common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "upgradeTo", _newImplementation)
-}
-
-// UpgradeTo is a paid mutator transaction binding the contract method 0x3659cfe6.
-//
-// Solidity: function upgradeTo(address _newImplementation) returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) UpgradeTo(_newImplementation common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.UpgradeTo(&_TrustManagementRouter.TransactOpts, _newImplementation)
-}
-
-// UpgradeTo is a paid mutator transaction binding the contract method 0x3659cfe6.
-//
-// Solidity: function upgradeTo(address _newImplementation) returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) UpgradeTo(_newImplementation common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.UpgradeTo(&_TrustManagementRouter.TransactOpts, _newImplementation)
+// Solidity: function setPerfomanceFeeRate(uint256 newPerfomanceFeeRate) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) SetPerfomanceFeeRate(newPerfomanceFeeRate *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.SetPerfomanceFeeRate(&_TrustManagementRouter.TransactOpts, newPerfomanceFeeRate)
 }
 
 // UpgradeToAndCall is a paid mutator transaction binding the contract method 0x4f1ef286.
@@ -947,30 +1106,30 @@ func (_TrustManagementRouter *TrustManagementRouterTransactorSession) UpgradeToA
 	return _TrustManagementRouter.Contract.UpgradeToAndCall(&_TrustManagementRouter.TransactOpts, newImplementation, data)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x572bcaa7.
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
 //
-// Solidity: function withdraw(address _wallet, bytes _signature, address _token, uint256[] _depositIds, uint256[] _amountWithYield, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactor) Withdraw(opts *bind.TransactOpts, _wallet common.Address, _signature []byte, _token common.Address, _depositIds []*big.Int, _amountWithYield []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.contract.Transact(opts, "withdraw", _wallet, _signature, _token, _depositIds, _amountWithYield, _receiver)
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactor) Withdraw(opts *bind.TransactOpts, wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.contract.Transact(opts, "withdraw", wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x572bcaa7.
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
 //
-// Solidity: function withdraw(address _wallet, bytes _signature, address _token, uint256[] _depositIds, uint256[] _amountWithYield, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterSession) Withdraw(_wallet common.Address, _signature []byte, _token common.Address, _depositIds []*big.Int, _amountWithYield []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _token, _depositIds, _amountWithYield, _receiver)
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterSession) Withdraw(wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
 }
 
-// Withdraw is a paid mutator transaction binding the contract method 0x572bcaa7.
+// Withdraw is a paid mutator transaction binding the contract method 0xd3413cac.
 //
-// Solidity: function withdraw(address _wallet, bytes _signature, address _token, uint256[] _depositIds, uint256[] _amountWithYield, address _receiver) payable returns()
-func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Withdraw(_wallet common.Address, _signature []byte, _token common.Address, _depositIds []*big.Int, _amountWithYield []*big.Int, _receiver common.Address) (*types.Transaction, error) {
-	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, _wallet, _signature, _token, _depositIds, _amountWithYield, _receiver)
+// Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
+func (_TrustManagementRouter *TrustManagementRouterTransactorSession) Withdraw(wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
+	return _TrustManagementRouter.Contract.Withdraw(&_TrustManagementRouter.TransactOpts, wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
 }
 
-// TrustManagementRouterDepositEventIterator is returned from FilterDepositEvent and is used to iterate over the raw logs and unpacked data for DepositEvent events raised by the TrustManagementRouter contract.
-type TrustManagementRouterDepositEventIterator struct {
-	Event *TrustManagementRouterDepositEvent // Event containing the contract specifics and raw log
+// TrustManagementRouterAllowedTokenSetIterator is returned from FilterAllowedTokenSet and is used to iterate over the raw logs and unpacked data for AllowedTokenSet events raised by the TrustManagementRouter contract.
+type TrustManagementRouterAllowedTokenSetIterator struct {
+	Event *TrustManagementRouterAllowedTokenSet // Event containing the contract specifics and raw log
 
 	contract *bind.BoundContract // Generic contract to use for unpacking event data
 	event    string              // Event name to use for unpacking event data
@@ -984,7 +1143,7 @@ type TrustManagementRouterDepositEventIterator struct {
 // Next advances the iterator to the subsequent event, returning whether there
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
-func (it *TrustManagementRouterDepositEventIterator) Next() bool {
+func (it *TrustManagementRouterAllowedTokenSetIterator) Next() bool {
 	// If the iterator failed, stop iterating
 	if it.fail != nil {
 		return false
@@ -993,7 +1152,7 @@ func (it *TrustManagementRouterDepositEventIterator) Next() bool {
 	if it.done {
 		select {
 		case log := <-it.logs:
-			it.Event = new(TrustManagementRouterDepositEvent)
+			it.Event = new(TrustManagementRouterAllowedTokenSet)
 			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 				it.fail = err
 				return false
@@ -1008,7 +1167,7 @@ func (it *TrustManagementRouterDepositEventIterator) Next() bool {
 	// Iterator still in progress, wait for either a data or an error event
 	select {
 	case log := <-it.logs:
-		it.Event = new(TrustManagementRouterDepositEvent)
+		it.Event = new(TrustManagementRouterAllowedTokenSet)
 		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
 			it.fail = err
 			return false
@@ -1024,45 +1183,43 @@ func (it *TrustManagementRouterDepositEventIterator) Next() bool {
 }
 
 // Error returns any retrieval or parsing error occurred during filtering.
-func (it *TrustManagementRouterDepositEventIterator) Error() error {
+func (it *TrustManagementRouterAllowedTokenSetIterator) Error() error {
 	return it.fail
 }
 
 // Close terminates the iteration process, releasing any pending underlying
 // resources.
-func (it *TrustManagementRouterDepositEventIterator) Close() error {
+func (it *TrustManagementRouterAllowedTokenSetIterator) Close() error {
 	it.sub.Unsubscribe()
 	return nil
 }
 
-// TrustManagementRouterDepositEvent represents a DepositEvent event raised by the TrustManagementRouter contract.
-type TrustManagementRouterDepositEvent struct {
-	Wallet          common.Address
-	User            common.Address
-	Token           common.Address
-	Amount          *big.Int
-	UnlockTimestamp *big.Int
-	Raw             types.Log // Blockchain specific contextual infos
+// TrustManagementRouterAllowedTokenSet represents a AllowedTokenSet event raised by the TrustManagementRouter contract.
+type TrustManagementRouterAllowedTokenSet struct {
+	Token     common.Address
+	IsAllowed bool
+	Caller    common.Address
+	Raw       types.Log // Blockchain specific contextual infos
 }
 
-// FilterDepositEvent is a free log retrieval operation binding the contract event 0x06e15f44f14902aa990d1ee87818dbf5fefcd7cc78920c3833ef6aca41672704.
+// FilterAllowedTokenSet is a free log retrieval operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event DepositEvent(address wallet, address user, address token, uint256 amount, uint256 unlockTimestamp)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterDepositEvent(opts *bind.FilterOpts) (*TrustManagementRouterDepositEventIterator, error) {
+// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterAllowedTokenSet(opts *bind.FilterOpts) (*TrustManagementRouterAllowedTokenSetIterator, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "DepositEvent")
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "AllowedTokenSet")
 	if err != nil {
 		return nil, err
 	}
-	return &TrustManagementRouterDepositEventIterator{contract: _TrustManagementRouter.contract, event: "DepositEvent", logs: logs, sub: sub}, nil
+	return &TrustManagementRouterAllowedTokenSetIterator{contract: _TrustManagementRouter.contract, event: "AllowedTokenSet", logs: logs, sub: sub}, nil
 }
 
-// WatchDepositEvent is a free log subscription operation binding the contract event 0x06e15f44f14902aa990d1ee87818dbf5fefcd7cc78920c3833ef6aca41672704.
+// WatchAllowedTokenSet is a free log subscription operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event DepositEvent(address wallet, address user, address token, uint256 amount, uint256 unlockTimestamp)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDepositEvent(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterDepositEvent) (event.Subscription, error) {
+// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchAllowedTokenSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterAllowedTokenSet) (event.Subscription, error) {
 
-	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "DepositEvent")
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "AllowedTokenSet")
 	if err != nil {
 		return nil, err
 	}
@@ -1072,8 +1229,8 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDepositEvent(o
 			select {
 			case log := <-logs:
 				// New log arrived, parse the event and forward to the user
-				event := new(TrustManagementRouterDepositEvent)
-				if err := _TrustManagementRouter.contract.UnpackLog(event, "DepositEvent", log); err != nil {
+				event := new(TrustManagementRouterAllowedTokenSet)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "AllowedTokenSet", log); err != nil {
 					return err
 				}
 				event.Raw = log
@@ -1094,12 +1251,558 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDepositEvent(o
 	}), nil
 }
 
-// ParseDepositEvent is a log parse operation binding the contract event 0x06e15f44f14902aa990d1ee87818dbf5fefcd7cc78920c3833ef6aca41672704.
+// ParseAllowedTokenSet is a log parse operation binding the contract event 0x08e00fb187b2ed4d0d966e3e6885897b97cd8695c9731410b7d2a189e474c95e.
 //
-// Solidity: event DepositEvent(address wallet, address user, address token, uint256 amount, uint256 unlockTimestamp)
-func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseDepositEvent(log types.Log) (*TrustManagementRouterDepositEvent, error) {
-	event := new(TrustManagementRouterDepositEvent)
-	if err := _TrustManagementRouter.contract.UnpackLog(event, "DepositEvent", log); err != nil {
+// Solidity: event AllowedTokenSet(address token, bool isAllowed, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseAllowedTokenSet(log types.Log) (*TrustManagementRouterAllowedTokenSet, error) {
+	event := new(TrustManagementRouterAllowedTokenSet)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "AllowedTokenSet", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterClaimedIterator is returned from FilterClaimed and is used to iterate over the raw logs and unpacked data for Claimed events raised by the TrustManagementRouter contract.
+type TrustManagementRouterClaimedIterator struct {
+	Event *TrustManagementRouterClaimed // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterClaimedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterClaimed)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterClaimed)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterClaimedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterClaimedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterClaimed represents a Claimed event raised by the TrustManagementRouter contract.
+type TrustManagementRouterClaimed struct {
+	Wallet   common.Address
+	User     common.Address
+	Tokens   []common.Address
+	Receiver common.Address
+	Raw      types.Log // Blockchain specific contextual infos
+}
+
+// FilterClaimed is a free log retrieval operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
+//
+// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterClaimed(opts *bind.FilterOpts) (*TrustManagementRouterClaimedIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Claimed")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterClaimedIterator{contract: _TrustManagementRouter.contract, event: "Claimed", logs: logs, sub: sub}, nil
+}
+
+// WatchClaimed is a free log subscription operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
+//
+// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchClaimed(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterClaimed) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Claimed")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterClaimed)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "Claimed", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseClaimed is a log parse operation binding the contract event 0x6341e54c99570fa6967fa5800dd288c6b0c405bacae23a5ad6a94e0f970318f8.
+//
+// Solidity: event Claimed(address wallet, address user, address[] tokens, address receiver)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseClaimed(log types.Log) (*TrustManagementRouterClaimed, error) {
+	event := new(TrustManagementRouterClaimed)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "Claimed", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterDepositedIterator is returned from FilterDeposited and is used to iterate over the raw logs and unpacked data for Deposited events raised by the TrustManagementRouter contract.
+type TrustManagementRouterDepositedIterator struct {
+	Event *TrustManagementRouterDeposited // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterDepositedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterDeposited)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterDeposited)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterDepositedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterDepositedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterDeposited represents a Deposited event raised by the TrustManagementRouter contract.
+type TrustManagementRouterDeposited struct {
+	Wallet       common.Address
+	User         common.Address
+	Token        common.Address
+	Amount       *big.Int
+	LockDuration *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterDeposited is a free log retrieval operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterDeposited(opts *bind.FilterOpts) (*TrustManagementRouterDepositedIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Deposited")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterDepositedIterator{contract: _TrustManagementRouter.contract, event: "Deposited", logs: logs, sub: sub}, nil
+}
+
+// WatchDeposited is a free log subscription operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchDeposited(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterDeposited) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Deposited")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterDeposited)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "Deposited", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseDeposited is a log parse operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address user, address token, uint256 amount, uint256 lockDuration)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseDeposited(log types.Log) (*TrustManagementRouterDeposited, error) {
+	event := new(TrustManagementRouterDeposited)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "Deposited", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterExecutedIterator is returned from FilterExecuted and is used to iterate over the raw logs and unpacked data for Executed events raised by the TrustManagementRouter contract.
+type TrustManagementRouterExecutedIterator struct {
+	Event *TrustManagementRouterExecuted // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterExecutedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterExecuted)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterExecuted)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterExecutedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterExecutedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterExecuted represents a Executed event raised by the TrustManagementRouter contract.
+type TrustManagementRouterExecuted struct {
+	Target common.Address
+	Data   []byte
+	Caller common.Address
+	Raw    types.Log // Blockchain specific contextual infos
+}
+
+// FilterExecuted is a free log retrieval operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
+//
+// Solidity: event Executed(address target, bytes data, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterExecuted(opts *bind.FilterOpts) (*TrustManagementRouterExecutedIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Executed")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterExecutedIterator{contract: _TrustManagementRouter.contract, event: "Executed", logs: logs, sub: sub}, nil
+}
+
+// WatchExecuted is a free log subscription operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
+//
+// Solidity: event Executed(address target, bytes data, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchExecuted(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterExecuted) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Executed")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterExecuted)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "Executed", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseExecuted is a log parse operation binding the contract event 0x40e4545157549759798da7c1865562e1e6473f16e61954ae287208f49962927f.
+//
+// Solidity: event Executed(address target, bytes data, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseExecuted(log types.Log) (*TrustManagementRouterExecuted, error) {
+	event := new(TrustManagementRouterExecuted)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "Executed", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterFeeCollectorSetIterator is returned from FilterFeeCollectorSet and is used to iterate over the raw logs and unpacked data for FeeCollectorSet events raised by the TrustManagementRouter contract.
+type TrustManagementRouterFeeCollectorSetIterator struct {
+	Event *TrustManagementRouterFeeCollectorSet // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterFeeCollectorSetIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterFeeCollectorSet)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterFeeCollectorSet)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterFeeCollectorSetIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterFeeCollectorSetIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterFeeCollectorSet represents a FeeCollectorSet event raised by the TrustManagementRouter contract.
+type TrustManagementRouterFeeCollectorSet struct {
+	NewFeeCollector common.Address
+	Caller          common.Address
+	Raw             types.Log // Blockchain specific contextual infos
+}
+
+// FilterFeeCollectorSet is a free log retrieval operation binding the contract event 0x089588e3f10370c99a6f74177eacb5361ba90e1b70a123bfeccb6619c21cd721.
+//
+// Solidity: event FeeCollectorSet(address newFeeCollector, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterFeeCollectorSet(opts *bind.FilterOpts) (*TrustManagementRouterFeeCollectorSetIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "FeeCollectorSet")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterFeeCollectorSetIterator{contract: _TrustManagementRouter.contract, event: "FeeCollectorSet", logs: logs, sub: sub}, nil
+}
+
+// WatchFeeCollectorSet is a free log subscription operation binding the contract event 0x089588e3f10370c99a6f74177eacb5361ba90e1b70a123bfeccb6619c21cd721.
+//
+// Solidity: event FeeCollectorSet(address newFeeCollector, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchFeeCollectorSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterFeeCollectorSet) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "FeeCollectorSet")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterFeeCollectorSet)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "FeeCollectorSet", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseFeeCollectorSet is a log parse operation binding the contract event 0x089588e3f10370c99a6f74177eacb5361ba90e1b70a123bfeccb6619c21cd721.
+//
+// Solidity: event FeeCollectorSet(address newFeeCollector, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseFeeCollectorSet(log types.Log) (*TrustManagementRouterFeeCollectorSet, error) {
+	event := new(TrustManagementRouterFeeCollectorSet)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "FeeCollectorSet", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -1234,6 +1937,141 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchInitialized(op
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseInitialized(log types.Log) (*TrustManagementRouterInitialized, error) {
 	event := new(TrustManagementRouterInitialized)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Initialized", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterPerformanceFeeRateSetIterator is returned from FilterPerformanceFeeRateSet and is used to iterate over the raw logs and unpacked data for PerformanceFeeRateSet events raised by the TrustManagementRouter contract.
+type TrustManagementRouterPerformanceFeeRateSetIterator struct {
+	Event *TrustManagementRouterPerformanceFeeRateSet // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterPerformanceFeeRateSetIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterPerformanceFeeRateSet)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterPerformanceFeeRateSet)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterPerformanceFeeRateSetIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterPerformanceFeeRateSetIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterPerformanceFeeRateSet represents a PerformanceFeeRateSet event raised by the TrustManagementRouter contract.
+type TrustManagementRouterPerformanceFeeRateSet struct {
+	NewPerfomanceFeeRate *big.Int
+	Caller               common.Address
+	Raw                  types.Log // Blockchain specific contextual infos
+}
+
+// FilterPerformanceFeeRateSet is a free log retrieval operation binding the contract event 0xaa7531042271e1c8eee267fa80dead7e054f25a9dc0ea5709de69a1ca378c5ef.
+//
+// Solidity: event PerformanceFeeRateSet(uint256 newPerfomanceFeeRate, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterPerformanceFeeRateSet(opts *bind.FilterOpts) (*TrustManagementRouterPerformanceFeeRateSetIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "PerformanceFeeRateSet")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterPerformanceFeeRateSetIterator{contract: _TrustManagementRouter.contract, event: "PerformanceFeeRateSet", logs: logs, sub: sub}, nil
+}
+
+// WatchPerformanceFeeRateSet is a free log subscription operation binding the contract event 0xaa7531042271e1c8eee267fa80dead7e054f25a9dc0ea5709de69a1ca378c5ef.
+//
+// Solidity: event PerformanceFeeRateSet(uint256 newPerfomanceFeeRate, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchPerformanceFeeRateSet(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterPerformanceFeeRateSet) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "PerformanceFeeRateSet")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterPerformanceFeeRateSet)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "PerformanceFeeRateSet", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParsePerformanceFeeRateSet is a log parse operation binding the contract event 0xaa7531042271e1c8eee267fa80dead7e054f25a9dc0ea5709de69a1ca378c5ef.
+//
+// Solidity: event PerformanceFeeRateSet(uint256 newPerfomanceFeeRate, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParsePerformanceFeeRateSet(log types.Log) (*TrustManagementRouterPerformanceFeeRateSet, error) {
+	event := new(TrustManagementRouterPerformanceFeeRateSet)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "PerformanceFeeRateSet", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
@@ -1726,6 +2564,143 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseRoleRevoked(lo
 	return event, nil
 }
 
+// TrustManagementRouterSessionInitializedIterator is returned from FilterSessionInitialized and is used to iterate over the raw logs and unpacked data for SessionInitialized events raised by the TrustManagementRouter contract.
+type TrustManagementRouterSessionInitializedIterator struct {
+	Event *TrustManagementRouterSessionInitialized // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterSessionInitializedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterSessionInitialized)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterSessionInitialized)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterSessionInitializedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterSessionInitializedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterSessionInitialized represents a SessionInitialized event raised by the TrustManagementRouter contract.
+type TrustManagementRouterSessionInitialized struct {
+	SessionKey common.Address
+	MrEnclave  [32]byte
+	HashedData [32]byte
+	Caller     common.Address
+	Raw        types.Log // Blockchain specific contextual infos
+}
+
+// FilterSessionInitialized is a free log retrieval operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
+//
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterSessionInitialized(opts *bind.FilterOpts) (*TrustManagementRouterSessionInitializedIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "SessionInitialized")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterSessionInitializedIterator{contract: _TrustManagementRouter.contract, event: "SessionInitialized", logs: logs, sub: sub}, nil
+}
+
+// WatchSessionInitialized is a free log subscription operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
+//
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchSessionInitialized(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterSessionInitialized) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "SessionInitialized")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterSessionInitialized)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "SessionInitialized", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseSessionInitialized is a log parse operation binding the contract event 0xec00d59ce40b347d1ecc55021a8dabf207d4b9084d2820fe25b69680eaab0f7d.
+//
+// Solidity: event SessionInitialized(address sessionKey, bytes32 mrEnclave, bytes32 hashedData, address caller)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseSessionInitialized(log types.Log) (*TrustManagementRouterSessionInitialized, error) {
+	event := new(TrustManagementRouterSessionInitialized)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "SessionInitialized", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
 // TrustManagementRouterUpgradedIterator is returned from FilterUpgraded and is used to iterate over the raw logs and unpacked data for Upgraded events raised by the TrustManagementRouter contract.
 type TrustManagementRouterUpgradedIterator struct {
 	Event *TrustManagementRouterUpgraded // Event containing the contract specifics and raw log
@@ -1864,6 +2839,280 @@ func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchUpgraded(opts 
 func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseUpgraded(log types.Log) (*TrustManagementRouterUpgraded, error) {
 	event := new(TrustManagementRouterUpgraded)
 	if err := _TrustManagementRouter.contract.UnpackLog(event, "Upgraded", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterWalletCreatedIterator is returned from FilterWalletCreated and is used to iterate over the raw logs and unpacked data for WalletCreated events raised by the TrustManagementRouter contract.
+type TrustManagementRouterWalletCreatedIterator struct {
+	Event *TrustManagementRouterWalletCreated // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterWalletCreatedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterWalletCreated)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterWalletCreated)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterWalletCreatedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterWalletCreatedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterWalletCreated represents a WalletCreated event raised by the TrustManagementRouter contract.
+type TrustManagementRouterWalletCreated struct {
+	Wallet common.Address
+	User   common.Address
+	Raw    types.Log // Blockchain specific contextual infos
+}
+
+// FilterWalletCreated is a free log retrieval operation binding the contract event 0x5b03bfed1c14a02bdeceb5fa582eb1a5765fc0bc64ca0e6af4c20afc9487f081.
+//
+// Solidity: event WalletCreated(address wallet, address user)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterWalletCreated(opts *bind.FilterOpts) (*TrustManagementRouterWalletCreatedIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "WalletCreated")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterWalletCreatedIterator{contract: _TrustManagementRouter.contract, event: "WalletCreated", logs: logs, sub: sub}, nil
+}
+
+// WatchWalletCreated is a free log subscription operation binding the contract event 0x5b03bfed1c14a02bdeceb5fa582eb1a5765fc0bc64ca0e6af4c20afc9487f081.
+//
+// Solidity: event WalletCreated(address wallet, address user)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchWalletCreated(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterWalletCreated) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "WalletCreated")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterWalletCreated)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "WalletCreated", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseWalletCreated is a log parse operation binding the contract event 0x5b03bfed1c14a02bdeceb5fa582eb1a5765fc0bc64ca0e6af4c20afc9487f081.
+//
+// Solidity: event WalletCreated(address wallet, address user)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseWalletCreated(log types.Log) (*TrustManagementRouterWalletCreated, error) {
+	event := new(TrustManagementRouterWalletCreated)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "WalletCreated", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
+}
+
+// TrustManagementRouterWithdrawnIterator is returned from FilterWithdrawn and is used to iterate over the raw logs and unpacked data for Withdrawn events raised by the TrustManagementRouter contract.
+type TrustManagementRouterWithdrawnIterator struct {
+	Event *TrustManagementRouterWithdrawn // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *TrustManagementRouterWithdrawnIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(TrustManagementRouterWithdrawn)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(TrustManagementRouterWithdrawn)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *TrustManagementRouterWithdrawnIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *TrustManagementRouterWithdrawnIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// TrustManagementRouterWithdrawn represents a Withdrawn event raised by the TrustManagementRouter contract.
+type TrustManagementRouterWithdrawn struct {
+	Wallet    common.Address
+	User      common.Address
+	Token     common.Address
+	Receiver  common.Address
+	Amount    *big.Int
+	FeeAmount *big.Int
+	Raw       types.Log // Blockchain specific contextual infos
+}
+
+// FilterWithdrawn is a free log retrieval operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
+//
+// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) FilterWithdrawn(opts *bind.FilterOpts) (*TrustManagementRouterWithdrawnIterator, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.FilterLogs(opts, "Withdrawn")
+	if err != nil {
+		return nil, err
+	}
+	return &TrustManagementRouterWithdrawnIterator{contract: _TrustManagementRouter.contract, event: "Withdrawn", logs: logs, sub: sub}, nil
+}
+
+// WatchWithdrawn is a free log subscription operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
+//
+// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) WatchWithdrawn(opts *bind.WatchOpts, sink chan<- *TrustManagementRouterWithdrawn) (event.Subscription, error) {
+
+	logs, sub, err := _TrustManagementRouter.contract.WatchLogs(opts, "Withdrawn")
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(TrustManagementRouterWithdrawn)
+				if err := _TrustManagementRouter.contract.UnpackLog(event, "Withdrawn", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseWithdrawn is a log parse operation binding the contract event 0x554e88281043242e15d672fb9bd9320d0c660a025e8103b8ed42709235b1796e.
+//
+// Solidity: event Withdrawn(address wallet, address user, address token, address receiver, uint256 amount, uint256 feeAmount)
+func (_TrustManagementRouter *TrustManagementRouterFilterer) ParseWithdrawn(log types.Log) (*TrustManagementRouterWithdrawn, error) {
+	event := new(TrustManagementRouterWithdrawn)
+	if err := _TrustManagementRouter.contract.UnpackLog(event, "Withdrawn", log); err != nil {
 		return nil, err
 	}
 	event.Raw = log
