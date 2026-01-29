@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/rs/zerolog/log"
+
 	"financial-agent-backend/config"
+	"financial-agent-backend/core/transactor"
+	"financial-agent-backend/core/utils"
 )
 
 var (
@@ -19,13 +21,26 @@ var (
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg, err := config.LoadConfig()
 			if err != nil {
-				fmt.Println("Error loading config:", err)
+				log.Error().Err(err).Msg("Error loading config")
 				return
 			}
-			fmt.Println("Config loaded:", cfg)
+			log.Info().Interface("config", cfg).Msg("Config loaded")
 
 			if err := cfg.Validate(); err != nil {
-				fmt.Println("Error validating config:", err)
+				log.Error().Err(err).Msg("Error validating config")
+				return
+			}
+
+			ethClient, err := utils.ConnectToNode(cfg.Network.HttpRpcUrl)
+			if err != nil {
+				log.Error().Err(err).Msg("Error connecting to node")
+				return
+			}
+			log.Info().Str("rpc_url", cfg.Network.HttpRpcUrl).Msg("Connected to node")
+
+			transactor := transactor.NewTransactor(ethClient)
+			if err := transactor.InitializeOnChainSession(); err != nil {
+				log.Error().Err(err).Msg("Error initializing transactor")
 				return
 			}
 		},
@@ -54,6 +69,6 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		log.Info().Str("config_file", viper.ConfigFileUsed()).Msg("Using config file")
 	}
 }
