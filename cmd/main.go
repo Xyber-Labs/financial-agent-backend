@@ -184,8 +184,8 @@ var (
 		Short: "Financial Agent Backend",
 		Long:  `Financial Agent Backend`,
 		Run: func(cmd *cobra.Command, args []string) {
-			// runImpl(cmd, args)
-			testImpl(cmd, args)
+			runImpl(cmd, args)
+			// testImpl(cmd, args)
 		},
 	}
 )
