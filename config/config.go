@@ -24,6 +24,8 @@ type NetworkConfig struct {
 	TrustManagementRouterAddress string
 	// Aave Pool address
 	AavePoolAddress string
+	// Optional block number to start processing events from
+	StartBlock *uint64
 }
 
 type HttpServerConfig struct {

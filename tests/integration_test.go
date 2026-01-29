@@ -22,6 +22,7 @@ import (
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/network"
 	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
@@ -89,66 +90,52 @@ func TestDeposit(t *testing.T) {
 		trustManagementRouter,
 		aavePool,
 		&bind.CallOpts{},
+		nil,
+		nil,
 	)
+	_ = trustManagementProvider
 
-	// Create HTTP server
-	serverConfig := config.HttpServerConfig{
-		Port: 8080,
-	}
-	agentServer := server.NewHttpAgentServer(
-		&serverConfig,
-		testTransactor,
+	// Create event handler
+	evmEventHandler := network.NewEvmEventHandler(
 		trustManagementProvider,
+		trustManagementRouter,
+		ethBackend.Client(),
+		10,
+		0,
 	)
+	_ = evmEventHandler
 
-	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
-	defer cancel()
-	go agentServer.Start(ginCtx)
-
-	// Arbitrary wait for server to startup
-	time.Sleep(time.Second)
-
-	// Get nonceBefore before sending the request
-	nonceBefore, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	blockBeforeDeposit, err := ethBackend.Client().BlockNumber(ctx)
 	r.NoError(err)
-	fmt.Println("nonceBefore", nonceBefore)
-
-	// Make /deposit HTTP request to server
-	depositUrl := fmt.Sprintf("http://127.0.0.1:%d/deposit", serverConfig.Port)
-	depositReqBody := server.DepositRequest{
-		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		ChainId:      1,
-		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		Amount:       "10000000000000000",
-		Deadline:     1700000000,
-		SigV:         27,
-		SigR:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
-		SigS:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
-	}
-	reqBody, err := json.Marshal(depositReqBody)
+	_, err = trustManagementRouter.Deposit(
+		transactOpts,
+		adminPubkey,
+		adminPubkey,
+		big.NewInt(10000000000000000),
+		big.NewInt(10000000000000000),
+	)
 	r.NoError(err)
-	resp, err := http.Post(depositUrl, "application/json", bytes.NewBuffer(reqBody))
-	r.NoError(err)
-	r.Equal(http.StatusOK, resp.StatusCode)
-	defer resp.Body.Close()
 	ethBackend.Commit()
 
-	var depositResponse server.DepositResponse
-	err = json.NewDecoder(resp.Body).Decode(&depositResponse)
+	blockAfterDeposit, err := ethBackend.Client().BlockNumber(ctx)
 	r.NoError(err)
-	fmt.Println("depositResponse", depositResponse)
-	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(depositResponse.Tx))
+
+	r.Greater(blockAfterDeposit, blockBeforeDeposit)
+
+	nonceBefore, err := ethBackend.Client().PendingNonceAt(ctx, adminPubkey)
 	r.NoError(err)
-	fmt.Println("sentTx", sentTx)
 
-	// Get nonceAfter after sending the request
-	nonceAfter, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	// Handle events
+	err = evmEventHandler.HandleDepositedEvents(network.BlockRange{
+		Start: blockBeforeDeposit,
+		End:   blockAfterDeposit,
+	})
 	r.NoError(err)
-	fmt.Println("nonceAfter", nonceAfter)
 
-	r.Equal(nonceBefore+1, nonceAfter)
+	nonceAfter, err := ethBackend.Client().PendingNonceAt(ctx, adminPubkey)
+	r.NoError(err)
 
-	_ = agentServer
+	r.Equal(nonceAfter, nonceBefore+1)
 }
 
 func TestWithdraw(t *testing.T) {
@@ -205,6 +192,8 @@ func TestWithdraw(t *testing.T) {
 		trustManagementRouter,
 		aavePool,
 		&bind.CallOpts{},
+		nil,
+		nil,
 	)
 
 	// Create HTTP server
@@ -300,7 +289,6 @@ func TestWithdraw(t *testing.T) {
 				ChainId:      1,
 				Amount:       tc.amount,
 				TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-				Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
 			}
 			reqBody, err := json.Marshal(withdrawReqBody)
 			r.NoError(err)
@@ -380,6 +368,8 @@ func TestClaim(t *testing.T) {
 		trustManagementRouter,
 		aavePool,
 		&bind.CallOpts{},
+		nil,
+		nil,
 	)
 
 	serverConfig := config.HttpServerConfig{
@@ -405,8 +395,6 @@ func TestClaim(t *testing.T) {
 		ChainId:      1,
 		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
 		Amount:       "10000000000000000",
-		Deadline:     1700000000,
-		Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
 	}
 	reqBody, err := json.Marshal(claimReqBody)
 	r.NoError(err)

@@ -72,8 +72,8 @@ type MockTrustManagementRouterTransaction struct {
 
 // MockTrustManagementRouterMetaData contains all meta data concerning the MockTrustManagementRouter contract.
 var MockTrustManagementRouterMetaData = &bind.MetaData{
-	ABI: "[{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"depositWithPermit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"permit\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.Permit\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"v\",\"type\":\"uint8\",\"internalType\":\"uint8\"},{\"name\":\"r\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}]}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"execute\",\"inputs\":[{\"name\":\"txs\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Transaction[]\",\"components\":[{\"name\":\"target\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"getDeposits\",\"inputs\":[{\"name\":\"user\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Deposit[]\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockedUntil\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"initSessionKey\",\"inputs\":[{\"name\":\"leaf\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedX509Cert\",\"components\":[{\"name\":\"bodyPartOne\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"publicKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"bodyPartTwo\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"intermediate\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedX509Cert\",\"components\":[{\"name\":\"bodyPartOne\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"publicKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"bodyPartTwo\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"quote\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedSGXQuote\",\"components\":[{\"name\":\"header\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"isvReport\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"isvReportSignature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"attestationKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeReport\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeReportSignature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeAuthenticationData\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"sessionKey\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"mockSetDeposits\",\"inputs\":[{\"name\":\"deposits\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Deposit[]\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockedUntil\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"depositIds\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"amountsWithYield\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"}]",
-	Bin: "0x6080604052348015600e575f5ffd5b50610b828061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061007b575f3560e01c8063385270b911610059578063385270b9146100fb5780634c7c04c414610117578063c860efa814610133578063d3413cac146101635761007b565b8063018fa3601461007f57806320e8c565146100af5780632f37da74146100df575b5f5ffd5b61009960048036038101906100949190610334565b61017f565b6040516100a6919061045f565b60405180910390f35b6100c960048036038101906100c491906104a9565b6101f0565b6040516100d6919061051c565b60405180910390f35b6100f960048036038101906100f491906105eb565b6101f9565b005b610115600480360381019061011091906106d1565b610200565b005b610131600480360381019061012c919061075c565b6102b7565b005b61014d60048036038101906101489190610832565b6102bd565b60405161015a919061051c565b60405180910390f35b61017d600480360381019061017891906108ec565b6102c6565b005b60605f805480602002602001604051908101604052809291908181526020015f905b828210156101e4578382905f5260205f2090600202016040518060400160405290815f8201548152602001600182015481525050815260200190600101906101a1565b50505050905092915050565b5f949350505050565b5050505050565b5b5f5f805490501115610247575f80548061021e5761021d6109e9565b5b600190038181905f5260205f2090600202015f5f82015f9055600182015f905550509055610201565b5f5f90505b828290508110156102b2575f83838381811061026b5761026a610a16565b5b905060400201908060018154018082558091505060019003905f5260205f2090600202015f9091909190915081816102a39190610b3e565b5050808060010191505061024c565b505050565b50505050565b5f949350505050565b50505050505050505050565b5f5ffd5b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f610303826102da565b9050919050565b610313816102f9565b811461031d575f5ffd5b50565b5f8135905061032e8161030a565b92915050565b5f5f6040838503121561034a576103496102d2565b5b5f61035785828601610320565b925050602061036885828601610320565b9150509250929050565b5f81519050919050565b5f82825260208201905092915050565b5f819050602082019050919050565b5f819050919050565b6103ad8161039b565b82525050565b604082015f8201516103c75f8501826103a4565b5060208201516103da60208501826103a4565b50505050565b5f6103eb83836103b3565b60408301905092915050565b5f602082019050919050565b5f61040d82610372565b610417818561037c565b93506104228361038c565b805f5b8381101561045257815161043988826103e0565b9750610444836103f7565b925050600181019050610425565b5085935050505092915050565b5f6020820190508181035f8301526104778184610403565b905092915050565b6104888161039b565b8114610492575f5ffd5b50565b5f813590506104a38161047f565b92915050565b5f5f5f5f608085870312156104c1576104c06102d2565b5b5f6104ce87828801610320565b94505060206104df87828801610320565b93505060406104f087828801610495565b925050606061050187828801610495565b91505092959194509250565b610516816102f9565b82525050565b5f60208201905061052f5f83018461050d565b92915050565b5f5ffd5b5f5ffd5b5f5ffd5b5f5f83601f84011261055657610555610535565b5b8235905067ffffffffffffffff81111561057357610572610539565b5b60208301915083602082028301111561058f5761058e61053d565b5b9250929050565b5f5f83601f8401126105ab576105aa610535565b5b8235905067ffffffffffffffff8111156105c8576105c7610539565b5b6020830191508360018202830111156105e4576105e361053d565b5b9250929050565b5f5f5f5f5f60608688031215610604576106036102d2565b5b5f86013567ffffffffffffffff811115610621576106206102d6565b5b61062d88828901610541565b9550955050602086013567ffffffffffffffff8111156106505761064f6102d6565b5b61065c88828901610596565b9350935050604061066f88828901610495565b9150509295509295909350565b5f5f83601f84011261069157610690610535565b5b8235905067ffffffffffffffff8111156106ae576106ad610539565b5b6020830191508360408202830111156106ca576106c961053d565b5b9250929050565b5f5f602083850312156106e7576106e66102d2565b5b5f83013567ffffffffffffffff811115610704576107036102d6565b5b6107108582860161067c565b92509250509250929050565b5f5ffd5b5f608082840312156107355761073461071c565b5b81905092915050565b5f60e082840312156107535761075261071c565b5b81905092915050565b5f5f5f5f60808587031215610774576107736102d2565b5b5f85013567ffffffffffffffff811115610791576107906102d6565b5b61079d87828801610720565b945050602085013567ffffffffffffffff8111156107be576107bd6102d6565b5b6107ca87828801610720565b935050604085013567ffffffffffffffff8111156107eb576107ea6102d6565b5b6107f78782880161073e565b925050606061080887828801610320565b91505092959194509250565b5f60a082840312156108295761082861071c565b5b81905092915050565b5f5f5f5f610100858703121561084b5761084a6102d2565b5b5f61085887828801610320565b945050602061086987828801610320565b935050604061087a87828801610495565b925050606061088b87828801610814565b91505092959194509250565b5f5f83601f8401126108ac576108ab610535565b5b8235905067ffffffffffffffff8111156108c9576108c8610539565b5b6020830191508360208202830111156108e5576108e461053d565b5b9250929050565b5f5f5f5f5f5f5f5f5f5f60e08b8d03121561090a576109096102d2565b5b5f6109178d828e01610320565b9a505060206109288d828e01610320565b99505060406109398d828e01610320565b98505060608b013567ffffffffffffffff81111561095a576109596102d6565b5b6109668d828e01610897565b975097505060808b013567ffffffffffffffff811115610989576109886102d6565b5b6109958d828e01610897565b955095505060a08b013567ffffffffffffffff8111156109b8576109b76102d6565b5b6109c48d828e01610596565b935093505060c06109d78d828e01610495565b9150509295989b9194979a5092959850565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52603160045260245ffd5b7f4e487b71000000000000000000000000000000000000000000000000000000005f52603260045260245ffd5b5f8135610a4f8161047f565b80915050919050565b5f815f1b9050919050565b5f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff610a8e84610a58565b9350801983169250808416831791505092915050565b5f819050919050565b5f610ac7610ac2610abd8461039b565b610aa4565b61039b565b9050919050565b5f819050919050565b610ae082610aad565b610af3610aec82610ace565b8354610a63565b8255505050565b5f81015f830180610b0a81610a43565b9050610b168184610ad7565b505050600181016020830180610b2b81610a43565b9050610b378184610ad7565b5050505050565b610b488282610afa565b505056fea26469706673582212208917528be325055fc4008417db2ac5c66f1acb7d2216fad8ff84f12790b1ca4d64736f6c634300081e0033",
+	ABI: "[{\"type\":\"function\",\"name\":\"deposit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"depositWithPermit\",\"inputs\":[{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"permit\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.Permit\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"v\",\"type\":\"uint8\",\"internalType\":\"uint8\"},{\"name\":\"r\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"},{\"name\":\"s\",\"type\":\"bytes32\",\"internalType\":\"bytes32\"}]}],\"outputs\":[{\"name\":\"walletAddress\",\"type\":\"address\",\"internalType\":\"address\"}],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"execute\",\"inputs\":[{\"name\":\"txs\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Transaction[]\",\"components\":[{\"name\":\"target\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"value\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"data\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"getDeposits\",\"inputs\":[{\"name\":\"user\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[{\"name\":\"\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Deposit[]\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockedUntil\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"stateMutability\":\"view\"},{\"type\":\"function\",\"name\":\"initSessionKey\",\"inputs\":[{\"name\":\"leaf\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedX509Cert\",\"components\":[{\"name\":\"bodyPartOne\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"publicKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"bodyPartTwo\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"intermediate\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedX509Cert\",\"components\":[{\"name\":\"bodyPartOne\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"publicKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"bodyPartTwo\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"quote\",\"type\":\"tuple\",\"internalType\":\"structMockTrustManagementRouter.ChunkedSGXQuote\",\"components\":[{\"name\":\"header\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"isvReport\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"isvReportSignature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"attestationKey\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeReport\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeReportSignature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"qeAuthenticationData\",\"type\":\"bytes\",\"internalType\":\"bytes\"}]},{\"name\":\"sessionKey\",\"type\":\"address\",\"internalType\":\"address\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"mockSetDeposits\",\"inputs\":[{\"name\":\"deposits\",\"type\":\"tuple[]\",\"internalType\":\"structMockTrustManagementRouter.Deposit[]\",\"components\":[{\"name\":\"amount\",\"type\":\"uint256\",\"internalType\":\"uint256\"},{\"name\":\"lockedUntil\",\"type\":\"uint256\",\"internalType\":\"uint256\"}]}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"function\",\"name\":\"withdraw\",\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"receiver\",\"type\":\"address\",\"internalType\":\"address\"},{\"name\":\"depositIds\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"amountsWithYield\",\"type\":\"uint256[]\",\"internalType\":\"uint256[]\"},{\"name\":\"signature\",\"type\":\"bytes\",\"internalType\":\"bytes\"},{\"name\":\"deadline\",\"type\":\"uint256\",\"internalType\":\"uint256\"}],\"outputs\":[],\"stateMutability\":\"nonpayable\"},{\"type\":\"event\",\"name\":\"Deposited\",\"inputs\":[{\"name\":\"wallet\",\"type\":\"address\",\"indexed\":false,\"internalType\":\"address\"},{\"name\":\"user\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"token\",\"type\":\"address\",\"indexed\":true,\"internalType\":\"address\"},{\"name\":\"amount\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"},{\"name\":\"lockDuration\",\"type\":\"uint256\",\"indexed\":false,\"internalType\":\"uint256\"}],\"anonymous\":false}]",
+	Bin: "0x6080604052348015600e575f5ffd5b50610c2f8061001c5f395ff3fe608060405234801561000f575f5ffd5b506004361061007b575f3560e01c8063385270b911610059578063385270b9146100fb5780634c7c04c414610117578063c860efa814610133578063d3413cac146101635761007b565b8063018fa3601461007f57806320e8c565146100af5780632f37da74146100df575b5f5ffd5b6100996004803603810190610094919061039d565b61017f565b6040516100a691906104c8565b60405180910390f35b6100c960048036038101906100c49190610512565b6101f0565b6040516100d69190610585565b60405180910390f35b6100f960048036038101906100f49190610654565b610262565b005b6101156004803603810190610110919061073a565b610269565b005b610131600480360381019061012c91906107c5565b610320565b005b61014d6004803603810190610148919061089b565b610326565b60405161015a9190610585565b60405180910390f35b61017d60048036038101906101789190610955565b61032f565b005b60605f805480602002602001604051908101604052809291908181526020015f905b828210156101e4578382905f5260205f2090600202016040518060400160405290815f8201548152602001600182015481525050815260200190600101906101a1565b50505050905092915050565b5f8373ffffffffffffffffffffffffffffffffffffffff168573ffffffffffffffffffffffffffffffffffffffff167fb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f087868660405161025293929190610a61565b60405180910390a3949350505050565b5050505050565b5b5f5f8054905011156102b0575f80548061028757610286610a96565b5b600190038181905f5260205f2090600202015f5f82015f9055600182015f90555050905561026a565b5f5f90505b8282905081101561031b575f8383838181106102d4576102d3610ac3565b5b905060400201908060018154018082558091505060019003905f5260205f2090600202015f90919091909150818161030c9190610beb565b505080806001019150506102b5565b505050565b50505050565b5f949350505050565b50505050505050505050565b5f5ffd5b5f5ffd5b5f73ffffffffffffffffffffffffffffffffffffffff82169050919050565b5f61036c82610343565b9050919050565b61037c81610362565b8114610386575f5ffd5b50565b5f8135905061039781610373565b92915050565b5f5f604083850312156103b3576103b261033b565b5b5f6103c085828601610389565b92505060206103d185828601610389565b9150509250929050565b5f81519050919050565b5f82825260208201905092915050565b5f819050602082019050919050565b5f819050919050565b61041681610404565b82525050565b604082015f8201516104305f85018261040d565b506020820151610443602085018261040d565b50505050565b5f610454838361041c565b60408301905092915050565b5f602082019050919050565b5f610476826103db565b61048081856103e5565b935061048b836103f5565b805f5b838110156104bb5781516104a28882610449565b97506104ad83610460565b92505060018101905061048e565b5085935050505092915050565b5f6020820190508181035f8301526104e0818461046c565b905092915050565b6104f181610404565b81146104fb575f5ffd5b50565b5f8135905061050c816104e8565b92915050565b5f5f5f5f6080858703121561052a5761052961033b565b5b5f61053787828801610389565b945050602061054887828801610389565b9350506040610559878288016104fe565b925050606061056a878288016104fe565b91505092959194509250565b61057f81610362565b82525050565b5f6020820190506105985f830184610576565b92915050565b5f5ffd5b5f5ffd5b5f5ffd5b5f5f83601f8401126105bf576105be61059e565b5b8235905067ffffffffffffffff8111156105dc576105db6105a2565b5b6020830191508360208202830111156105f8576105f76105a6565b5b9250929050565b5f5f83601f8401126106145761061361059e565b5b8235905067ffffffffffffffff811115610631576106306105a2565b5b60208301915083600182028301111561064d5761064c6105a6565b5b9250929050565b5f5f5f5f5f6060868803121561066d5761066c61033b565b5b5f86013567ffffffffffffffff81111561068a5761068961033f565b5b610696888289016105aa565b9550955050602086013567ffffffffffffffff8111156106b9576106b861033f565b5b6106c5888289016105ff565b935093505060406106d8888289016104fe565b9150509295509295909350565b5f5f83601f8401126106fa576106f961059e565b5b8235905067ffffffffffffffff811115610717576107166105a2565b5b602083019150836040820283011115610733576107326105a6565b5b9250929050565b5f5f602083850312156107505761074f61033b565b5b5f83013567ffffffffffffffff81111561076d5761076c61033f565b5b610779858286016106e5565b92509250509250929050565b5f5ffd5b5f6080828403121561079e5761079d610785565b5b81905092915050565b5f60e082840312156107bc576107bb610785565b5b81905092915050565b5f5f5f5f608085870312156107dd576107dc61033b565b5b5f85013567ffffffffffffffff8111156107fa576107f961033f565b5b61080687828801610789565b945050602085013567ffffffffffffffff8111156108275761082661033f565b5b61083387828801610789565b935050604085013567ffffffffffffffff8111156108545761085361033f565b5b610860878288016107a7565b925050606061087187828801610389565b91505092959194509250565b5f60a0828403121561089257610891610785565b5b81905092915050565b5f5f5f5f61010085870312156108b4576108b361033b565b5b5f6108c187828801610389565b94505060206108d287828801610389565b93505060406108e3878288016104fe565b92505060606108f48782880161087d565b91505092959194509250565b5f5f83601f8401126109155761091461059e565b5b8235905067ffffffffffffffff811115610932576109316105a2565b5b60208301915083602082028301111561094e5761094d6105a6565b5b9250929050565b5f5f5f5f5f5f5f5f5f5f60e08b8d0312156109735761097261033b565b5b5f6109808d828e01610389565b9a505060206109918d828e01610389565b99505060406109a28d828e01610389565b98505060608b013567ffffffffffffffff8111156109c3576109c261033f565b5b6109cf8d828e01610900565b975097505060808b013567ffffffffffffffff8111156109f2576109f161033f565b5b6109fe8d828e01610900565b955095505060a08b013567ffffffffffffffff811115610a2157610a2061033f565b5b610a2d8d828e016105ff565b935093505060c0610a408d828e016104fe565b9150509295989b9194979a5092959850565b610a5b81610404565b82525050565b5f606082019050610a745f830186610576565b610a816020830185610a52565b610a8e6040830184610a52565b949350505050565b7f4e487b71000000000000000000000000000000000000000000000000000000005f52603160045260245ffd5b7f4e487b71000000000000000000000000000000000000000000000000000000005f52603260045260245ffd5b5f8135610afc816104e8565b80915050919050565b5f815f1b9050919050565b5f7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff610b3b84610b05565b9350801983169250808416831791505092915050565b5f819050919050565b5f610b74610b6f610b6a84610404565b610b51565b610404565b9050919050565b5f819050919050565b610b8d82610b5a565b610ba0610b9982610b7b565b8354610b10565b8255505050565b5f81015f830180610bb781610af0565b9050610bc38184610b84565b505050600181016020830180610bd881610af0565b9050610be48184610b84565b5050505050565b610bf58282610ba7565b505056fea264697066735822122023f2f1caa8a0bf1a16f6fb9e51d77e1b78600a255f2551b124c82eeaed378be764736f6c634300081e0033",
 }
 
 // MockTrustManagementRouterABI is the input ABI used to generate the binding from.
@@ -398,4 +398,160 @@ func (_MockTrustManagementRouter *MockTrustManagementRouterSession) Withdraw(wal
 // Solidity: function withdraw(address wallet, address token, address receiver, uint256[] depositIds, uint256[] amountsWithYield, bytes signature, uint256 deadline) returns()
 func (_MockTrustManagementRouter *MockTrustManagementRouterTransactorSession) Withdraw(wallet common.Address, token common.Address, receiver common.Address, depositIds []*big.Int, amountsWithYield []*big.Int, signature []byte, deadline *big.Int) (*types.Transaction, error) {
 	return _MockTrustManagementRouter.Contract.Withdraw(&_MockTrustManagementRouter.TransactOpts, wallet, token, receiver, depositIds, amountsWithYield, signature, deadline)
+}
+
+// MockTrustManagementRouterDepositedIterator is returned from FilterDeposited and is used to iterate over the raw logs and unpacked data for Deposited events raised by the MockTrustManagementRouter contract.
+type MockTrustManagementRouterDepositedIterator struct {
+	Event *MockTrustManagementRouterDeposited // Event containing the contract specifics and raw log
+
+	contract *bind.BoundContract // Generic contract to use for unpacking event data
+	event    string              // Event name to use for unpacking event data
+
+	logs chan types.Log        // Log channel receiving the found contract events
+	sub  ethereum.Subscription // Subscription for errors, completion and termination
+	done bool                  // Whether the subscription completed delivering logs
+	fail error                 // Occurred error to stop iteration
+}
+
+// Next advances the iterator to the subsequent event, returning whether there
+// are any more events found. In case of a retrieval or parsing error, false is
+// returned and Error() can be queried for the exact failure.
+func (it *MockTrustManagementRouterDepositedIterator) Next() bool {
+	// If the iterator failed, stop iterating
+	if it.fail != nil {
+		return false
+	}
+	// If the iterator completed, deliver directly whatever's available
+	if it.done {
+		select {
+		case log := <-it.logs:
+			it.Event = new(MockTrustManagementRouterDeposited)
+			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+				it.fail = err
+				return false
+			}
+			it.Event.Raw = log
+			return true
+
+		default:
+			return false
+		}
+	}
+	// Iterator still in progress, wait for either a data or an error event
+	select {
+	case log := <-it.logs:
+		it.Event = new(MockTrustManagementRouterDeposited)
+		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
+			it.fail = err
+			return false
+		}
+		it.Event.Raw = log
+		return true
+
+	case err := <-it.sub.Err():
+		it.done = true
+		it.fail = err
+		return it.Next()
+	}
+}
+
+// Error returns any retrieval or parsing error occurred during filtering.
+func (it *MockTrustManagementRouterDepositedIterator) Error() error {
+	return it.fail
+}
+
+// Close terminates the iteration process, releasing any pending underlying
+// resources.
+func (it *MockTrustManagementRouterDepositedIterator) Close() error {
+	it.sub.Unsubscribe()
+	return nil
+}
+
+// MockTrustManagementRouterDeposited represents a Deposited event raised by the MockTrustManagementRouter contract.
+type MockTrustManagementRouterDeposited struct {
+	Wallet       common.Address
+	User         common.Address
+	Token        common.Address
+	Amount       *big.Int
+	LockDuration *big.Int
+	Raw          types.Log // Blockchain specific contextual infos
+}
+
+// FilterDeposited is a free log retrieval operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
+func (_MockTrustManagementRouter *MockTrustManagementRouterFilterer) FilterDeposited(opts *bind.FilterOpts, user []common.Address, token []common.Address) (*MockTrustManagementRouterDepositedIterator, error) {
+
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _MockTrustManagementRouter.contract.FilterLogs(opts, "Deposited", userRule, tokenRule)
+	if err != nil {
+		return nil, err
+	}
+	return &MockTrustManagementRouterDepositedIterator{contract: _MockTrustManagementRouter.contract, event: "Deposited", logs: logs, sub: sub}, nil
+}
+
+// WatchDeposited is a free log subscription operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
+func (_MockTrustManagementRouter *MockTrustManagementRouterFilterer) WatchDeposited(opts *bind.WatchOpts, sink chan<- *MockTrustManagementRouterDeposited, user []common.Address, token []common.Address) (event.Subscription, error) {
+
+	var userRule []interface{}
+	for _, userItem := range user {
+		userRule = append(userRule, userItem)
+	}
+	var tokenRule []interface{}
+	for _, tokenItem := range token {
+		tokenRule = append(tokenRule, tokenItem)
+	}
+
+	logs, sub, err := _MockTrustManagementRouter.contract.WatchLogs(opts, "Deposited", userRule, tokenRule)
+	if err != nil {
+		return nil, err
+	}
+	return event.NewSubscription(func(quit <-chan struct{}) error {
+		defer sub.Unsubscribe()
+		for {
+			select {
+			case log := <-logs:
+				// New log arrived, parse the event and forward to the user
+				event := new(MockTrustManagementRouterDeposited)
+				if err := _MockTrustManagementRouter.contract.UnpackLog(event, "Deposited", log); err != nil {
+					return err
+				}
+				event.Raw = log
+
+				select {
+				case sink <- event:
+				case err := <-sub.Err():
+					return err
+				case <-quit:
+					return nil
+				}
+			case err := <-sub.Err():
+				return err
+			case <-quit:
+				return nil
+			}
+		}
+	}), nil
+}
+
+// ParseDeposited is a log parse operation binding the contract event 0xb045190548dadae679cfe9e337437613ca6dd73efdf984f75e56f152ccee22f0.
+//
+// Solidity: event Deposited(address wallet, address indexed user, address indexed token, uint256 amount, uint256 lockDuration)
+func (_MockTrustManagementRouter *MockTrustManagementRouterFilterer) ParseDeposited(log types.Log) (*MockTrustManagementRouterDeposited, error) {
+	event := new(MockTrustManagementRouterDeposited)
+	if err := _MockTrustManagementRouter.contract.UnpackLog(event, "Deposited", log); err != nil {
+		return nil, err
+	}
+	event.Raw = log
+	return event, nil
 }
