@@ -212,11 +212,22 @@ func TestWithdraw(t *testing.T) {
 	mockedTrustManagementRouter, err := contracts.NewMockTrustManagementRouter(mockedContracts.TrustManagementRouter, ethBackend.Client())
 	r.NoError(err)
 
+	mockedAavePool, err := contracts.NewMockAavePool(mockedContracts.AavePool, ethBackend.Client())
+	r.NoError(err)
+
+	_, err = mockedAavePool.MockSetReserveAToken(transactOpts, mockedContracts.ERC20)
+	r.NoError(err)
+	ethBackend.Commit()
+
+	mockedErc20, err := contracts.NewMockERC20(mockedContracts.ERC20, ethBackend.Client())
+	r.NoError(err)
+
 	testCases := []struct {
-		desc        string
-		deposits    []contracts.MockTrustManagementRouterDeposit
-		amount      string
-		expectedErr error
+		desc          string
+		deposits      []contracts.MockTrustManagementRouterDeposit
+		amount        string
+		aTokenBalance *big.Int
+		expectedErr   error
 	}{
 		{
 			desc: "sucessfull withdraw of 100%",
@@ -230,8 +241,9 @@ func TestWithdraw(t *testing.T) {
 					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
 				},
 			},
-			amount:      "10000",
-			expectedErr: nil,
+			amount:        "10000",
+			aTokenBalance: big.NewInt(10000),
+			expectedErr:   nil,
 		},
 		{
 			desc: "error on withdraw of 110%",
@@ -245,8 +257,9 @@ func TestWithdraw(t *testing.T) {
 					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
 				},
 			},
-			amount:      "11000",
-			expectedErr: fmt.Errorf("{\"error\":\"not enough deposits to cover withdraw amount, total deposit amount: 10000, withdraw amount: 11000\"}"),
+			amount:        "11000",
+			aTokenBalance: big.NewInt(10000),
+			expectedErr:   fmt.Errorf("{\"error\":\"not enough deposits to cover withdraw amount, total deposit amount: 10000, withdraw amount: 11000\"}"),
 		},
 	}
 
@@ -255,6 +268,12 @@ func TestWithdraw(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.desc, func(t *testing.T) {
+
+			// Set mock aToken balance
+			_, err = mockedErc20.MockSetBalance(transactOpts, tc.aTokenBalance)
+			r.NoError(err)
+			ethBackend.Commit()
+
 			// Set mock deposits in the contract
 			_, err = mockedTrustManagementRouter.MockSetDeposits(transactOpts, tc.deposits)
 			r.NoError(err)
