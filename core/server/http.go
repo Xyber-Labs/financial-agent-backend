@@ -207,7 +207,7 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			return
 		}
 
-		c.JSON(http.StatusOK, gin.H{"tx": tx.Hash().String()})
+		c.JSON(http.StatusOK, DepositResponse{Tx: tx.Hash().String()})
 	}
 }
 
@@ -243,6 +243,10 @@ type DepositRequest struct {
 	SigV         uint8  `json:"sigV"`
 	SigR         string `json:"sigR"`
 	SigS         string `json:"sigS"`
+}
+
+type DepositResponse struct {
+	Tx string `json:"tx"`
 }
 
 type ClaimRequest struct {

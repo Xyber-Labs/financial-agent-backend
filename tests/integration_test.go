@@ -11,6 +11,7 @@ import (
 	"testing"
 	"time"
 
+	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/stretchr/testify/require"
@@ -45,6 +46,7 @@ func TestDeposit(t *testing.T) {
 	r.NoError(err)
 
 	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
 	mteeService := mocks.NewMockTeeService(t)
 
 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
@@ -112,7 +114,15 @@ func TestDeposit(t *testing.T) {
 	resp, err := http.Post(depositUrl, "application/json", bytes.NewBuffer(reqBody))
 	r.NoError(err)
 	defer resp.Body.Close()
-	fmt.Println(resp)
+	ethBackend.Commit()
+
+	var depositResponse server.DepositResponse
+	err = json.NewDecoder(resp.Body).Decode(&depositResponse)
+	r.NoError(err)
+	fmt.Println("responseText", depositResponse)
+	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(depositResponse.Tx))
+	r.NoError(err)
+	fmt.Println("sentTx", sentTx)
 
 	// Get nonceAfter after sending the request
 	nonceAfter, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)

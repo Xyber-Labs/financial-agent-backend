@@ -100,27 +100,27 @@ func (t *Transactor) InitializeOnChainSession() error {
 
 // BatchAndExecute function batches provided transactions into TrustManagementRouter.execute multicall
 // And sends it to the network.
-func (t *Transactor) BatchAndExecute(txs []*ethtypes.Transaction) (*ethtypes.Transaction, error) {
+func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtypes.Transaction, error) {
 
 	// Prepare arguments for TrustManagementRouter.execute multicall
-	transactions := make([]TrustManagementRouter.ITrustManagementStructsTransaction, len(txs))
-	for i, tx := range txs {
+	transactionsArg := make([]TrustManagementRouter.ITrustManagementStructsTransaction, len(innerTxs))
+	for i, tx := range innerTxs {
 		if tx.To() == nil {
 			return nil, fmt.Errorf("BatchAndExecute: transaction %d has nil To field", i)
 		}
-		transactions[i] = TrustManagementRouter.ITrustManagementStructsTransaction{
+		transactionsArg[i] = TrustManagementRouter.ITrustManagementStructsTransaction{
 			Target: *tx.To(),
 			Value:  tx.Value(),
 			Data:   tx.Data(),
 		}
 	}
 
-	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, t.teeSessionAddress, transactions)
+	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, t.teeSessionAddress, transactionsArg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to send transaction: %w", err)
 	}
 
-	log.Info().Str("tx", tx.Hash().String()).Int("tx_count", len(txs)).Msg("Transactor.BatchAndExecute: sent batched transaction")
+	log.Info().Str("tx", tx.Hash().String()).Int("tx_count", len(innerTxs)).Msg("Transactor.BatchAndExecute: sent batched transaction")
 	return tx, nil
 }
 
