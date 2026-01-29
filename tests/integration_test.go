@@ -5,6 +5,7 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"math/big"
 	"net/http"
@@ -24,6 +25,7 @@ import (
 	"financial-agent-backend/core/server"
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
+	"financial-agent-backend/tests/contracts"
 	"financial-agent-backend/tests/mocks"
 )
 
@@ -207,25 +209,84 @@ func TestWithdraw(t *testing.T) {
 	// Arbitrary wait for server to startup
 	time.Sleep(time.Second)
 
+	mockedTrustManagementRouter, err := contracts.NewMockTrustManagementRouter(mockedContracts.TrustManagementRouter, ethBackend.Client())
+	r.NoError(err)
+
+	testCases := []struct {
+		desc        string
+		deposits    []contracts.MockTrustManagementRouterDeposit
+		amount      string
+		expectedErr error
+	}{
+		{
+			desc: "sucessfull withdraw of 100%",
+			deposits: []contracts.MockTrustManagementRouterDeposit{
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt(time.Now().Add(-time.Hour).Unix()),
+				},
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
+				},
+			},
+			amount:      "10000",
+			expectedErr: nil,
+		},
+		{
+			desc: "error on withdraw of 110%",
+			deposits: []contracts.MockTrustManagementRouterDeposit{
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt(time.Now().Add(-time.Hour).Unix()),
+				},
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
+				},
+			},
+			amount:      "11000",
+			expectedErr: fmt.Errorf("{\"error\":\"not enough deposits to cover withdraw amount, total deposit amount: 10000, withdraw amount: 11000\"}"),
+		},
+	}
+
 	// Make /withdraw HTTP request to server
 	withdrawUrl := fmt.Sprintf("http://127.0.0.1:%d/withdraw", serverConfig.Port)
-	withdrawReqBody := server.WithdrawRequest{
-		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		ChainId:      1,
-		Amount:       "10000000000000000",
-		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
-		Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
-	}
-	reqBody, err := json.Marshal(withdrawReqBody)
-	r.NoError(err)
-	resp, err := http.Post(withdrawUrl, "application/json", bytes.NewBuffer(reqBody))
-	r.NoError(err)
-	r.Equal(http.StatusOK, resp.StatusCode)
-	defer resp.Body.Close()
-	ethBackend.Commit()
 
-	var withdrawResponse server.WithdrawResponse
-	err = json.NewDecoder(resp.Body).Decode(&withdrawResponse)
-	r.NoError(err)
-	fmt.Println("withdrawResponse", withdrawResponse)
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+			// Set mock deposits in the contract
+			_, err = mockedTrustManagementRouter.MockSetDeposits(transactOpts, tc.deposits)
+			r.NoError(err)
+			ethBackend.Commit()
+
+			// Prepare HTTP request
+			withdrawReqBody := server.WithdrawRequest{
+				UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+				ChainId:      1,
+				Amount:       tc.amount,
+				TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+				Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
+			}
+			reqBody, err := json.Marshal(withdrawReqBody)
+			r.NoError(err)
+			resp, err := http.Post(withdrawUrl, "application/json", bytes.NewBuffer(reqBody))
+			r.NoError(err)
+			defer resp.Body.Close()
+			if tc.expectedErr != nil {
+				errBytes := make([]byte, 1000)
+				nBytes, _ := resp.Body.Read(errBytes)
+				r.Greater(nBytes, 0)
+				r.Equal(errors.New(string(errBytes[:nBytes])), tc.expectedErr)
+				r.Equal(http.StatusInternalServerError, resp.StatusCode)
+				return
+			}
+
+			ethBackend.Commit()
+			r.Equal(http.StatusOK, resp.StatusCode)
+			var withdrawResponse server.WithdrawResponse
+			err = json.NewDecoder(resp.Body).Decode(&withdrawResponse)
+			r.NoError(err)
+		})
+	}
 }
