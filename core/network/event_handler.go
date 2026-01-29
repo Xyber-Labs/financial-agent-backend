@@ -156,7 +156,6 @@ func ListenBlocks(ctx context.Context, client BlockNumberReader, start uint64, l
 	startBlock := start
 	ch := make(chan BlockRange)
 	go func() {
-		firstScan := true
 		for {
 			select {
 			case <-ctx.Done():
@@ -174,27 +173,32 @@ func ListenBlocks(ctx context.Context, client BlockNumberReader, start uint64, l
 					startBlock = currentBlock
 				}
 
-				blockRange := currentBlock - startBlock
-				if blockRange == 0 {
+				// If we are already past the current head, wait for next tick
+				if startBlock > currentBlock {
 					continue
 				}
 
-				if blockRange > limit {
-					blockRange = limit
+				// Compute inclusive end block, respecting limit if provided
+				endBlock := currentBlock
+				if limit > 0 {
+					maxEnd := startBlock + limit - 1
+					if endBlock > maxEnd {
+						endBlock = maxEnd
+					}
 				}
-				endBlock := startBlock + blockRange
 
-				if !firstScan {
-					startBlock++ // skip 1 block so we don't process it again
+				// If still no range to process, continue
+				if startBlock > endBlock {
+					continue
 				}
-				firstScan = false
 
 				ch <- BlockRange{
 					Start: startBlock,
 					End:   endBlock,
 				}
 
-				startBlock += blockRange
+				// Advance start to the next unprocessed block (contiguous, no gaps)
+				startBlock = endBlock + 1
 			}
 		}
 	}()
