@@ -119,13 +119,5 @@ func TestCreateTeeSessionSignature(t *testing.T) {
 	r.NotEmpty(sig)
 	r.Equal(len(sig), 65)
 	r.Equal(expectedMsgHash, msgHash)
-
-	// recover the signed from the signature
-	recoveredAddr, err := ethcrypto.SigToPub(msgHash, sig)
-	r.NoError(err)
-	r.Equal(ethcrypto.PubkeyToAddress(*recoveredAddr), ethcrypto.PubkeyToAddress(sessionPubkey))
-
-	// fmt.Println("sessionPubkey:", ethcrypto.PubkeyToAddress(sessionPubkey))
-	// fmt.Println("recoveredAddr:", ethcrypto.PubkeyToAddress(*recoveredAddr))
-	// r.Equal(0, 1)
+	r.True(ethcrypto.VerifySignature(ethcrypto.FromECDSAPub(&sessionPubkey), msgHash, sig[:len(sig)-1]))
 }
