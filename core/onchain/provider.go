@@ -361,7 +361,7 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
-	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
+	withdrawAmounts, err := calculateWithdrawAmounts(amount, unlockedDepositAmount, userATokenBalance)
 	if err != nil {
 		return nil, err
 	}
@@ -375,7 +375,7 @@ func (p *TrustManagementProvider) Withdraw(
 	aaveWithdrawTx, err := p.AavePool.Withdraw(
 		p.createTxOpts,
 		tokenAddress,
-		amountWithYield,
+		withdrawAmounts.AmountWithYield,
 		userWalletAddress.WalletAddress,
 	)
 	if err != nil {
@@ -404,8 +404,8 @@ func (p *TrustManagementProvider) Withdraw(
 		tokenAddress,
 		userAddress,
 		depositIds,
-		amount,
-		amountWithYield,
+		withdrawAmounts.BaseAmount,
+		withdrawAmounts.AmountWithYield,
 	)
 	if err != nil {
 		return nil, err
@@ -415,8 +415,8 @@ func (p *TrustManagementProvider) Withdraw(
 		Str("userAddress", userAddress.String()).
 		Str("tokenAddress", tokenAddress.String()).
 		Str("userWallet", userWalletAddress.WalletAddress.String()).
-		Str("requestedAmount", amount.String()).
-		Str("amountWithYield", amountWithYield.String()).
+		Str("withdrawAmounts.BaseAmount", withdrawAmounts.BaseAmount.String()).
+		Str("withdrawAmounts.AmountWithYield", withdrawAmounts.AmountWithYield.String()).
 		Int("depositIdsCount", len(depositIds)).
 		Msg("Executing batched transaction for withdraw")
 
@@ -497,7 +497,7 @@ func (p *TrustManagementProvider) WithdrawNative(
 		return nil, err
 	}
 
-	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
+	withdrawAmounts, err := calculateWithdrawAmounts(amount, unlockedDepositAmount, userATokenBalance)
 	if err != nil {
 		return nil, err
 	}
@@ -511,7 +511,7 @@ func (p *TrustManagementProvider) WithdrawNative(
 	aaveWithdrawTx, err := p.AavePool.Withdraw(
 		p.createTxOpts,
 		*p.NativeErc20Address,
-		amountWithYield,
+		withdrawAmounts.AmountWithYield,
 		userWalletAddress.WalletAddress,
 	)
 	if err != nil {
@@ -519,7 +519,7 @@ func (p *TrustManagementProvider) WithdrawNative(
 	}
 
 	// Unwrap ERC20 native into native tokens
-	unwrapNativeTx, err := p.NativeErc20.Withdraw(p.createTxOpts, amountWithYield)
+	unwrapNativeTx, err := p.NativeErc20.Withdraw(p.createTxOpts, withdrawAmounts.AmountWithYield)
 	if err != nil {
 		return nil, err
 	}
@@ -549,8 +549,8 @@ func (p *TrustManagementProvider) WithdrawNative(
 		trustManagementNativeTokenLabel,
 		userAddress,
 		depositIds,
-		amount,
-		amountWithYield,
+		withdrawAmounts.BaseAmount,
+		withdrawAmounts.AmountWithYield,
 	)
 	if err != nil {
 		return nil, err
@@ -561,7 +561,10 @@ func (p *TrustManagementProvider) WithdrawNative(
 		Str("erc20Native", p.NativeErc20Address.String()).
 		Str("userWallet", userWalletAddress.WalletAddress.String()).
 		Str("requestedAmount", amount.String()).
-		Str("amountWithYield", amountWithYield.String()).
+		Str("withdrawAmounts.BaseAmount", withdrawAmounts.BaseAmount.String()).
+		Str("withdrawAmounts.AmountWithYield", withdrawAmounts.AmountWithYield.String()).
+		Str("userATokenBalance", userATokenBalance.String()).
+		Str("aTokenAddress", aTokenAddress.String()).
 		Int("depositIdsCount", len(depositIds)).
 		Msg("Executing batched transaction for withdraw")
 
@@ -590,4 +593,53 @@ func calculateAmountWithYield(
 	yieldAmount := new(big.Int).Sub(aTokenBalance, totalDepositAmount)
 	amountWithYield := yieldAmount.Add(yieldAmount, amount)
 	return amountWithYield, nil
+}
+
+type CalculatedWithdrawAmounts struct {
+	BaseAmount      *big.Int
+	AmountWithYield *big.Int
+}
+
+// IMPORTANT: WON'T WORK IF LOCKS ARE ENABLED
+// This function calculates the amounts to be passed to Router.withdraw function.
+// It prioritizes user's yield, meaning it will subtract withdraw amount from the yield first,
+// only touching the deposit when yield is not enough to cover withdraw amount.
+// If withdrawAmount is lower than user's yield (atokenBalance - unlockedDepositAmount),
+// baseAmount is equal to 0, and userWithdrawAmount is subtracted fully from user's yield.
+// Below are couple of examples
+// 1. User withdraw amount higher than he's yield:
+// * User has 100 tokens deposited, and has 20 tokens of yield
+// * User withdraws 50 tokens
+// * baseAmount is 30 tokens, and amountWithYield is 50 tokens (20 is subtracted from yield)
+// 2. User withdraw amount lower than he's yield:
+// * User has 100 tokens deposited, and has 20 tokens of yield
+// * User withdraws 15 tokens
+// * baseAmount is 0 tokens, and amountWithYield is 15 tokens (note that only yield will be subtracted)
+func calculateWithdrawAmounts(
+	userWithdrawAmount *big.Int,
+	unlockedDepositAmount *big.Int,
+	aTokenBalance *big.Int,
+) (CalculatedWithdrawAmounts, error) {
+
+	if aTokenBalance.Cmp(unlockedDepositAmount) < 0 {
+		return CalculatedWithdrawAmounts{}, fmt.Errorf(
+			"INTERNAL ERROR: aToken balance is less than unlocked deposit amount, aToken balance: %s, unlocked deposit amount: %s",
+			aTokenBalance, unlockedDepositAmount,
+		)
+	}
+
+	yieldAmount := new(big.Int).Sub(aTokenBalance, unlockedDepositAmount)
+	// Default: withdraw entirely from yield if sufficient
+	baseAmount := big.NewInt(0)
+	amountWithYield := new(big.Int).Set(userWithdrawAmount)
+
+	// If requested > yield, the excess must be taken from base deposits
+	if userWithdrawAmount.Cmp(yieldAmount) > 0 {
+		baseAmount = new(big.Int).Sub(userWithdrawAmount, yieldAmount)
+	}
+
+	return CalculatedWithdrawAmounts{
+		BaseAmount:      baseAmount,
+		AmountWithYield: amountWithYield,
+	}, nil
 }
