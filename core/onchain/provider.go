@@ -53,7 +53,7 @@ func (p *TrustManagementProvider) Deposit(
 	tokenAddress ethcommon.Address,
 	tokenAmount *big.Int,
 	deadline *big.Int,
-	permit TrustManagementRouter.IXyberTrustManagementStructsPermit,
+	permit TrustManagementRouter.Permit,
 ) (*ethtypes.Transaction, error) {
 	depositWithPermitTx, err := p.TrustManagementRouter.DepositWithPermit(
 		p.createTxOpts,

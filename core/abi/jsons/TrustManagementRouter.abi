@@ -242,18 +242,40 @@
     "inputs":[
       
     ],
-    "name":"XyberTrustManagementRouter__CallerIsNotAgent",
+    "name":"XyberTrustManagementRouter__DeadlineExpired",
     "type":"error"
   },
   {
     "inputs":[
       {
         "internalType":"address",
-        "name":"caller",
+        "name":"target",
         "type":"address"
       }
     ],
-    "name":"XyberTrustManagementRouter__CallerIsNotOwnerOfWallet",
+    "name":"XyberTrustManagementRouter__ExecuteCallFailed",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"uint256",
+        "name":"perfomanceFeeRate",
+        "type":"uint256"
+      }
+    ],
+    "name":"XyberTrustManagementRouter__FeeRateExceeded",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"target",
+        "type":"address"
+      }
+    ],
+    "name":"XyberTrustManagementRouter__InvalidCallTarget",
     "type":"error"
   },
   {
@@ -264,62 +286,79 @@
         "type":"address"
       }
     ],
-    "name":"XyberTrustManagementRouter__CallerIsNotUserOrAgent",
+    "name":"XyberTrustManagementRouter__InvalidCaller",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"hashedData",
+        "type":"bytes32"
+      }
+    ],
+    "name":"XyberTrustManagementRouter__InvalidHashedData",
     "type":"error"
   },
   {
     "inputs":[
       {
         "internalType":"address",
-        "name":"wallet",
+        "name":"signer",
         "type":"address"
       }
     ],
-    "name":"XyberTrustManagementRouter__InvalidWallet",
-    "type":"error"
-  },
-  {
-    "inputs":[
-      {
-        "internalType":"bytes",
-        "name":"callResponse",
-        "type":"bytes"
-      }
-    ],
-    "name":"XyberTrustManagementRouter__MsgValueSendingFail",
+    "name":"XyberTrustManagementRouter__InvalidSigner",
     "type":"error"
   },
   {
     "inputs":[
       {
         "internalType":"address",
-        "name":"newImplementation",
+        "name":"token",
         "type":"address"
       }
     ],
-    "name":"XyberTrustManagementRouter__NewImplementationIsInvalid",
+    "name":"XyberTrustManagementRouter__UnallowedToken",
     "type":"error"
   },
   {
     "inputs":[
       {
-        "internalType":"address",
-        "name":"tokenAddress",
-        "type":"address"
+        "internalType":"bytes32",
+        "name":"mrEnclave",
+        "type":"bytes32"
       }
     ],
-    "name":"XyberTrustManagementRouter__TokenNotAllowed",
+    "name":"XyberTrustManagementRouter__UnauthorizedMrEnclave",
     "type":"error"
   },
   {
     "inputs":[
-      {
-        "internalType":"address",
-        "name":"wallet",
-        "type":"address"
-      }
+      
     ],
-    "name":"XyberTrustManagementRouter__WalletAreadyExists",
+    "name":"XyberTrustManagementRouter__UsedSignature",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"XyberTrustManagementRouter__WalletCallFailed",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"XyberTrustManagementRouter__ZeroAddress",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"XyberTrustManagementRouter__ZeroSessionKey",
     "type":"error"
   },
   {
@@ -333,13 +372,13 @@
     "anonymous":false,
     "inputs":[
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"token",
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"bool",
         "name":"isAllowed",
         "type":"bool"
@@ -364,7 +403,7 @@
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"user",
         "type":"address"
@@ -395,13 +434,13 @@
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"user",
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"token",
         "type":"address"
@@ -426,7 +465,7 @@
     "anonymous":false,
     "inputs":[
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"target",
         "type":"address"
@@ -595,7 +634,7 @@
         "type":"bytes32"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"caller",
         "type":"address"
@@ -646,13 +685,13 @@
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"user",
         "type":"address"
       },
       {
-        "indexed":false,
+        "indexed":true,
         "internalType":"address",
         "name":"token",
         "type":"address"
@@ -901,7 +940,7 @@
             "type":"bytes32"
           }
         ],
-        "internalType":"struct IXyberTrustManagementStructs.Permit",
+        "internalType":"struct Permit",
         "name":"permit",
         "type":"tuple"
       }
@@ -966,7 +1005,7 @@
             "type":"bytes"
           }
         ],
-        "internalType":"struct IXyberTrustManagementStructs.Transaction[]",
+        "internalType":"struct Transaction[]",
         "name":"txs",
         "type":"tuple[]"
       },
@@ -998,6 +1037,66 @@
         "internalType":"address",
         "name":"feeCollectorAddress",
         "type":"address"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "internalType":"address[]",
+        "name":"tokens",
+        "type":"address[]"
+      }
+    ],
+    "name":"getBalances",
+    "outputs":[
+      {
+        "internalType":"uint256[]",
+        "name":"balances",
+        "type":"uint256[]"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      }
+    ],
+    "name":"getDeposits",
+    "outputs":[
+      {
+        "components":[
+          {
+            "internalType":"uint256",
+            "name":"amount",
+            "type":"uint256"
+          },
+          {
+            "internalType":"uint256",
+            "name":"lockedUntil",
+            "type":"uint256"
+          }
+        ],
+        "internalType":"struct Deposit[]",
+        "name":"deposits",
+        "type":"tuple[]"
       }
     ],
     "stateMutability":"view",
@@ -1041,6 +1140,54 @@
         "internalType":"bool",
         "name":"isDeployed",
         "type":"bool"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      }
+    ],
+    "name":"getWithdrawableAmount",
+    "outputs":[
+      {
+        "internalType":"uint256",
+        "name":"withdrawableAmount",
+        "type":"uint256"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      }
+    ],
+    "name":"getWithdrawableDeposits",
+    "outputs":[
+      {
+        "internalType":"uint256[]",
+        "name":"withdrawableDepositsIds",
+        "type":"uint256[]"
       }
     ],
     "stateMutability":"view",
@@ -1207,6 +1354,33 @@
         "internalType":"address",
         "name":"defaultAdmin",
         "type":"address"
+      },
+      {
+        "components":[
+          {
+            "internalType":"bytes",
+            "name":"bodyPartOne",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"publicKey",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"bodyPartTwo",
+            "type":"bytes"
+          },
+          {
+            "internalType":"bytes",
+            "name":"signature",
+            "type":"bytes"
+          }
+        ],
+        "internalType":"struct ChunkedX509Cert",
+        "name":"rootCert",
+        "type":"tuple"
       }
     ],
     "name":"initialize",
@@ -1373,6 +1547,26 @@
   {
     "inputs":[
       {
+        "internalType":"bytes32",
+        "name":"mrEnclave",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"bool",
+        "name":"isAuthorized",
+        "type":"bool"
+      }
+    ],
+    "name":"setMrEnclave",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
         "internalType":"uint256",
         "name":"newPerfomanceFeeRate",
         "type":"uint256"
@@ -1399,6 +1593,30 @@
         "internalType":"bool",
         "name":"",
         "type":"bool"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      }
+    ],
+    "name":"totalDeposited",
+    "outputs":[
+      {
+        "internalType":"uint256",
+        "name":"totalDepositedTokens",
+        "type":"uint256"
       }
     ],
     "stateMutability":"view",

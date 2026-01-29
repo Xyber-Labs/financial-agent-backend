@@ -152,7 +152,7 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			tokenAddress,
 			tokenAmount,
 			big.NewInt(int64(req.Deadline)),
-			TrustManagementRouter.IXyberTrustManagementStructsPermit{
+			TrustManagementRouter.Permit{
 				Holder:   userAddress,
 				Amount:   tokenAmount,
 				Deadline: big.NewInt(int64(req.Deadline)),
