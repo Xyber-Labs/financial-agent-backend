@@ -6,6 +6,7 @@ import (
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/ERC20"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/abi/bindings/TrustManagementWallet"
 	"financial-agent-backend/core/abi/bindings/WETH"
 	"financial-agent-backend/core/transactor"
 	"fmt"
@@ -79,10 +80,19 @@ func (p *TrustManagementProvider) Deposit(
 		Msg("Executing TrustManagementProvider.Deposit")
 
 	// Get user wallet address
-	// userWallet, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
-	// if err != nil {
-	// 	return nil, err
-	// }
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if userWalletAddress.IsDeployed == false {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletAddress.WalletAddress.String())
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
 
 	token, err := ERC20.NewERC20(tokenAddress, p.client)
 	if err != nil {
@@ -93,6 +103,19 @@ func (p *TrustManagementProvider) Deposit(
 	approveTx, err := token.Approve(p.createTxOpts, p.AavePoolAddress, tokenAmount)
 	if err != nil {
 		return nil, err
+	}
+
+	if approveTx.To() == nil {
+		return nil, fmt.Errorf("INTERNAL ERROR: approve transaction has no recipient")
+	}
+
+	// Since we need to call approve from wallet's context, we need to wrap the
+	// approve transaction with Wallet.execute and pass it to Router. In this case
+	// Router.execute executes Wallet.execute which calls Token.Approve from wallet's context.
+	wrappedApproveTx := TrustManagementWallet.Transaction{
+		Target: *approveTx.To(),
+		Data:   approveTx.Data(),
+		Value:  approveTx.Value(),
 	}
 
 	// Create AavePool.supply transaction
@@ -107,10 +130,25 @@ func (p *TrustManagementProvider) Deposit(
 		return nil, err
 	}
 
+	if aaveSupplyTx.To() == nil {
+		return nil, fmt.Errorf("INTERNAL ERROR: supply transaction has no recipient")
+	}
+
+	wrappedSupplyTx := TrustManagementWallet.Transaction{
+		Target: *aaveSupplyTx.To(),
+		Data:   aaveSupplyTx.Data(),
+		Value:  aaveSupplyTx.Value(),
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, []TrustManagementWallet.Transaction{wrappedApproveTx, wrappedSupplyTx})
+	if err != nil {
+		return nil, err
+	}
+
 	log.Info().Msg("Batching and executing transactions")
 
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{approveTx, aaveSupplyTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
 	if err != nil {
 		return nil, err
 	}
