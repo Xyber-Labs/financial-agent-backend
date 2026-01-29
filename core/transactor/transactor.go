@@ -1,7 +1,6 @@
 package transactor
 
 import (
-	"context"
 	"crypto/ecdsa"
 	"crypto/rand"
 	"encoding/hex"
@@ -25,7 +24,7 @@ type Transactor struct {
 	teeSessionKey         *ecdsa.PrivateKey
 	teeSessionAddress     ethcommon.Address
 	transactOpts          *bind.TransactOpts
-	TrustManagementRouter *TrustManagementRouter.TrustManagementRouterCaller
+	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
 	TEEWallet             *TEEWallet.TEEWallet
 }
 
@@ -36,7 +35,7 @@ func NewTransactor(
 	teeWalletAddress ethcommon.Address,
 	teeService TeeService,
 ) (*Transactor, error) {
-	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouterCaller(
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
 		trustManagementRouterAddress,
 		client,
 	)
@@ -114,13 +113,28 @@ func (t *Transactor) InitializeOnChainSession() error {
 
 // BatchAndExecute function batches provided transactions into TrustManagementRouter.execute multicall
 // And sends it to the network.
-func (t *Transactor) BatchAndExecute(txs []*ethtypes.Transaction) error {
-	signedTxs, err := t.transactOpts.Signer(t.transactOpts.From, txs)
-	if err != nil {
-		return err
+func (t *Transactor) BatchAndExecute(txs []*ethtypes.Transaction) (*ethtypes.Transaction, error) {
+
+	// Prepare arguments for TrustManagementRouter.execute multicall
+	transactions := make([]TrustManagementRouter.ITrustManagementStructsTransaction, len(txs))
+	for i, tx := range txs {
+		if tx.To() == nil {
+			return nil, fmt.Errorf("BatchAndExecute: transaction %d has nil To field", i)
+		}
+		transactions[i] = TrustManagementRouter.ITrustManagementStructsTransaction{
+			Target: *tx.To(),
+			Value:  tx.Value(),
+			Data:   tx.Data(),
+		}
 	}
-	// FIXME(ak): add proper session key signature
-	return t.client.SendTransaction(context.Background(), signedTx)
+
+	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, t.teeSessionAddress, transactions)
+	if err != nil {
+		return nil, fmt.Errorf("failed to send transaction: %w", err)
+	}
+
+	log.Info().Str("tx", tx.Hash().String()).Int("tx_count", len(txs)).Msg("Transactor.BatchAndExecute: sent batched transaction")
+	return tx, nil
 }
 
 func (t *Transactor) extractQuote(sessionKey ethcommon.Address) ([]byte, error) {
