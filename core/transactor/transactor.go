@@ -170,52 +170,11 @@ func (t *Transactor) createTeeSessionSignature(
 	deadline *big.Int,
 	transactions []TrustManagementRouter.Transaction,
 ) ([]byte, error) {
-	if t.TeeSessionKey == nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: TeeSessionKey is not initialized")
-	}
-	if t.ChainId == nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: ChainId is not set")
-	}
-
-	// Prepare ABI types: (uint256 chainId, address router, uint256 deadline, tuple(address,uint256,bytes)[] txs)
-	uint256Type, err := abi.NewType("uint256", "", nil)
+	sig, _, err := CreateTeeSessionSignature(t.ChainId, t.TeeSessionKey, t.TrustManagementRouterAddress, deadline, transactions)
 	if err != nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: failed to create uint256 ABI type: %w", err)
+		return nil, err
 	}
-	addressType, err := abi.NewType("address", "", nil)
-	if err != nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: failed to create address ABI type: %w", err)
-	}
-	txTupleArrayType, err := abi.NewType("tuple[]", "", []abi.ArgumentMarshaling{
-		{Name: "target", Type: "address"},
-		{Name: "value", Type: "uint256"},
-		{Name: "data", Type: "bytes"},
-	})
-	if err != nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: failed to create tx tuple[] ABI type: %w", err)
-	}
-
-	args := abi.Arguments{
-		{Type: uint256Type},      // chainId
-		{Type: addressType},      // router address
-		{Type: uint256Type},      // deadline
-		{Type: txTupleArrayType}, // transactions
-	}
-
-	packed, err := args.Pack(t.ChainId, t.TrustManagementRouterAddress, deadline, transactions)
-	if err != nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: ABI pack failed: %w", err)
-	}
-
-	// Solidity: keccak256(abi.encode(chainid, address(router), deadline, txs))
-	msgHash := ethcrypto.Keccak256(packed)
-
-	signature, err := ethcrypto.Sign(msgHash, t.TeeSessionKey)
-	if err != nil {
-		return nil, fmt.Errorf("createTeeSessionSignature: sign failed: %w", err)
-	}
-
-	return signature, nil
+	return sig, nil
 }
 
 // Creates a new ECDSA private key using the secp256k1 curve
@@ -228,4 +187,67 @@ func GenerateTeeSessionKey() (*ecdsa.PrivateKey, error) {
 	}
 
 	return privateKey, nil
+}
+
+func CreateTeeSessionSignature(
+	chainId *big.Int,
+	teeSessionKey *ecdsa.PrivateKey,
+	trustManagementRouterAddress ethcommon.Address,
+	deadline *big.Int,
+	transactions []TrustManagementRouter.Transaction,
+) ([]byte, []byte, error) {
+	if teeSessionKey == nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: TeeSessionKey is not initialized")
+	}
+	if chainId == nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: ChainId is not set")
+	}
+	if deadline == nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: Deadline is not set")
+	}
+	if transactions == nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: Transactions is not set")
+	}
+
+	// Prepare ABI types: (uint256 chainId, address router, uint256 deadline, tuple(address,uint256,bytes)[] txs)
+	uint256Type, err := abi.NewType("uint256", "", nil)
+	if err != nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: failed to create uint256 ABI type: %w", err)
+	}
+	addressType, err := abi.NewType("address", "", nil)
+	if err != nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: failed to create address ABI type: %w", err)
+	}
+	txTupleArrayType, err := abi.NewType("tuple[]", "", []abi.ArgumentMarshaling{
+		{Name: "target", Type: "address"},
+		{Name: "value", Type: "uint256"},
+		{Name: "data", Type: "bytes"},
+	})
+	if err != nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: failed to create tx tuple[] ABI type: %w", err)
+	}
+
+	args := abi.Arguments{
+		{Type: uint256Type},      // chainId
+		{Type: addressType},      // router address
+		{Type: uint256Type},      // deadline
+		{Type: txTupleArrayType}, // transactions
+	}
+
+	packed, err := args.Pack(chainId, trustManagementRouterAddress, deadline, transactions)
+	if err != nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: ABI pack failed: %w", err)
+	}
+	fmt.Println("packedData:", hex.EncodeToString(packed))
+
+	// Solidity: keccak256(abi.encode(chainid, address(router), deadline, txs))
+	msgHash := ethcrypto.Keccak256(packed)
+	fmt.Println("hashedData:", hex.EncodeToString(msgHash))
+
+	signature, err := ethcrypto.Sign(msgHash, teeSessionKey)
+	if err != nil {
+		return nil, nil, fmt.Errorf("createTeeSessionSignature: sign failed: %w", err)
+	}
+
+	return signature, msgHash, nil
 }

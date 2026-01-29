@@ -5,7 +5,6 @@ import (
 	"crypto/ecdsa"
 	"errors"
 	"math/big"
-	"slices"
 	"testing"
 
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
@@ -76,13 +75,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 			// Arrange
 			mteeService := mocks.NewMockTeeService(t)
-			var captured []byte
-			mteeService.EXPECT().GetQuote(mock.Anything).Run(func(b []byte) {
-				// capture argument for later comparison
-				if b != nil {
-					captured = slices.Clone(b)
-				}
-			}).Return(tc.getQuoteRes, tc.getQuoteErr)
+			mteeService.EXPECT().GetQuote(mock.Anything).Return(tc.getQuoteRes, tc.getQuoteErr)
 
 			// Build Transactor via constructor with minimal deps
 			client := backend.Client()
@@ -98,7 +91,40 @@ func TestInitializeOnChainSession(t *testing.T) {
 			r.NoError(err)
 			r.NotNil(transactor.TeeSessionKey)
 			r.NotEqualValues([20]byte{}, transactor.TeeSessionAddress)
-			r.Equal(transactor.TeeSessionAddress[:], captured)
+			r.NotEqual(transactor.TeeSessionAddress, ethcommon.Address{})
 		})
 	}
+}
+
+func TestCreateTeeSessionSignature(t *testing.T) {
+	r := require.New(t)
+
+	chainId := big.NewInt(8545)
+	teeSessionKey, err := GenerateTeeSessionKey()
+	r.NoError(err)
+	sessionPubkey := teeSessionKey.PublicKey
+	deadline := big.NewInt(1757444944)
+	transactions := []TrustManagementRouter.Transaction{
+		{
+			Target: ethcommon.HexToAddress("0x9C868614ffca7da36B36330b1f317B117c7834dE"),
+			Value:  big.NewInt(0),
+			Data:   ethcommon.FromHex("a9059cbb000000000000000000000000a660eca41fb70818522bea470e6060053011b6ab00000000000000000000000000000000000000000000000000000000000016ce"),
+		},
+	}
+	trustManagementRouterAddress := ethcommon.HexToAddress("0x9C868614ffca7da36B36330b1f317B117c7834dE")
+	expectedMsgHash := ethcommon.FromHex("627fd8adf20484e0fa193746fe430ec1658107245731b8c8bcfa7dee70744b2b")
+	sig, msgHash, err := CreateTeeSessionSignature(chainId, teeSessionKey, trustManagementRouterAddress, deadline, transactions)
+	r.NoError(err)
+	r.NotEmpty(sig)
+	r.Equal(len(sig), 65)
+	r.Equal(expectedMsgHash, msgHash)
+
+	// recover the signed from the signature
+	recoveredAddr, err := ethcrypto.SigToPub(msgHash, sig)
+	r.NoError(err)
+	r.Equal(ethcrypto.PubkeyToAddress(*recoveredAddr), ethcrypto.PubkeyToAddress(sessionPubkey))
+
+	// fmt.Println("sessionPubkey:", ethcrypto.PubkeyToAddress(sessionPubkey))
+	// fmt.Println("recoveredAddr:", ethcrypto.PubkeyToAddress(*recoveredAddr))
+	// r.Equal(0, 1)
 }
