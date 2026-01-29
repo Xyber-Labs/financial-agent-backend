@@ -112,10 +112,10 @@ func (t *Transactor) InitializeOnChainSession() error {
 	return nil
 }
 
-// SignAndSendTransaction function is meant to be used by main backend logic to send transactions
-// to the network.
-func (t *Transactor) SignAndSendTransaction(tx *ethtypes.Transaction) error {
-	signedTx, err := t.transactOpts.Signer(t.transactOpts.From, tx)
+// BatchAndExecute function batches provided transactions into TrustManagementRouter.execute multicall
+// And sends it to the network.
+func (t *Transactor) BatchAndExecute(txs []*ethtypes.Transaction) error {
+	signedTxs, err := t.transactOpts.Signer(t.transactOpts.From, txs)
 	if err != nil {
 		return err
 	}
