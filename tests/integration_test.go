@@ -9,6 +9,7 @@ import (
 
 	"financial-agent-backend/core/transactor"
 	"financial-agent-backend/core/utils"
+	"financial-agent-backend/tests/mocks"
 )
 
 func TestDeposit(t *testing.T) {
@@ -25,11 +26,12 @@ func TestDeposit(t *testing.T) {
 	r.NoError(err)
 
 	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
-	mteeService := transactor.NewMockTeeService(t)
+	mteeService := mocks.NewMockTeeService(t)
 
 	testTransactor, err := transactor.NewTransactor(
 		ethBackend.Client(),
 		transactOpts,
+		mockedContracts.TeeWallet,
 		mockedContracts.TeeWallet,
 		mteeService,
 	)

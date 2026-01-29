@@ -17,6 +17,7 @@ import (
 
 	"financial-agent-backend/core/utils"
 	testutils "financial-agent-backend/tests"
+	"financial-agent-backend/tests/mocks"
 )
 
 func TestInitialization(t *testing.T) {
@@ -68,7 +69,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 
 			// Arrange
-			mteeService := NewMockTeeService(t)
+			mteeService := mocks.NewMockTeeService(t)
 			var captured []byte
 			mteeService.EXPECT().GetQuote(mock.Anything).Run(func(b []byte) {
 				// capture argument for later comparison
