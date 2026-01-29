@@ -7,6 +7,11 @@
         "type":"address"
       },
       {
+        "internalType":"address",
+        "name":"weth",
+        "type":"address"
+      },
+      {
         "internalType":"uint256",
         "name":"minLockDuration",
         "type":"uint256"
@@ -72,13 +77,6 @@
       }
     ],
     "name":"SafeERC20FailedOperation",
-    "type":"error"
-  },
-  {
-    "inputs":[
-      
-    ],
-    "name":"XyberTrustManagementRouter__EthereumTransferFailed",
     "type":"error"
   },
   {
@@ -365,6 +363,21 @@
   },
   {
     "inputs":[
+      
+    ],
+    "name":"WETH_ADDRESS",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
       {
         "internalType":"address",
         "name":"receiver",
@@ -625,6 +638,11 @@
         "internalType":"uint256[]",
         "name":"depositIds",
         "type":"uint256[]"
+      },
+      {
+        "internalType":"uint256",
+        "name":"baseAmount",
+        "type":"uint256"
       },
       {
         "internalType":"uint256",
