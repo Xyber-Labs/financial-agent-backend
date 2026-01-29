@@ -10,6 +10,8 @@ import (
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	testutils "financial-agent-backend/tests"
 )
 
 func TestInitialization(t *testing.T) {
@@ -18,6 +20,12 @@ func TestInitialization(t *testing.T) {
 
 // Tests for InitializeOnChainSession using mockery-generated MockTeeService
 func TestInitializeOnChainSession(t *testing.T) {
+
+	// Create eth simulated setup
+	backend := testutils.CreateSimulatedNode(nil)
+	mockedContracts := testutils.DeployMockedContracts(backend.Client(), nil)
+	teeWalletAddress := mockedContracts.TeeWallet
+
 	testCases := []struct {
 		name        string
 		getQuoteRes []byte
@@ -56,7 +64,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 			client := &ethclient.Client{}
 			opts := &bind.TransactOpts{From: ethcommon.Address{}}
 			routerAddr := ethcommon.Address{0x1}
-			walletAddr := ethcommon.Address{0x2}
+			walletAddr := teeWalletAddress
 			transactor, nerr := NewTransactor(client, opts, routerAddr, walletAddr, mteeService)
 			r.NoError(nerr)
 
