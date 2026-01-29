@@ -1,0 +1,427 @@
+package tests
+
+import (
+	"bytes"
+	"context"
+	"crypto/ecdsa"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"math/big"
+	"net/http"
+	"testing"
+	"time"
+
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	ethcommon "github.com/ethereum/go-ethereum/common"
+	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	ethcrypto "github.com/ethereum/go-ethereum/crypto"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
+
+	"financial-agent-backend/config"
+	"financial-agent-backend/core/abi/bindings/AavePool"
+	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/onchain"
+	"financial-agent-backend/core/server"
+	"financial-agent-backend/core/transactor"
+	"financial-agent-backend/core/utils"
+	"financial-agent-backend/tests/contracts"
+	"financial-agent-backend/tests/mocks"
+)
+
+const senderPrivKeyStr = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+const teeQuoteStrMock = "03000200000000000b001000939a7233f79c4ca9940a0db3957f0607d5a10527dd8023847d26b1649fbf35e9000000000e0f100fffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000500000000000000e700000000000000d90070ef01fefc0008655dc57041d3ff175f9b46da9c63d9c4e6868d6a0f865c0000000000000000000000000000000000000000000000000000000000000000c7bfcf4b6442144f2e68d85587ad5eb1ec1efb9a1b92463b34e69aa3d63391fc000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000eae43463f7ff8c86b772f7b76ea7cc4ce6bca820000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ca1000001992a0044e82337d4cd3286941853bccaef57c8b06c466e06cad0acb7eb4b11aa1919f37d570b30009d260f10e8815fef154adaf37bf4283c1c2cb6c5231aa2522cd79c3f442bc2b364d38ec4d06439e6594b538829f7238c56ba786d31db9cc8acf6328af22ca7dada62ab27801f65e700eabae0fe99dea75c2411c74a5c1790e0f100fffff0000000000000000000000000000000000000000000000000000000000000000000000000000000000001500000000000000e70000000000000078fe8cfd01095a0f108aff5c40624b93612d6c28b73e1a8d28179c9ddf0e068600000000000000000000000000000000000000000000000000000000000000008c4f5775d796503e96137f77c68a829a0056ac8ded70140b081b094490c57bff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001000b0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030ed453da237af6a2134c8bdd7c8dccb16ed0abd535aa877641c3d211ef94e3d0000000000000000000000000000000000000000000000000000000000000000e12a9cd49d8073325121817fc9c100225e7f814a6e22994fa89606d7e4fb6ff5ecdf746dcf1bc1656ba55d22d54f7ab69f33c34deb0e739ffd260e428c337b862000000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f0500620e00002d2d2d2d2d424547494e2043455254494649434154452d2d2d2d2d0a4d494945386a4343424a69674177494241674955424c7959683448736b72783874666a69556a557532546a6e4c664177436759494b6f5a497a6a3045417749770a634445694d434147413155454177775a535735305a577767553064594946424453794251624746305a6d397962534244515445614d42674741315545436777520a535735305a577767513239796347397959585270623234784644415342674e564241634d43314e68626e526849454e7359584a684d51737743515944565151490a44414a445154454c4d416b474131554542684d4356564d774868634e4d6a55774f4441794d5455304e7a55355768634e4d7a49774f4441794d5455304e7a55350a576a42774d534977494159445651514444426c4a626e526c624342545231676755454e4c49454e6c636e52705a6d6c6a5958526c4d526f77474159445651514b0a4442464a626e526c6243424462334a7762334a6864476c76626a45554d424947413155454277774c553246756447456751327868636d4578437a414a42674e560a4241674d416b4e424d517377435159445651514745774a56557a425a4d424d4742797147534d34394167454743437147534d34394177454841304941424e38440a446c32386e476a62326e4a4337746c503749326272762f4f656b45537972695a68466870414b41737632506c6165517a5041767562734c56435379397958584a0a5638323746343634485534375939454e594f796a67674d4f4d494944436a416642674e5648534d4547444157674253566231334e765276683655424a796454300a4d383442567776655644427242674e56485238455a4442694d47436758714263686c706f64485277637a6f764c32467761533530636e567a6447566b633256790a646d6c6a5a584d75615735305a577775593239744c334e6e6543396a5a584a3061575a7059324630615739754c33597a4c33426a61324e796244396a595431770a624746305a6d397962535a6c626d4e765a476c755a7a316b5a584977485159445652304f42425945464138436f70466e7a416b31324a704f576d6d396b4863450a623142584d41344741315564447745422f775145417749477744414d42674e5648524d4241663845416a41414d4949434f77594a4b6f5a496876684e415130420a424949434c444343416967774867594b4b6f5a496876684e4151304241515151797a6b5244464354655570312b7666564c4e58703454434341575547436971470a534962345451454e41514977676746564d42414743797147534962345451454e415149424167454f4d42414743797147534962345451454e415149434167454f0a4d42414743797147534962345451454e41514944416745444d42414743797147534962345451454e41514945416745444d42454743797147534962345451454e0a41514946416749412f7a415242677371686b69472b4530424451454342674943415038774541594c4b6f5a496876684e4151304241676343415141774541594c0a4b6f5a496876684e4151304241676743415141774541594c4b6f5a496876684e4151304241676b43415141774541594c4b6f5a496876684e4151304241676f430a415141774541594c4b6f5a496876684e4151304241677343415141774541594c4b6f5a496876684e4151304241677743415141774541594c4b6f5a496876684e0a4151304241673043415141774541594c4b6f5a496876684e4151304241673443415141774541594c4b6f5a496876684e4151304241673843415141774541594c0a4b6f5a496876684e4151304241684143415141774541594c4b6f5a496876684e4151304241684543415130774877594c4b6f5a496876684e41513042416849450a4541344f4177502f2f7741414141414141414141414141774541594b4b6f5a496876684e4151304241775143414141774641594b4b6f5a496876684e415130420a4241514741474271414141414d41384743697147534962345451454e4151554b415145774867594b4b6f5a496876684e41513042426751514b693749436977300a7676506d37736b554131596e5a6a424542676f71686b69472b453042445145484d4459774541594c4b6f5a496876684e4151304242774542416638774541594c0a4b6f5a496876684e4151304242774942416638774541594c4b6f5a496876684e4151304242774d4241663877436759494b6f5a497a6a304541774944534141770a5251496745582b33746b6147707972566169704d627436382f73534f6d4f564a76764f654d6736673035445a306c6f43495144544c325a5a48327648636b464f0a54464a5031424a5547687552567153683943577732727a52364c662f4f513d3d0a2d2d2d2d2d454e442043455254494649434154452d2d2d2d2d0a2d2d2d2d2d424547494e2043455254494649434154452d2d2d2d2d0a4d4949436c6a4343416a32674177494241674956414a567658633239472b487051456e4a3150517a7a674658433935554d416f4743437147534d343942414d430a4d476778476a415942674e5642414d4d45556c756447567349464e48574342536232393049454e424d526f77474159445651514b4442464a626e526c624342440a62334a7762334a6864476c76626a45554d424947413155454277774c553246756447456751327868636d4578437a414a42674e564241674d416b4e424d5173770a435159445651514745774a56557a4165467730784f4441314d6a45784d4455774d5442614677307a4d7a41314d6a45784d4455774d5442614d484178496a41670a42674e5642414d4d47556c756447567349464e4857434251513073675547786864475a76636d306751304578476a415942674e5642416f4d45556c75644756730a49454e76636e4276636d4630615739754d5251774567594456515148444174545957353059534244624746795954454c4d416b474131554543417743513045780a437a414a42674e5642415954416c56544d466b77457759484b6f5a497a6a3043415159494b6f5a497a6a304441516344516741454e53422f377432316c58534f0a3243757a7078773734654a423732457944476757357258437478327456544c7136684b6b367a2b5569525a436e71523770734f766771466553786c6d546c4a6c0a65546d693257597a33714f42757a43427544416642674e5648534d4547444157674251695a517a575770303069664f44744a5653763141624f536347724442530a42674e5648523845537a424a4d45656752614244686b466f64485277637a6f764c324e6c636e52705a6d6c6a5958526c63793530636e567a6447566b633256790a646d6c6a5a584d75615735305a577775593239744c306c756447567355306459556d397664454e424c6d526c636a416442674e5648513445466751556c5739640a7a62306234656c4153636e553944504f4156634c336c517744675944565230504151482f42415144416745474d42494741315564457745422f7751494d4159420a4166384341514177436759494b6f5a497a6a30454177494452774177524149675873566b6930772b6936565947573355462f32327561586530594a446a3155650a6e412b546a44316169356343494359623153416d4435786b66545670766f34556f79695359787244574c6d5552344349394e4b7966504e2b0a2d2d2d2d2d454e442043455254494649434154452d2d2d2d2d0a2d2d2d2d2d424547494e2043455254494649434154452d2d2d2d2d0a4d4949436a7a4343416a53674177494241674955496d554d316c71644e496e7a6737535655723951477a6b6e42717777436759494b6f5a497a6a3045417749770a614445614d4267474131554541777752535735305a5777675530645949464a766233516751304578476a415942674e5642416f4d45556c756447567349454e760a636e4276636d4630615739754d5251774567594456515148444174545957353059534244624746795954454c4d416b47413155454341774351304578437a414a0a42674e5642415954416c56544d423458445445344d4455794d5445774e4455784d466f58445451354d54497a4d54497a4e546b314f566f77614445614d4267470a4131554541777752535735305a5777675530645949464a766233516751304578476a415942674e5642416f4d45556c756447567349454e76636e4276636d46300a615739754d5251774567594456515148444174545957353059534244624746795954454c4d416b47413155454341774351304578437a414a42674e56424159540a416c56544d466b77457759484b6f5a497a6a3043415159494b6f5a497a6a3044415163445167414543366e45774d4449595a4f6a2f69505773437a61454b69370a314f694f534c52466857476a626e42564a66566e6b59347533496a6b4459594c304d784f346d717379596a6c42616c54565978465032734a424b357a6c4b4f420a757a43427544416642674e5648534d4547444157674251695a517a575770303069664f44744a5653763141624f5363477244425342674e5648523845537a424a0a4d45656752614244686b466f64485277637a6f764c324e6c636e52705a6d6c6a5958526c63793530636e567a6447566b63325679646d6c6a5a584d75615735300a5a577775593239744c306c756447567355306459556d397664454e424c6d526c636a416442674e564851344546675155496d554d316c71644e496e7a673753560a55723951477a6b6e4271777744675944565230504151482f42415144416745474d42494741315564457745422f7751494d4159424166384341514577436759490a4b6f5a497a6a3045417749445351417752674968414f572f35516b522b533943695344634e6f6f774c7550524c735747662f59693747535839344267775477670a41694541344a306c72486f4d732b586f356f2f7358364f39515778485241765a55474f6452513763767152586171493d0a2d2d2d2d2d454e442043455254494649434154452d2d2d2d2d0a00"
+
+func TestDeposit(t *testing.T) {
+	r := require.New(t)
+	ctx := context.Background()
+
+	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+
+	chainId, err := ethBackend.Client().ChainID(context.Background())
+	r.NoError(err)
+	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+	r.NoError(err)
+
+	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
+	mteeService := mocks.NewMockTeeService(t)
+	quoteMock := ethcommon.Hex2Bytes(teeQuoteStrMock)
+	mteeService.EXPECT().GetQuote(mock.Anything).Return(quoteMock, nil)
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	aavePool, err := AavePool.NewAavePool(
+		mockedContracts.AavePool,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	testTransactor, err := transactor.NewTransactor(
+		ethBackend.Client(),
+		chainId,
+		transactOpts,
+		mockedContracts.TrustManagementRouter,
+		trustManagementRouter,
+		mteeService,
+	)
+	r.NoError(err)
+	err = testTransactor.InitializeOnChainSession()
+	r.NoError(err)
+	ethBackend.Commit()
+
+	// Create onchain provider instance
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+		&bind.CallOpts{},
+	)
+
+	// Create HTTP server
+	serverConfig := config.HttpServerConfig{
+		Port: 8080,
+	}
+	agentServer := server.NewHttpAgentServer(
+		&serverConfig,
+		testTransactor,
+		trustManagementProvider,
+	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	// Get nonceBefore before sending the request
+	nonceBefore, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	r.NoError(err)
+	fmt.Println("nonceBefore", nonceBefore)
+
+	// Make /deposit HTTP request to server
+	depositUrl := fmt.Sprintf("http://127.0.0.1:%d/deposit", serverConfig.Port)
+	depositReqBody := server.DepositRequest{
+		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		ChainId:      1,
+		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		Amount:       "10000000000000000",
+		Deadline:     1700000000,
+		SigV:         27,
+		SigR:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
+		SigS:         "0x0fe8e32c2e530da67ead433ce694e845bf72b711aa385add3dc79b423a812f3d",
+	}
+	reqBody, err := json.Marshal(depositReqBody)
+	r.NoError(err)
+	resp, err := http.Post(depositUrl, "application/json", bytes.NewBuffer(reqBody))
+	r.NoError(err)
+	r.Equal(http.StatusOK, resp.StatusCode)
+	defer resp.Body.Close()
+	ethBackend.Commit()
+
+	var depositResponse server.DepositResponse
+	err = json.NewDecoder(resp.Body).Decode(&depositResponse)
+	r.NoError(err)
+	fmt.Println("depositResponse", depositResponse)
+	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(depositResponse.Tx))
+	r.NoError(err)
+	fmt.Println("sentTx", sentTx)
+
+	// Get nonceAfter after sending the request
+	nonceAfter, err := ethBackend.Client().NonceAt(ctx, adminPubkey, nil)
+	r.NoError(err)
+	fmt.Println("nonceAfter", nonceAfter)
+
+	r.Equal(nonceBefore+1, nonceAfter)
+
+	_ = agentServer
+}
+
+func TestWithdraw(t *testing.T) {
+	r := require.New(t)
+	ctx := context.Background()
+
+	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+
+	chainId, err := ethBackend.Client().ChainID(ctx)
+	r.NoError(err)
+	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+	r.NoError(err)
+
+	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
+	mteeService := mocks.NewMockTeeService(t)
+	quoteMock := ethcommon.Hex2Bytes(teeQuoteStrMock)
+	mteeService.EXPECT().GetQuote(mock.Anything).Return(quoteMock, nil)
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	testTransactor, err := transactor.NewTransactor(
+		ethBackend.Client(),
+		chainId,
+		transactOpts,
+		mockedContracts.TrustManagementRouter,
+		trustManagementRouter,
+		mteeService,
+	)
+	r.NoError(err)
+	err = testTransactor.InitializeOnChainSession()
+	r.NoError(err)
+
+	aavePool, err := AavePool.NewAavePool(
+		mockedContracts.AavePool,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+		&bind.CallOpts{},
+	)
+
+	// Create HTTP server
+	serverConfig := config.HttpServerConfig{
+		Port: 8081,
+	}
+	agentServer := server.NewHttpAgentServer(
+		&serverConfig,
+		testTransactor,
+		trustManagementProvider,
+	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	mockedTrustManagementRouter, err := contracts.NewMockTrustManagementRouter(mockedContracts.TrustManagementRouter, ethBackend.Client())
+	r.NoError(err)
+
+	mockedAavePool, err := contracts.NewMockAavePool(mockedContracts.AavePool, ethBackend.Client())
+	r.NoError(err)
+
+	_, err = mockedAavePool.MockSetReserveAToken(transactOpts, mockedContracts.ERC20)
+	r.NoError(err)
+	ethBackend.Commit()
+
+	mockedErc20, err := contracts.NewMockERC20(mockedContracts.ERC20, ethBackend.Client())
+	r.NoError(err)
+
+	testCases := []struct {
+		desc          string
+		deposits      []contracts.MockTrustManagementRouterDeposit
+		amount        string
+		aTokenBalance *big.Int
+		expectedErr   error
+	}{
+		{
+			desc: "sucessfull withdraw of 100%",
+			deposits: []contracts.MockTrustManagementRouterDeposit{
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt(time.Now().Add(-time.Hour).Unix()),
+				},
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
+				},
+			},
+			amount:        "10000",
+			aTokenBalance: big.NewInt(10000),
+			expectedErr:   nil,
+		},
+		{
+			desc: "error on withdraw of 110%",
+			deposits: []contracts.MockTrustManagementRouterDeposit{
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt(time.Now().Add(-time.Hour).Unix()),
+				},
+				{
+					Amount:      big.NewInt(5000),
+					LockedUntil: big.NewInt((time.Now().Add(-time.Hour)).Unix()),
+				},
+			},
+			amount:        "11000",
+			aTokenBalance: big.NewInt(10000),
+			expectedErr:   fmt.Errorf("{\"error\":\"not enough deposits to cover withdraw amount, total deposit amount: 10000, withdraw amount: 11000\"}"),
+		},
+	}
+
+	// Make /withdraw HTTP request to server
+	withdrawUrl := fmt.Sprintf("http://127.0.0.1:%d/withdraw", serverConfig.Port)
+
+	for _, tc := range testCases {
+		t.Run(tc.desc, func(t *testing.T) {
+
+			// Set mock aToken balance
+			_, err = mockedErc20.MockSetBalance(transactOpts, tc.aTokenBalance)
+			r.NoError(err)
+			ethBackend.Commit()
+
+			// Set mock deposits in the contract
+			_, err = mockedTrustManagementRouter.MockSetDeposits(transactOpts, tc.deposits)
+			r.NoError(err)
+			ethBackend.Commit()
+
+			// Prepare HTTP request
+			withdrawReqBody := server.WithdrawRequest{
+				UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+				ChainId:      1,
+				Amount:       tc.amount,
+				TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+				Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
+			}
+			reqBody, err := json.Marshal(withdrawReqBody)
+			r.NoError(err)
+			resp, err := http.Post(withdrawUrl, "application/json", bytes.NewBuffer(reqBody))
+			r.NoError(err)
+			defer resp.Body.Close()
+			if tc.expectedErr != nil {
+				errBytes := make([]byte, 1000)
+				nBytes, _ := resp.Body.Read(errBytes)
+				r.Greater(nBytes, 0)
+				r.Equal(errors.New(string(errBytes[:nBytes])), tc.expectedErr)
+				r.Equal(http.StatusInternalServerError, resp.StatusCode)
+				return
+			}
+
+			ethBackend.Commit()
+			r.Equal(http.StatusOK, resp.StatusCode)
+			var withdrawResponse server.WithdrawResponse
+			err = json.NewDecoder(resp.Body).Decode(&withdrawResponse)
+			r.NoError(err)
+		})
+	}
+}
+
+func TestClaim(t *testing.T) {
+	r := require.New(t)
+	ctx := context.Background()
+
+	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+
+	chainId, err := ethBackend.Client().ChainID(ctx)
+	r.NoError(err)
+	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+	r.NoError(err)
+
+	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
+	mteeService := mocks.NewMockTeeService(t)
+	r.NoError(err)
+	quoteMock := ethcommon.Hex2Bytes(teeQuoteStrMock)
+	mteeService.EXPECT().GetQuote(mock.Anything).Return(quoteMock, nil)
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	testTransactor, err := transactor.NewTransactor(
+		ethBackend.Client(),
+		chainId,
+		transactOpts,
+		mockedContracts.TrustManagementRouter,
+		trustManagementRouter,
+		mteeService,
+	)
+	r.NoError(err)
+	err = testTransactor.InitializeOnChainSession()
+	r.NoError(err)
+
+	aavePool, err := AavePool.NewAavePool(
+		mockedContracts.AavePool,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+		&bind.CallOpts{},
+	)
+
+	serverConfig := config.HttpServerConfig{
+		Port: 8082,
+	}
+	agentServer := server.NewHttpAgentServer(
+		&serverConfig,
+		testTransactor,
+		trustManagementProvider,
+	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	// Make /claim HTTP request to server
+	claimUrl := fmt.Sprintf("http://127.0.0.1:%d/claim", serverConfig.Port)
+	claimReqBody := server.ClaimRequest{
+		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		ChainId:      1,
+		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		Amount:       "10000000000000000",
+		Deadline:     1700000000,
+		Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
+	}
+	reqBody, err := json.Marshal(claimReqBody)
+	r.NoError(err)
+	resp, err := http.Post(claimUrl, "application/json", bytes.NewBuffer(reqBody))
+	r.NoError(err)
+	r.Equal(http.StatusOK, resp.StatusCode)
+	defer resp.Body.Close()
+	ethBackend.Commit()
+
+	var claimResponse server.ClaimResponse
+	err = json.NewDecoder(resp.Body).Decode(&claimResponse)
+	r.NoError(err)
+	fmt.Println("claimResponse", claimResponse)
+	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(claimResponse.Tx))
+	r.NoError(err)
+	fmt.Println("sentTx", sentTx)
+
+}

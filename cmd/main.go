@@ -1,11 +1,23 @@
 package main
 
 import (
-	"fmt"
+	"context"
 
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+
 	"financial-agent-backend/config"
+	"financial-agent-backend/core/abi/bindings/AavePool"
+	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/onchain"
+	"financial-agent-backend/core/server"
+	"financial-agent-backend/core/transactor"
+	"financial-agent-backend/core/utils"
+
+	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
 )
 
 var (
@@ -15,17 +27,94 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "financial-agent-backend",
 		Short: "Financial Agent Backend",
-		Long: `Financial Agent Backend`,
+		Long:  `Financial Agent Backend`,
 		Run: func(cmd *cobra.Command, args []string) {
 			cfg, err := config.LoadConfig()
 			if err != nil {
-				fmt.Println("Error loading config:", err)
+				log.Error().Err(err).Msg("Error loading config")
 				return
 			}
-			fmt.Println("Config loaded:", cfg)
+			log.Info().Interface("config", cfg).Msg("Config loaded")
 
 			if err := cfg.Validate(); err != nil {
-				fmt.Println("Error validating config:", err)
+				log.Error().Err(err).Msg("Error validating config")
+				return
+			}
+
+			ethClient, err := utils.ConnectToNode(cfg.Network.HttpRpcUrl)
+			if err != nil {
+				log.Error().Err(err).Msg("Error connecting to node")
+				return
+			}
+			log.Info().Str("rpc_url", cfg.Network.HttpRpcUrl).Msg("Connected to node")
+
+			chainId, err := ethClient.ChainID(context.Background())
+			if err != nil {
+				log.Error().Err(err).Msg("Error getting chain id")
+				return
+			}
+
+			// Prepare transactor opts.
+			transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(cfg.Network.SenderPrivateKey, chainId)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating transactor")
+				return
+			}
+
+			trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
+				ethClient,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating trust management router")
+				return
+			}
+
+			teeService := sgx_quote.NewTeeService(false)
+			transactor, err := transactor.NewTransactor(
+				ethClient,
+				chainId,
+				transactOpts,
+				common.HexToAddress(cfg.Network.TrustManagementRouterAddress),
+				trustManagementRouter,
+				teeService,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating transactor")
+				return
+			}
+			if err := transactor.InitializeOnChainSession(); err != nil {
+				log.Error().Err(err).Msg("Error initializing transactor")
+				return
+			}
+
+			aavePool, err := AavePool.NewAavePool(
+				common.HexToAddress(cfg.Network.AavePoolAddress),
+				ethClient,
+			)
+			if err != nil {
+				log.Error().Err(err).Msg("Error creating aave pool")
+				return
+			}
+
+			trustManagementProvider := onchain.NewTrustManagementProvider(
+				ethClient,
+				transactor,
+				trustManagementRouter,
+				aavePool,
+				&bind.CallOpts{},
+			)
+
+			agentServer := server.NewHttpAgentServer(
+				&config.HttpServerConfig{
+					Port: cfg.Http.Port,
+				},
+				transactor,
+				trustManagementProvider,
+			)
+			err = agentServer.Start(context.Background())
+			if err != nil {
+				log.Error().Err(err).Msg("Error starting agent server")
 				return
 			}
 		},
@@ -54,6 +143,6 @@ func initConfig() {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		log.Info().Str("config_file", viper.ConfigFileUsed()).Msg("Using config file")
 	}
 }
