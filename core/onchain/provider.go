@@ -194,7 +194,11 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, err
 	}
 
-	nativeDepositTx, err := p.NativeErc20.Deposit(p.createTxOpts)
+	// On native deposit value, we need to pass Value as the amount we want to wrap.
+	// For this purpose, recreate createWethDepositTxOpts with Value set
+	createWethDepositTxOpts := *p.createTxOpts
+	createWethDepositTxOpts.Value = nativeAmount
+	nativeDepositTx, err := p.NativeErc20.Deposit(&createWethDepositTxOpts)
 	if err != nil {
 		return nil, err
 	}
