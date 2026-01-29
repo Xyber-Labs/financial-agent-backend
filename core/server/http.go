@@ -7,53 +7,37 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog/log"
 
 	"financial-agent-backend/config"
-	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
+	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/transactor"
 )
 
+var addressRegex = regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
+
 type HttpAgentServer struct {
-	Config                *config.HttpServerConfig
-	Transactor            *transactor.Transactor
-	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
-	AavePool              *AavePool.AavePool
-	createTxOpts          *bind.TransactOpts
-	Gin                   *gin.Engine
+	Config                  *config.HttpServerConfig
+	Transactor              *transactor.Transactor
+	Gin                     *gin.Engine
+	trustManagementProvider *onchain.TrustManagementProvider
 }
 
 func NewHttpAgentServer(
 	config *config.HttpServerConfig,
 	transactor *transactor.Transactor,
-	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
-	aavePool *AavePool.AavePool,
+	trustManagementProvider *onchain.TrustManagementProvider,
 ) *HttpAgentServer {
-	// createTxOpts only used to consturct the calldata for the transactions
-	// to be later reconstructed in a batch transaction. Therefore we don't actually
-	// want to sign, estimate or execute them.
-	createTxOpts := bind.TransactOpts{
-		From:     ethcommon.Address{},
-		NoSend:   true,
-		GasLimit: 1000000,
-		Signer: func(address ethcommon.Address, tx *ethtypes.Transaction) (*ethtypes.Transaction, error) {
-			return tx, nil
-		},
-		Context: context.Background(),
-	}
+
 	s := &HttpAgentServer{
-		Config:                config,
-		Transactor:            transactor,
-		TrustManagementRouter: trustManagementRouter,
-		AavePool:              aavePool,
-		createTxOpts:          &createTxOpts,
-		Gin:                   gin.New(),
+		Config:                  config,
+		Transactor:              transactor,
+		Gin:                     gin.New(),
+		trustManagementProvider: trustManagementProvider,
 	}
 	s.registerHandlers()
 	return s
@@ -104,8 +88,6 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-
-		addressRegex := regexp.MustCompile("^0x[0-9a-fA-F]{40}$")
 
 		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
@@ -165,10 +147,10 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 			Interface("sigS", sigS).
 			Msg("Creating TrustManagementRouter.depositWithPermit transaction")
 
-		depositWithPermitTx, err := s.TrustManagementRouter.DepositWithPermit(
-			s.createTxOpts,
+		tx, err := s.trustManagementProvider.Deposit(
 			userAddress,
 			tokenAddress,
+			tokenAmount,
 			big.NewInt(int64(req.Deadline)),
 			TrustManagementRouter.IXyberTrustManagementStructsPermit{
 				Holder:   userAddress,
@@ -179,30 +161,6 @@ func (s *HttpAgentServer) depositHandler() gin.HandlerFunc {
 				S:        sigS,
 			},
 		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		log.Info().Msg("Creating AavePool.supply transaction")
-
-		// Create AavePool.supply transaction
-		aaveSupplyTx, err := s.AavePool.Supply(
-			s.createTxOpts,
-			tokenAddress,
-			tokenAmount,
-			userAddress,
-			0,
-		)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-
-		log.Info().Msg("Batching and executing transactions")
-
-		// Batch and execute transactions
-		tx, err := s.Transactor.BatchAndExecute([]*ethtypes.Transaction{depositWithPermitTx, aaveSupplyTx})
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -232,6 +190,28 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
+
+		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
+			return
+		}
+
+		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
+			return
+		}
+
+		tx, err := s.trustManagementProvider.Withdraw(
+			ethcommon.HexToAddress(req.TokenAddress),
+			big.NewInt(0), // TODO
+			ethcommon.HexToAddress(req.UserAddress),
+		)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, WithdrawResponse{Tx: tx.Hash().String()})
 	}
 }
 
@@ -255,5 +235,11 @@ type ClaimRequest struct {
 }
 
 type WithdrawRequest struct {
-	ChainId uint64 `json:"chainId"`
+	UserAddress  string `json:"userAddress"`
+	ChainId      uint64 `json:"chainId"`
+	TokenAddress string `json:"tokenAddress"`
+}
+
+type WithdrawResponse struct {
+	Tx string `json:"tx"`
 }
