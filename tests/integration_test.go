@@ -27,11 +27,12 @@ import (
 	"financial-agent-backend/tests/mocks"
 )
 
+const senderPrivKeyStr = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
 func TestDeposit(t *testing.T) {
 	r := require.New(t)
 	ctx := context.Background()
 
-	senderPrivKeyStr := "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
 	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
 	r.NoError(err)
 	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
@@ -117,13 +118,14 @@ func TestDeposit(t *testing.T) {
 	r.NoError(err)
 	resp, err := http.Post(depositUrl, "application/json", bytes.NewBuffer(reqBody))
 	r.NoError(err)
+	r.Equal(http.StatusOK, resp.StatusCode)
 	defer resp.Body.Close()
 	ethBackend.Commit()
 
 	var depositResponse server.DepositResponse
 	err = json.NewDecoder(resp.Body).Decode(&depositResponse)
 	r.NoError(err)
-	fmt.Println("responseText", depositResponse)
+	fmt.Println("depositResponse", depositResponse)
 	sentTx, _, err := ethBackend.Client().TransactionByHash(ctx, ethcommon.HexToHash(depositResponse.Tx))
 	r.NoError(err)
 	fmt.Println("sentTx", sentTx)
@@ -136,4 +138,94 @@ func TestDeposit(t *testing.T) {
 	r.Equal(nonceBefore+1, nonceAfter)
 
 	_ = agentServer
+}
+
+func TestWithdraw(t *testing.T) {
+	r := require.New(t)
+	ctx := context.Background()
+
+	adminKey, err := utils.ParseKeyFromHex(senderPrivKeyStr)
+	r.NoError(err)
+	pub, ok := adminKey.Public().(*ecdsa.PublicKey)
+	r.True(ok)
+	adminPubkey := ethcrypto.PubkeyToAddress(*pub)
+	ethBackend := CreateSimulatedNode(ethtypes.GenesisAlloc{
+		adminPubkey: {Balance: big.NewInt(10000000000000000)},
+	})
+
+	chainId, err := ethBackend.Client().ChainID(ctx)
+	r.NoError(err)
+	transactOpts, err := utils.GetTransactOptsFromPrivateKeyString(senderPrivKeyStr, chainId)
+	r.NoError(err)
+
+	mockedContracts := DeployMockedContracts(ethBackend.Client(), transactOpts)
+	ethBackend.Commit()
+	mteeService := mocks.NewMockTeeService(t)
+
+	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
+		mockedContracts.TrustManagementRouter,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	testTransactor, err := transactor.NewTransactor(
+		ethBackend.Client(),
+		transactOpts,
+		trustManagementRouter,
+		mteeService,
+	)
+	r.NoError(err)
+
+	aavePool, err := AavePool.NewAavePool(
+		mockedContracts.AavePool,
+		ethBackend.Client(),
+	)
+	r.NoError(err)
+
+	trustManagementProvider := onchain.NewTrustManagementProvider(
+		ethBackend.Client(),
+		testTransactor,
+		trustManagementRouter,
+		aavePool,
+		&bind.CallOpts{},
+	)
+
+	// Create HTTP server
+	serverConfig := config.HttpServerConfig{
+		Port: 8081,
+	}
+	agentServer := server.NewHttpAgentServer(
+		&serverConfig,
+		testTransactor,
+		trustManagementProvider,
+	)
+
+	ginCtx, cancel := context.WithTimeout(ctx, 3000*time.Second)
+	defer cancel()
+	go agentServer.Start(ginCtx)
+
+	// Arbitrary wait for server to startup
+	time.Sleep(time.Second)
+
+	// Make /withdraw HTTP request to server
+	withdrawUrl := fmt.Sprintf("http://127.0.0.1:%d/withdraw", serverConfig.Port)
+	withdrawReqBody := server.WithdrawRequest{
+		UserAddress:  "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		ChainId:      1,
+		Amount:       "10000000000000000",
+		TokenAddress: "0xAc0974bec39a17E36Ba4a6B4d238FF944bAcB478",
+		Signature:    "0x107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e107c123c2415c39cd7da08ceb1a53acfb6978067fd86b0ec8e2aa0c8e673255e01",
+	}
+	reqBody, err := json.Marshal(withdrawReqBody)
+	r.NoError(err)
+	resp, err := http.Post(withdrawUrl, "application/json", bytes.NewBuffer(reqBody))
+	r.NoError(err)
+	r.Equal(http.StatusOK, resp.StatusCode)
+	defer resp.Body.Close()
+	ethBackend.Commit()
+
+	var withdrawResponse server.WithdrawResponse
+	err = json.NewDecoder(resp.Body).Decode(&withdrawResponse)
+	r.NoError(err)
+	fmt.Println("withdrawResponse", withdrawResponse)
 }

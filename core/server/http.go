@@ -186,29 +186,35 @@ func (s *HttpAgentServer) claimHandler() gin.HandlerFunc {
 
 func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		log.Info().Msg("withdrawHandler: received request")
 		var req WithdrawRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
+			log.Error().Err(err).Msg("withdrawHandler: failed to parse request body")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
+			log.Error().Str("userAddress", req.UserAddress).Msg("withdrawHandler: userAddress is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
 			return
 		}
 
 		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
+			log.Error().Str("tokenAddress", req.TokenAddress).Msg("withdrawHandler: tokenAddress is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
 			return
 		}
 
 		if req.Amount == "" || req.Amount == "0" {
+			log.Error().Str("amount", req.Amount).Msg("withdrawHandler: amount is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
 			return
 		}
 
 		withdrawAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
 		if !ok {
+			log.Error().Str("amount", req.Amount).Msg("withdrawHandler: unable to convert amount to *big.Int")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
 			return
 		}
@@ -222,12 +228,12 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 		}
 
 		if len(signature) != 65 {
+			log.Error().Str("signature", req.Signature).Msg("withdrawHandler: signature must be 65 bytes long")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "signature must be 65 bytes long"})
 			return
 		}
 
 		deadline := big.NewInt(time.Now().Unix())
-
 		tx, err := s.trustManagementProvider.Withdraw(
 			ethcommon.HexToAddress(req.TokenAddress),
 			withdrawAmount,
@@ -236,6 +242,7 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			signature,
 		)
 		if err != nil {
+			log.Error().Err(err).Msg("withdrawHandler: withdraw failed")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
