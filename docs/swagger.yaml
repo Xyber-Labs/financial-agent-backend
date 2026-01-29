@@ -1,4 +1,11 @@
 definitions:
+  server.WithdrawNativeRequest:
+    properties:
+      amount:
+        type: string
+      userAddress:
+        type: string
+    type: object
   server.WithdrawRequest:
     properties:
       amount:
@@ -39,4 +46,25 @@ paths:
           schema:
             $ref: '#/definitions/server.WithdrawResponse'
       summary: withdraw assets on behalf of user, earned rewards included
+  /withdraw-native:
+    post:
+      consumes:
+      - application/json
+      description: withdraw the provided amount of native tokens from the protocol,
+        unwrap them to native and send to user address
+      parameters:
+      - description: Withdraw native request payload
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/server.WithdrawNativeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/server.WithdrawResponse'
+      summary: withdraw native tokens on behalf of user
 swagger: "2.0"
