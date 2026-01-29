@@ -154,7 +154,13 @@ func (p *TrustManagementProvider) Deposit(
 		return nil, err
 	}
 
-	p.logger.Info().Msg("Batching and executing transactions")
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Str("tokenAmount", tokenAmount.String()).
+		Str("aavePool", p.AavePoolAddress.String()).
+		Msg("Executing batched transaction for deposit")
 
 	// Batch and execute transactions
 	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
@@ -399,6 +405,15 @@ func (p *TrustManagementProvider) Withdraw(
 	if err != nil {
 		return nil, err
 	}
+
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("tokenAddress", tokenAddress.String()).
+		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("requestedAmount", amount.String()).
+		Str("amountWithYield", amountWithYield.String()).
+		Int("depositIdsCount", len(depositIds)).
+		Msg("Executing batched transaction for withdraw")
 
 	// Batch and execute transactions
 	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx, routerWithdrawTx})
