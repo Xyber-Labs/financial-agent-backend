@@ -1,3 +1,5 @@
+http:
+  port: 8081
 network:
   name: mainnet
   httpRpcUrl: "https://ethereum-rpc.publicnode.com"

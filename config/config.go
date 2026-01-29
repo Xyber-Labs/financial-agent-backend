@@ -10,6 +10,7 @@ import (
 
 type Config struct {
 	Network NetworkConfig
+	Http    HttpServerConfig
 }
 
 type NetworkConfig struct {
@@ -23,6 +24,10 @@ type NetworkConfig struct {
 	TrustManagementRouterAddress string
 	// TEE Wallet address
 	TEEWalletAddress string
+}
+
+type HttpServerConfig struct {
+	Port int
 }
 
 func LoadConfig() (*Config, error) {
