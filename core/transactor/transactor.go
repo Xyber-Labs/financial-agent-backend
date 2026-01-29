@@ -20,28 +20,31 @@ import (
 )
 
 type Transactor struct {
-	client                bind.ContractBackend
-	ChainId               *big.Int
-	teeService            TeeService
-	teeSessionKey         *ecdsa.PrivateKey
-	teeSessionAddress     ethcommon.Address
-	transactOpts          *bind.TransactOpts
-	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
+	Client                       bind.ContractBackend
+	ChainId                      *big.Int
+	TeeService                   TeeService
+	TeeSessionKey                *ecdsa.PrivateKey
+	TeeSessionAddress            ethcommon.Address
+	TransactOpts                 *bind.TransactOpts
+	TrustManagementRouterAddress ethcommon.Address
+	TrustManagementRouter        *TrustManagementRouter.TrustManagementRouter
 }
 
 func NewTransactor(
 	client bind.ContractBackend,
 	chainId *big.Int,
 	transactOpts *bind.TransactOpts,
+	trustManagementRouterAddress ethcommon.Address,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
 	teeService TeeService,
 ) (*Transactor, error) {
 	return &Transactor{
-		client:                client,
-		ChainId:               chainId,
-		teeService:            teeService,
-		transactOpts:          transactOpts,
-		TrustManagementRouter: trustManagementRouter,
+		Client:                       client,
+		ChainId:                      chainId,
+		TeeService:                   teeService,
+		TransactOpts:                 transactOpts,
+		TrustManagementRouterAddress: trustManagementRouterAddress,
+		TrustManagementRouter:        trustManagementRouter,
 	}, nil
 }
 
@@ -53,14 +56,14 @@ func (t *Transactor) InitializeOnChainSession() error {
 	if err != nil {
 		return err
 	}
-	t.teeSessionKey = sessionKey
-	t.teeSessionAddress = ethcrypto.PubkeyToAddress(sessionKey.PublicKey)
+	t.TeeSessionKey = sessionKey
+	t.TeeSessionAddress = ethcrypto.PubkeyToAddress(sessionKey.PublicKey)
 	log.Info().
-		Str("address", t.teeSessionAddress.String()).
+		Str("address", t.TeeSessionAddress.String()).
 		Msg("NewTeeSession: generated session key for TeeSession")
 
 	// Extract SGX quote from the environment
-	quote, err := t.extractQuote(t.teeSessionAddress)
+	quote, err := t.extractQuote(t.TeeSessionAddress)
 	if err != nil {
 		return err
 	}
@@ -83,11 +86,11 @@ func (t *Transactor) InitializeOnChainSession() error {
 
 	// Initialize onchain tee session session
 	tx, err := t.TrustManagementRouter.InitSessionKey(
-		t.transactOpts,
+		t.TransactOpts,
 		teeXyberProof.Leaf,
 		teeXyberProof.Intermediate,
 		teeXyberProof.Quote,
-		t.teeSessionAddress,
+		t.TeeSessionAddress,
 	)
 	if err != nil {
 		return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
@@ -116,12 +119,12 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 	}
 
 	deadline := time.Now().Add(10 * time.Minute)
-	signature, err := t.createTeeSessionSignature(t.transactOpts.From, big.NewInt(deadline.Unix()), transactionsArg)
+	signature, err := t.createTeeSessionSignature(big.NewInt(deadline.Unix()), transactionsArg)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create tee session signature: %w", err)
 	}
 
-	tx, err := t.TrustManagementRouter.Execute(t.transactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
+	tx, err := t.TrustManagementRouter.Execute(t.TransactOpts, transactionsArg, signature, big.NewInt(deadline.Unix()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to send transaction: %w", err)
 	}
@@ -131,12 +134,13 @@ func (t *Transactor) BatchAndExecute(innerTxs []*ethtypes.Transaction) (*ethtype
 }
 
 func (t *Transactor) extractQuote(sessionKey ethcommon.Address) ([]byte, error) {
-	return t.teeService.GetQuote(sessionKey[:])
+	return t.TeeService.GetQuote(sessionKey[:])
 	// return []byte("quote"), nil
 }
 
+// Generates signature using t.sessionKey with the following message format:
+// keccak256(abi.encode(block.chainid, address(router), deadline, txs))
 func (t *Transactor) createTeeSessionSignature(
-	address ethcommon.Address,
 	deadline *big.Int,
 	transactions []TrustManagementRouter.Transaction,
 ) ([]byte, error) {

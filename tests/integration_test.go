@@ -69,6 +69,7 @@ func TestDeposit(t *testing.T) {
 		ethBackend.Client(),
 		chainId,
 		transactOpts,
+		mockedContracts.TrustManagementRouter,
 		trustManagementRouter,
 		mteeService,
 	)
@@ -175,6 +176,7 @@ func TestWithdraw(t *testing.T) {
 		ethBackend.Client(),
 		chainId,
 		transactOpts,
+		mockedContracts.TrustManagementRouter,
 		trustManagementRouter,
 		mteeService,
 	)
@@ -345,6 +347,7 @@ func TestClaim(t *testing.T) {
 		ethBackend.Client(),
 		chainId,
 		transactOpts,
+		mockedContracts.TrustManagementRouter,
 		trustManagementRouter,
 		mteeService,
 	)
