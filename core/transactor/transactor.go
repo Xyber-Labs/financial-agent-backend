@@ -14,7 +14,6 @@ import (
 	ethcrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/rs/zerolog/log"
 
-	"financial-agent-backend/core/abi/bindings/TEEWallet"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 
 	sgx_quote "github.com/Xyber-Labs/go-tee/sgx-quote"
@@ -27,14 +26,12 @@ type Transactor struct {
 	teeSessionAddress     ethcommon.Address
 	transactOpts          *bind.TransactOpts
 	TrustManagementRouter *TrustManagementRouter.TrustManagementRouter
-	TEEWallet             *TEEWallet.TEEWallet
 }
 
 func NewTransactor(
 	client bind.ContractBackend,
 	transactOpts *bind.TransactOpts,
 	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
-	teeWallet *TEEWallet.TEEWallet,
 	teeService TeeService,
 ) (*Transactor, error) {
 
@@ -43,7 +40,6 @@ func NewTransactor(
 		teeService:            teeService,
 		transactOpts:          transactOpts,
 		TrustManagementRouter: trustManagementRouter,
-		TEEWallet:             teeWallet,
 	}, nil
 }
 
@@ -71,31 +67,31 @@ func (t *Transactor) InitializeOnChainSession() error {
 		Str("quoteHex", hex.EncodeToString(quote)).
 		Msg("NewTeeSession: extracted quote for TeeSession")
 
-	// Prepare SGX quote for use in TEEWallet
+	// Prepare SGX quote
 	sgxParser := sgx_quote.NewSgxParser()
 	parsedQuote, err := sgxParser.ParseQuote(quote)
 	if err != nil {
 		return fmt.Errorf("TeeSession: failed to parse quote: %w", err)
 	}
 
-	teeWaletProof, err := FromSgxQuoteToTeeWalletProof(parsedQuote)
+	teeXyberProof, err := FromSgxQuoteToProof(parsedQuote)
 	if err != nil {
 		return fmt.Errorf("TeeSession: failed to convert quote to tee wallet arguments: %w", err)
 	}
 
-	// Initialize session in TEEWallet contract
-	tx, err := t.TEEWallet.InitSessionKey(
+	// Initialize onchain tee session session
+	tx, err := t.TrustManagementRouter.InitSessionKey(
 		t.transactOpts,
-		teeWaletProof.Leaf,
-		teeWaletProof.Intermediate,
-		teeWaletProof.Quote,
+		teeXyberProof.Leaf,
+		teeXyberProof.Intermediate,
+		teeXyberProof.Quote,
 		t.teeSessionAddress,
 	)
 	if err != nil {
 		return fmt.Errorf("TeeSession: failed to send transaction: %w", err)
 	}
 
-	log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TEEWallet")
+	log.Info().Str("tx", tx.Hash().String()).Msg("InitializeOnChainSession: registered in TrustManagementRouter")
 
 	return nil
 }

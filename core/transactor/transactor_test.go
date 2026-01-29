@@ -15,7 +15,6 @@ import (
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
-	"financial-agent-backend/core/abi/bindings/TEEWallet"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/utils"
 	testutils "financial-agent-backend/tests"
@@ -48,11 +47,6 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
 		mockedContracts.TrustManagementRouter,
-		backend.Client(),
-	)
-	r.NoError(err)
-	teeWallet, err := TEEWallet.NewTEEWallet(
-		mockedContracts.TeeWallet,
 		backend.Client(),
 	)
 	r.NoError(err)
@@ -92,7 +86,7 @@ func TestInitializeOnChainSession(t *testing.T) {
 
 			// Build Transactor via constructor with minimal deps
 			client := backend.Client()
-			transactor, nerr := NewTransactor(client, txOpts, trustManagementRouter, teeWallet, mteeService)
+			transactor, nerr := NewTransactor(client, txOpts, trustManagementRouter, mteeService)
 			r.NoError(nerr)
 
 			// Assert

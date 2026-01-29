@@ -22,8 +22,6 @@ type NetworkConfig struct {
 	SenderPrivateKey string
 	// Trust Management Router address
 	TrustManagementRouterAddress string
-	// TEE Wallet address
-	TEEWalletAddress string
 }
 
 type HttpServerConfig struct {

@@ -18,7 +18,6 @@ import (
 
 	"financial-agent-backend/config"
 	"financial-agent-backend/core/abi/bindings/AavePool"
-	"financial-agent-backend/core/abi/bindings/TEEWallet"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/onchain"
 	"financial-agent-backend/core/server"
@@ -55,11 +54,7 @@ func TestDeposit(t *testing.T) {
 		ethBackend.Client(),
 	)
 	r.NoError(err)
-	teeWallet, err := TEEWallet.NewTEEWallet(
-		mockedContracts.TeeWallet,
-		ethBackend.Client(),
-	)
-	r.NoError(err)
+
 	aavePool, err := AavePool.NewAavePool(
 		mockedContracts.AavePool,
 		ethBackend.Client(),
@@ -70,7 +65,6 @@ func TestDeposit(t *testing.T) {
 		ethBackend.Client(),
 		transactOpts,
 		trustManagementRouter,
-		teeWallet,
 		mteeService,
 	)
 	r.NoError(err)
