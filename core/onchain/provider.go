@@ -2,6 +2,7 @@ package onchain
 
 import (
 	"context"
+	"financial-agent-backend/core/abi/bindings/AaveAToken"
 	"financial-agent-backend/core/abi/bindings/AavePool"
 	"financial-agent-backend/core/abi/bindings/TrustManagementRouter"
 	"financial-agent-backend/core/transactor"
@@ -143,6 +144,33 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", totalDepositAmount, amount)
 	}
 
+	// Calculate amount of token with yield considering compounded yield of atoken on Aave
+	aTokenAddress, err := p.AavePool.GetReserveAToken(p.callOpts, tokenAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if (aTokenAddress == ethcommon.Address{}) {
+		return nil, fmt.Errorf("aToken is nil or zero address")
+	}
+
+	aToken, err := AaveAToken.NewAaveAToken(aTokenAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if userATokenBalance.Cmp(totalDepositAmount) < 0 {
+		return nil, fmt.Errorf("INTERNAL ERROR: aToken balance is less than total deposit amount, aToken balance: %s, total deposit amount: %s", userATokenBalance, totalDepositAmount)
+	}
+
+	yieldAmount := new(big.Int).Sub(userATokenBalance, totalDepositAmount)
+	amountWithYield := yieldAmount.Add(yieldAmount, amount)
+
 	// Call TrustManagementRouter.withdraw
 	routerWithdrawTx, err := p.TrustManagementRouter.Withdraw(
 		p.createTxOpts,
@@ -150,7 +178,7 @@ func (p *TrustManagementProvider) Withdraw(
 		tokenAddress,
 		userAddress,
 		depositIds,
-		amountsWithYield,
+		amountWithYield,
 		signature,
 		deadline,
 	)
