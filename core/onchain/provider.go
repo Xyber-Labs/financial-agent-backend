@@ -428,6 +428,150 @@ func (p *TrustManagementProvider) Withdraw(
 	return tx, nil
 }
 
+func (p *TrustManagementProvider) WithdrawNative(
+	amount *big.Int,
+	userAddress ethcommon.Address,
+) (*ethtypes.Transaction, error) {
+
+	if p.NativeErc20Address == nil || p.NativeErc20 == nil {
+		return nil, fmt.Errorf("NativeErc20 is not set, WithdrawNative is not available")
+	}
+
+	trustManagementNativeTokenLabel := ethcommon.HexToAddress(TrustManagementNativeTokenLabel)
+
+	deposits, err := p.TrustManagementRouter.GetDeposits(
+		p.callOpts,
+		userAddress,
+		trustManagementNativeTokenLabel,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var depositIds []*big.Int
+	unlockedDepositAmount := big.NewInt(0)
+	currentTime := big.NewInt(time.Now().Unix())
+
+	// In this loop we need to identify deposits which we will have to liquidate.
+	// Deposits are qualified for liquidation when they are unlocked.
+	// We also need to verify here that amount of deposits are enough to cover
+	// the withdraw amount.
+	for i, deposit := range deposits {
+		if deposit.LockedUntil.Cmp(currentTime) < 0 {
+			depositIds = append(depositIds, big.NewInt(int64(i)))
+			unlockedDepositAmount = unlockedDepositAmount.Add(unlockedDepositAmount, deposit.Amount)
+		}
+	}
+
+	if unlockedDepositAmount.Cmp(amount) < 0 {
+		return nil, fmt.Errorf("not enough deposits to cover withdraw amount, total deposit amount: %s, withdraw amount: %s", unlockedDepositAmount, amount)
+	}
+
+	// Calculate amount of token with yield considering compounded yield of atoken on Aave
+	aTokenAddress, err := p.AavePool.GetReserveAToken(p.callOpts, *p.NativeErc20Address)
+	if err != nil {
+		return nil, err
+	}
+
+	if (aTokenAddress == ethcommon.Address{}) {
+		return nil, fmt.Errorf("aToken is nil or zero address")
+	}
+
+	aToken, err := AaveAToken.NewAaveAToken(aTokenAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if !userWalletAddress.IsDeployed {
+		return nil, fmt.Errorf("wallet is not deployed")
+	}
+
+	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userWalletAddress.WalletAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
+	if err != nil {
+		return nil, err
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call AavePool.withdraw
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
+		p.createTxOpts,
+		*p.NativeErc20Address,
+		amountWithYield,
+		userWalletAddress.WalletAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Unwrap ERC20 native into native tokens
+	unwrapNativeTx, err := p.NativeErc20.Withdraw(p.createTxOpts, amountWithYield)
+	if err != nil {
+		return nil, err
+	}
+
+	walletExecuteTxs := []TrustManagementWallet.Transaction{
+		{
+			Target: *aaveWithdrawTx.To(),
+			Data:   aaveWithdrawTx.Data(),
+			Value:  aaveWithdrawTx.Value(),
+		},
+		{
+			Target: *unwrapNativeTx.To(),
+			Data:   unwrapNativeTx.Data(),
+			Value:  unwrapNativeTx.Value(),
+		},
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, walletExecuteTxs)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call TrustManagementRouter.withdraw
+	routerWithdrawTx, err := p.TrustManagementRouter.Withdraw(
+		p.createTxOpts,
+		userAddress,
+		trustManagementNativeTokenLabel,
+		userAddress,
+		depositIds,
+		amountWithYield,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("erc20Native", p.NativeErc20Address.String()).
+		Str("userWallet", userWalletAddress.WalletAddress.String()).
+		Str("requestedAmount", amount.String()).
+		Str("amountWithYield", amountWithYield.String()).
+		Int("depositIdsCount", len(depositIds)).
+		Msg("Executing batched transaction for withdraw")
+
+	// Batch and execute transactions
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx, routerWithdrawTx})
+	if err != nil {
+		return nil, err
+	}
+
+	return tx, nil
+}
+
 func calculateAmountWithYield(
 	amount *big.Int,
 	totalDepositAmount *big.Int,

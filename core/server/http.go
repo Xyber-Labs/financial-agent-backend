@@ -69,6 +69,7 @@ func (s *HttpAgentServer) Start(ctx context.Context) error {
 func (s *HttpAgentServer) registerHandlers() {
 	// s.Gin.POST("/claim", s.claimHandler())
 	s.Gin.POST("/withdraw", s.withdrawHandler())
+	s.Gin.POST("/withdraw-native", s.withdrawNativeHandler())
 	s.Gin.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 }
 
@@ -168,11 +169,57 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	}
 }
 
+// @Summary withdraw native tokens on behalf of user
+// @Schemes
+// @Description withdraw the provided amount of native tokens from the protocol, unwrap them to native and send to user address
+// @Accept json
+// @Produce json
+// @Param request body WithdrawNativeRequest true "Withdraw native request payload"
+// @Success 200 {object} WithdrawResponse
+// @Router /withdraw-native [post]
+func (s *HttpAgentServer) withdrawNativeHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var req WithdrawNativeRequest
+		if err := c.ShouldBindJSON(&req); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		}
+
+		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
+			return
+		}
+
+		if req.Amount == "" || req.Amount == "0" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
+			return
+		}
+
+		withdrawAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
+		if !ok {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
+			return
+		}
+
+		tx, err := s.trustManagementProvider.WithdrawNative(withdrawAmount, ethcommon.HexToAddress(req.UserAddress))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H{"tx": tx.Hash().String()})
+	}
+}
+
 type ClaimRequest struct {
 	UserAddress  string `json:"userAddress"`
 	ChainId      uint64 `json:"chainId"`
 	Amount       string `json:"amount"`
 	TokenAddress string `json:"tokenAddress"`
+}
+
+type WithdrawNativeRequest struct {
+	UserAddress string `json:"userAddress"`
+	Amount      string `json:"amount"`
 }
 
 type WithdrawRequest struct {
@@ -187,5 +234,9 @@ type WithdrawResponse struct {
 }
 
 type ClaimResponse struct {
+	Tx string `json:"tx"`
+}
+
+type WithdrawNativeResponse struct {
 	Tx string `json:"tx"`
 }
