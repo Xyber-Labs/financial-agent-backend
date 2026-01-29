@@ -85,7 +85,7 @@ func (p *TrustManagementProvider) Deposit(
 		return nil, err
 	}
 
-	if userWalletAddress.IsDeployed == false {
+	if !userWalletAddress.IsDeployed {
 		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletAddress.WalletAddress.String())
 	}
 
@@ -123,7 +123,7 @@ func (p *TrustManagementProvider) Deposit(
 		p.createTxOpts,
 		tokenAddress,
 		tokenAmount,
-		userAddress,
+		userWalletAddress.WalletAddress,
 		0,
 	)
 	if err != nil {
@@ -248,17 +248,6 @@ func (p *TrustManagementProvider) Withdraw(
 	userAddress ethcommon.Address,
 ) (*ethtypes.Transaction, error) {
 
-	// Call AavePool.withdraw
-	aaveWithdrawTx, err := p.AavePool.Withdraw(
-		p.createTxOpts,
-		tokenAddress,
-		amount,
-		userAddress,
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	deposits, err := p.TrustManagementRouter.GetDeposits(
 		p.callOpts,
 		userAddress,
@@ -302,12 +291,52 @@ func (p *TrustManagementProvider) Withdraw(
 		return nil, err
 	}
 
-	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userAddress)
+	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	if err != nil {
+		return nil, err
+	}
+
+	if !userWalletAddress.IsDeployed {
+		return nil, fmt.Errorf("wallet is not deployed")
+	}
+
+	userATokenBalance, err := aToken.BalanceOf(p.callOpts, userWalletAddress.WalletAddress)
 	if err != nil {
 		return nil, err
 	}
 
 	amountWithYield, err := calculateAmountWithYield(amount, unlockedDepositAmount, userATokenBalance)
+	if err != nil {
+		return nil, err
+	}
+
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	if err != nil {
+		return nil, err
+	}
+
+	// Call AavePool.withdraw
+	aaveWithdrawTx, err := p.AavePool.Withdraw(
+		p.createTxOpts,
+		tokenAddress,
+		amountWithYield,
+		userWalletAddress.WalletAddress,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if aaveWithdrawTx.To() == nil {
+		return nil, fmt.Errorf("aave withdraw tx to is nil")
+	}
+
+	wrappedAaveWithdrawTx := TrustManagementWallet.Transaction{
+		Target: *aaveWithdrawTx.To(),
+		Data:   aaveWithdrawTx.Data(),
+		Value:  aaveWithdrawTx.Value(),
+	}
+
+	walletExecuteTx, err := userWallet.Execute(p.createTxOpts, []TrustManagementWallet.Transaction{wrappedAaveWithdrawTx})
 	if err != nil {
 		return nil, err
 	}
@@ -326,7 +355,7 @@ func (p *TrustManagementProvider) Withdraw(
 	}
 
 	// Batch and execute transactions
-	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{aaveWithdrawTx, routerWithdrawTx})
+	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx, routerWithdrawTx})
 	if err != nil {
 		return nil, err
 	}
