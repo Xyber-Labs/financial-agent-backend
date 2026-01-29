@@ -16,6 +16,7 @@ import (
 	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	ethcommon "github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -32,6 +33,8 @@ type TrustManagementProvider struct {
 	Transactor            *transactor.Transactor
 	createTxOpts          *bind.TransactOpts
 	callOpts              *bind.CallOpts
+
+	logger zerolog.Logger
 
 	// Optinal wrapped ERC20 native token for the network. If provided, enables DepositNative function
 	NativeErc20Address *ethcommon.Address
@@ -70,6 +73,7 @@ func NewTrustManagementProvider(
 		callOpts:              callOpts,
 		NativeErc20Address:    nativeErc20Address,
 		NativeErc20:           nativeErc20,
+		logger:                log.With().Str("component", "TrustManagementProvider").Logger(),
 	}
 }
 
@@ -78,7 +82,7 @@ func (p *TrustManagementProvider) Deposit(
 	tokenAddress ethcommon.Address,
 	tokenAmount *big.Int,
 ) (*ethtypes.Transaction, error) {
-	log.Info().
+	p.logger.Info().
 		Str("userAddress", userAddress.String()).
 		Str("tokenAddress", tokenAddress.String()).
 		Int64("tokenAmount", tokenAmount.Int64()).
@@ -150,7 +154,7 @@ func (p *TrustManagementProvider) Deposit(
 		return nil, err
 	}
 
-	log.Info().Msg("Batching and executing transactions")
+	p.logger.Info().Msg("Batching and executing transactions")
 
 	// Batch and execute transactions
 	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
@@ -170,16 +174,16 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, fmt.Errorf("NativeErc20 is not set, DepositNative is not available")
 	}
 
-	userWalletAddress, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
+	userWalletData, err := p.TrustManagementRouter.GetWalletAddress(p.callOpts, userAddress)
 	if err != nil {
 		return nil, err
 	}
 
-	if !userWalletAddress.IsDeployed {
-		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletAddress.WalletAddress.String())
+	if !userWalletData.IsDeployed {
+		return nil, fmt.Errorf("user wallet %s is not deployed", userWalletData.WalletAddress.String())
 	}
 
-	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletAddress.WalletAddress, p.client)
+	userWallet, err := TrustManagementWallet.NewTrustManagementWallet(userWalletData.WalletAddress, p.client)
 	if err != nil {
 		return nil, err
 	}
@@ -232,7 +236,12 @@ func (p *TrustManagementProvider) DepositNative(
 		return nil, err
 	}
 
-	log.Info().Msg("Batching and executing transactions")
+	p.logger.Info().
+		Str("userAddress", userAddress.String()).
+		Str("userWallet", userWalletData.WalletAddress.String()).
+		Str("nativeAmount", nativeAmount.String()).
+		Str("aavePool", p.AavePoolAddress.String()).
+		Msg("Executing batched transaction for native deposit")
 
 	tx, err := p.Transactor.BatchAndExecute([]*ethtypes.Transaction{walletExecuteTx})
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 	ethcommon "github.com/ethereum/go-ethereum/common"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -27,6 +28,7 @@ type HttpAgentServer struct {
 	Transactor              *transactor.Transactor
 	Gin                     *gin.Engine
 	trustManagementProvider *onchain.TrustManagementProvider
+	logger                  zerolog.Logger
 }
 
 func NewHttpAgentServer(
@@ -40,6 +42,7 @@ func NewHttpAgentServer(
 		Transactor:              transactor,
 		Gin:                     gin.New(),
 		trustManagementProvider: trustManagementProvider,
+		logger:                  log.With().Str("component", "HttpAgentServer").Logger(),
 	}
 	s.registerHandlers()
 	return s
@@ -47,7 +50,7 @@ func NewHttpAgentServer(
 
 func (s *HttpAgentServer) Start(ctx context.Context) error {
 	addr := fmt.Sprintf(":%d", s.Config.Port)
-	log.Info().Str("addr", addr).Msg("HttpAgentServer: starting server")
+	s.logger.Info().Str("addr", addr).Msg("HttpAgentServer: starting server")
 	errCh := make(chan error, 1)
 	go func() {
 		errCh <- s.Gin.Run(addr)
@@ -55,10 +58,10 @@ func (s *HttpAgentServer) Start(ctx context.Context) error {
 
 	select {
 	case err := <-errCh:
-		log.Error().Err(err).Msg("HttpAgentServer: server error")
+		s.logger.Error().Err(err).Msg("HttpAgentServer: server error")
 		return err
 	case <-ctx.Done():
-		log.Info().Msg("HttpAgentServer: context done")
+		s.logger.Info().Msg("HttpAgentServer: context done")
 		return ctx.Err()
 	}
 }
@@ -117,35 +120,35 @@ func (s *HttpAgentServer) registerHandlers() {
 // @Router /withdraw [post]
 func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Info().Msg("withdrawHandler: received request")
+		s.logger.Info().Msg("withdrawHandler: received request")
 		var req WithdrawRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
-			log.Error().Err(err).Msg("withdrawHandler: failed to parse request body")
+			s.logger.Error().Err(err).Msg("withdrawHandler: failed to parse request body")
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
 
 		if req.UserAddress == "" || !addressRegex.MatchString(req.UserAddress) {
-			log.Error().Str("userAddress", req.UserAddress).Msg("withdrawHandler: userAddress is required")
+			s.logger.Error().Str("userAddress", req.UserAddress).Msg("withdrawHandler: userAddress is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "userAddress is required"})
 			return
 		}
 
 		if req.TokenAddress == "" || !addressRegex.MatchString(req.TokenAddress) {
-			log.Error().Str("tokenAddress", req.TokenAddress).Msg("withdrawHandler: tokenAddress is required")
+			s.logger.Error().Str("tokenAddress", req.TokenAddress).Msg("withdrawHandler: tokenAddress is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "tokenAddress is required"})
 			return
 		}
 
 		if req.Amount == "" || req.Amount == "0" {
-			log.Error().Str("amount", req.Amount).Msg("withdrawHandler: amount is required")
+			s.logger.Error().Str("amount", req.Amount).Msg("withdrawHandler: amount is required")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "amount is required"})
 			return
 		}
 
 		withdrawAmount, ok := big.NewInt(0).SetString(req.Amount, 10)
 		if !ok {
-			log.Error().Str("amount", req.Amount).Msg("withdrawHandler: unable to convert amount to *big.Int")
+			s.logger.Error().Str("amount", req.Amount).Msg("withdrawHandler: unable to convert amount to *big.Int")
 			c.JSON(http.StatusBadRequest, gin.H{"error": "invalid amount"})
 			return
 		}
@@ -156,7 +159,7 @@ func (s *HttpAgentServer) withdrawHandler() gin.HandlerFunc {
 			ethcommon.HexToAddress(req.UserAddress),
 		)
 		if err != nil {
-			log.Error().Err(err).Msg("withdrawHandler: withdraw failed")
+			s.logger.Error().Err(err).Msg("withdrawHandler: withdraw failed")
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
