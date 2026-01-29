@@ -2,6 +2,8 @@
 > **General:** This repository is a core component of the Xyber platform, responsible for executing financial transactions in a secure and verifiable manner using Intel SGX TEE (Trusted Execution Environment) technology.
 > It integrates with lending protocols for yield generation and manages user deposits/withdrawals through trust-managed wallet proxies.
 
+> **Note:** Reference implementation, not production-ready.
+
 ## Capabilities
 
 ### 1. **REST API Endpoints**
