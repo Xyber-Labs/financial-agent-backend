@@ -47,7 +47,6 @@ The interface allows you to explore all REST endpoints, view their schemas, and 
     ```bash
     git clone <repository-url>
     cd financial-agent-backend
-    cp config.yaml.example config.yaml
     # Edit config.yaml with your settings (RPC URL, private key, contract addresses)
     ```
 
