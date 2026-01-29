@@ -31,24 +31,11 @@ type Transactor struct {
 func NewTransactor(
 	client bind.ContractBackend,
 	transactOpts *bind.TransactOpts,
-	trustManagementRouterAddress ethcommon.Address,
-	teeWalletAddress ethcommon.Address,
+	trustManagementRouter *TrustManagementRouter.TrustManagementRouter,
+	teeWallet *TEEWallet.TEEWallet,
 	teeService TeeService,
 ) (*Transactor, error) {
-	trustManagementRouter, err := TrustManagementRouter.NewTrustManagementRouter(
-		trustManagementRouterAddress,
-		client,
-	)
-	if err != nil {
-		return nil, err
-	}
-	teeWallet, err := TEEWallet.NewTEEWallet(
-		teeWalletAddress,
-		client,
-	)
-	if err != nil {
-		return nil, err
-	}
+
 	return &Transactor{
 		client:                client,
 		teeService:            teeService,
