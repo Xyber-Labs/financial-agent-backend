@@ -1,1112 +1,1178 @@
 [
-    {
-      "inputs": [],
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "inputs": [],
-      "name": "AccessControlBadConfirmation",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "neededRole",
-          "type": "bytes32"
-        }
-      ],
-      "name": "AccessControlUnauthorizedAccount",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "target",
-          "type": "address"
-        }
-      ],
-      "name": "AddressEmptyCode",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "AddressInsufficientBalance",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "implementation",
-          "type": "address"
-        }
-      ],
-      "name": "ERC1967InvalidImplementation",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "ERC1967NonPayable",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "FailedInnerCall",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "InvalidInitialization",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "NotInitializing",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        }
-      ],
-      "name": "SafeERC20FailedOperation",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "callerAddress",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__CallerDoesntHaveAgentRole",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "TrustManagementRouter__CallerIsNotAgent",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "callerAddress",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__CallerIsNotUser",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "caller",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__CallerIsNotUserOrWallet",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "wallet",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__InvalidWallet",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes",
-          "name": "callResponse",
-          "type": "bytes"
-        }
-      ],
-      "name": "TrustManagementRouter__MsgValueSendingFail",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "providedAddress",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__ProvidedAddressDoesntHaveAgentRole",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "tokenAddress",
-          "type": "address"
-        }
-      ],
-      "name": "TrustManagementRouter__TokenNotAllowed",
-      "type": "error"
-    },
-    {
-      "inputs": [],
-      "name": "UUPSUnauthorizedCallContext",
-      "type": "error"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "slot",
-          "type": "bytes32"
-        }
-      ],
-      "name": "UUPSUnsupportedProxiableUUID",
-      "type": "error"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "wallet",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "address",
-          "name": "token",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "unlockTimestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "DepositEvent",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint64",
-          "name": "version",
-          "type": "uint64"
-        }
-      ],
-      "name": "Initialized",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "previousAdminRole",
-          "type": "bytes32"
-        },
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "newAdminRole",
-          "type": "bytes32"
-        }
-      ],
-      "name": "RoleAdminChanged",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        }
-      ],
-      "name": "RoleGranted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "sender",
-          "type": "address"
-        }
-      ],
-      "name": "RoleRevoked",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "implementation",
-          "type": "address"
-        }
-      ],
-      "name": "Upgraded",
-      "type": "event"
-    },
-    {
-      "inputs": [],
-      "name": "AGENT_ROLE",
-      "outputs": [
-        {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "DEFAULT_ADMIN_ROLE",
-      "outputs": [
-        {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "UPGRADE_INTERFACE_VERSION",
-      "outputs": [
-        {
-          "internalType": "string",
-          "name": "",
-          "type": "string"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "beaconAddress",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_signature",
-          "type": "bytes"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_depositIds",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amountWithYield",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_receiver",
-          "type": "address"
-        }
-      ],
-      "name": "claim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_signature",
-          "type": "bytes"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_depositIds",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amountWithYield",
-          "type": "uint256"
-        },
-        {
-          "internalType": "address",
-          "name": "_receiver",
-          "type": "address"
-        }
-      ],
-      "name": "claim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_agent",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_salt",
-          "type": "bytes32"
-        }
-      ],
-      "name": "createWallet",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "newWallet",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_agent",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_salt",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_lockDuration",
-          "type": "uint256"
-        }
-      ],
-      "name": "createWalletAndDeposit",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "newWallet",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_agent",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_salt",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_lockDuration",
-          "type": "uint256"
-        }
-      ],
-      "name": "createWalletAndDeposit",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_agent",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes32",
-          "name": "_salt",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_unlockTimestamp",
-          "type": "uint256"
-        },
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint8",
-              "name": "v",
-              "type": "uint8"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "r",
-              "type": "bytes32"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "s",
-              "type": "bytes32"
-            }
-          ],
-          "internalType": "struct ITrustManagementStructs.Permit",
-          "name": "_permit",
-          "type": "tuple"
-        }
-      ],
-      "name": "createWalletAndDepositWithPermit",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_user",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_unlockTimestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "deposit",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_unlockTimestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "deposit",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_unlockTimestamp",
-          "type": "uint256"
-        }
-      ],
-      "name": "deposit",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "_unlockTimestamp",
-          "type": "uint256"
-        },
-        {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "deadline",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint8",
-              "name": "v",
-              "type": "uint8"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "r",
-              "type": "bytes32"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "s",
-              "type": "bytes32"
-            }
-          ],
-          "internalType": "struct ITrustManagementStructs.Permit",
-          "name": "_permit",
-          "type": "tuple"
-        }
-      ],
-      "name": "depositWithPermit",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "address[]",
-          "name": "_tokens",
-          "type": "address[]"
-        },
-        {
-          "internalType": "uint256[][]",
-          "name": "_depositsIds",
-          "type": "uint256[][]"
-        },
-        {
-          "internalType": "address",
-          "name": "_receiver",
-          "type": "address"
-        }
-      ],
-      "name": "emergencyWithdraw",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_depositIds",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "address",
-          "name": "_receiver",
-          "type": "address"
-        }
-      ],
-      "name": "emergencyWithdraw",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "target",
-          "type": "address"
-        },
-        {
-          "components": [
-            {
-              "internalType": "address",
-              "name": "target",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "value",
-              "type": "uint256"
-            },
-            {
-              "internalType": "bytes",
-              "name": "data",
-              "type": "bytes"
-            }
-          ],
-          "internalType": "struct ITrustManagementStructs.Transaction[]",
-          "name": "txs",
-          "type": "tuple[]"
-        }
-      ],
-      "name": "execute",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getFeeReceiver",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "feeReceiver",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "getPerfomanceFeeRate",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "perfomanceFeeRate",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        }
-      ],
-      "name": "getRoleAdmin",
-      "outputs": [
-        {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "grantRole",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "hasRole",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_initBlueprint",
-          "type": "address"
-        }
-      ],
-      "name": "initialize",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "proxiableUUID",
-      "outputs": [
-        {
-          "internalType": "bytes32",
-          "name": "",
-          "type": "bytes32"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "callerConfirmation",
-          "type": "address"
-        }
-      ],
-      "name": "renounceRole",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes32",
-          "name": "role",
-          "type": "bytes32"
-        },
-        {
-          "internalType": "address",
-          "name": "account",
-          "type": "address"
-        }
-      ],
-      "name": "revokeRole",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_newFeeReceiver",
-          "type": "address"
-        }
-      ],
-      "name": "setFeeReceiver",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "_newPerfomanceFeeRate",
-          "type": "uint256"
-        }
-      ],
-      "name": "setPerfomanceFeeRate",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "bytes4",
-          "name": "interfaceId",
-          "type": "bytes4"
-        }
-      ],
-      "name": "supportsInterface",
-      "outputs": [
-        {
-          "internalType": "bool",
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_newImplementation",
-          "type": "address"
-        }
-      ],
-      "name": "upgradeTo",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newImplementation",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "data",
-          "type": "bytes"
-        }
-      ],
-      "name": "upgradeToAndCall",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "_wallet",
-          "type": "address"
-        },
-        {
-          "internalType": "bytes",
-          "name": "_signature",
-          "type": "bytes"
-        },
-        {
-          "internalType": "address",
-          "name": "_token",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_depositIds",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "uint256[]",
-          "name": "_amountWithYield",
-          "type": "uint256[]"
-        },
-        {
-          "internalType": "address",
-          "name": "_receiver",
-          "type": "address"
-        }
-      ],
-      "name": "withdraw",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    }
-  ]
+  {
+    "inputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"constructor"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"AccessControlBadConfirmation",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes32",
+        "name":"neededRole",
+        "type":"bytes32"
+      }
+    ],
+    "name":"AccessControlUnauthorizedAccount",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"target",
+        "type":"address"
+      }
+    ],
+    "name":"AddressEmptyCode",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      }
+    ],
+    "name":"AddressInsufficientBalance",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"implementation",
+        "type":"address"
+      }
+    ],
+    "name":"ERC1967InvalidImplementation",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"ERC1967NonPayable",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"FailedInnerCall",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"InvalidInitialization",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"NotInitializing",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      }
+    ],
+    "name":"SafeERC20FailedOperation",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"callerAddress",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__CallerDoesntHaveAgentRole",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"TrustManagementRouter__CallerIsNotAgent",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"callerAddress",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__CallerIsNotUser",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"caller",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__CallerIsNotUserOrWallet",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"wallet",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__InvalidWallet",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes",
+        "name":"callResponse",
+        "type":"bytes"
+      }
+    ],
+    "name":"TrustManagementRouter__MsgValueSendingFail",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"providedAddress",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__ProvidedAddressDoesntHaveAgentRole",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"tokenAddress",
+        "type":"address"
+      }
+    ],
+    "name":"TrustManagementRouter__TokenNotAllowed",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"UUPSUnauthorizedCallContext",
+    "type":"error"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"slot",
+        "type":"bytes32"
+      }
+    ],
+    "name":"UUPSUnsupportedProxiableUUID",
+    "type":"error"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":false,
+        "internalType":"address",
+        "name":"wallet",
+        "type":"address"
+      },
+      {
+        "indexed":false,
+        "internalType":"address",
+        "name":"user",
+        "type":"address"
+      },
+      {
+        "indexed":false,
+        "internalType":"address",
+        "name":"token",
+        "type":"address"
+      },
+      {
+        "indexed":false,
+        "internalType":"uint256",
+        "name":"amount",
+        "type":"uint256"
+      },
+      {
+        "indexed":false,
+        "internalType":"uint256",
+        "name":"unlockTimestamp",
+        "type":"uint256"
+      }
+    ],
+    "name":"DepositEvent",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":false,
+        "internalType":"uint64",
+        "name":"version",
+        "type":"uint64"
+      }
+    ],
+    "name":"Initialized",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":true,
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "indexed":true,
+        "internalType":"bytes32",
+        "name":"previousAdminRole",
+        "type":"bytes32"
+      },
+      {
+        "indexed":true,
+        "internalType":"bytes32",
+        "name":"newAdminRole",
+        "type":"bytes32"
+      }
+    ],
+    "name":"RoleAdminChanged",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":true,
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      },
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"sender",
+        "type":"address"
+      }
+    ],
+    "name":"RoleGranted",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":true,
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      },
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"sender",
+        "type":"address"
+      }
+    ],
+    "name":"RoleRevoked",
+    "type":"event"
+  },
+  {
+    "anonymous":false,
+    "inputs":[
+      {
+        "indexed":true,
+        "internalType":"address",
+        "name":"implementation",
+        "type":"address"
+      }
+    ],
+    "name":"Upgraded",
+    "type":"event"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"AGENT_ROLE",
+    "outputs":[
+      {
+        "internalType":"bytes32",
+        "name":"",
+        "type":"bytes32"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"DEFAULT_ADMIN_ROLE",
+    "outputs":[
+      {
+        "internalType":"bytes32",
+        "name":"",
+        "type":"bytes32"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"UPGRADE_INTERFACE_VERSION",
+    "outputs":[
+      {
+        "internalType":"string",
+        "name":"",
+        "type":"string"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"beaconAddress",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes",
+        "name":"_signature",
+        "type":"bytes"
+      },
+      {
+        "internalType":"uint256[]",
+        "name":"_depositIds",
+        "type":"uint256[]"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_amountWithYield",
+        "type":"uint256"
+      },
+      {
+        "internalType":"address",
+        "name":"_receiver",
+        "type":"address"
+      }
+    ],
+    "name":"claim",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes",
+        "name":"_signature",
+        "type":"bytes"
+      },
+      {
+        "internalType":"uint256[]",
+        "name":"_depositIds",
+        "type":"uint256[]"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_amountWithYield",
+        "type":"uint256"
+      },
+      {
+        "internalType":"address",
+        "name":"_receiver",
+        "type":"address"
+      }
+    ],
+    "name":"claim",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_agent",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes32",
+        "name":"_salt",
+        "type":"bytes32"
+      }
+    ],
+    "name":"createWallet",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"newWallet",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_agent",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes32",
+        "name":"_salt",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_lockDuration",
+        "type":"uint256"
+      }
+    ],
+    "name":"createWalletAndDeposit",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"newWallet",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_agent",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes32",
+        "name":"_salt",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_amount",
+        "type":"uint256"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_lockDuration",
+        "type":"uint256"
+      }
+    ],
+    "name":"createWalletAndDeposit",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_agent",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes32",
+        "name":"_salt",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_unlockTimestamp",
+        "type":"uint256"
+      },
+      {
+        "components":[
+          {
+            "internalType":"uint256",
+            "name":"amount",
+            "type":"uint256"
+          },
+          {
+            "internalType":"uint256",
+            "name":"deadline",
+            "type":"uint256"
+          },
+          {
+            "internalType":"uint8",
+            "name":"v",
+            "type":"uint8"
+          },
+          {
+            "internalType":"bytes32",
+            "name":"r",
+            "type":"bytes32"
+          },
+          {
+            "internalType":"bytes32",
+            "name":"s",
+            "type":"bytes32"
+          }
+        ],
+        "internalType":"struct ITrustManagementStructs.Permit",
+        "name":"_permit",
+        "type":"tuple"
+      }
+    ],
+    "name":"createWalletAndDepositWithPermit",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_user",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_amount",
+        "type":"uint256"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_unlockTimestamp",
+        "type":"uint256"
+      }
+    ],
+    "name":"deposit",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_amount",
+        "type":"uint256"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_unlockTimestamp",
+        "type":"uint256"
+      }
+    ],
+    "name":"deposit",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_unlockTimestamp",
+        "type":"uint256"
+      }
+    ],
+    "name":"deposit",
+    "outputs":[
+      
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256",
+        "name":"_unlockTimestamp",
+        "type":"uint256"
+      },
+      {
+        "components":[
+          {
+            "internalType":"uint256",
+            "name":"amount",
+            "type":"uint256"
+          },
+          {
+            "internalType":"uint256",
+            "name":"deadline",
+            "type":"uint256"
+          },
+          {
+            "internalType":"uint8",
+            "name":"v",
+            "type":"uint8"
+          },
+          {
+            "internalType":"bytes32",
+            "name":"r",
+            "type":"bytes32"
+          },
+          {
+            "internalType":"bytes32",
+            "name":"s",
+            "type":"bytes32"
+          }
+        ],
+        "internalType":"struct ITrustManagementStructs.Permit",
+        "name":"_permit",
+        "type":"tuple"
+      }
+    ],
+    "name":"depositWithPermit",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"address[]",
+        "name":"_tokens",
+        "type":"address[]"
+      },
+      {
+        "internalType":"uint256[][]",
+        "name":"_depositsIds",
+        "type":"uint256[][]"
+      },
+      {
+        "internalType":"address",
+        "name":"_receiver",
+        "type":"address"
+      }
+    ],
+    "name":"emergencyWithdraw",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256[]",
+        "name":"_depositIds",
+        "type":"uint256[]"
+      },
+      {
+        "internalType":"address",
+        "name":"_receiver",
+        "type":"address"
+      }
+    ],
+    "name":"emergencyWithdraw",
+    "outputs":[
+      
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"target",
+        "type":"address"
+      },
+      {
+        "components":[
+          {
+            "internalType":"address",
+            "name":"target",
+            "type":"address"
+          },
+          {
+            "internalType":"uint256",
+            "name":"value",
+            "type":"uint256"
+          },
+          {
+            "internalType":"bytes",
+            "name":"data",
+            "type":"bytes"
+          }
+        ],
+        "internalType":"struct ITrustManagementStructs.Transaction[]",
+        "name":"txs",
+        "type":"tuple[]"
+      }
+    ],
+    "name":"execute",
+    "outputs":[
+      
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"getFeeReceiver",
+    "outputs":[
+      {
+        "internalType":"address",
+        "name":"feeReceiver",
+        "type":"address"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"getPerfomanceFeeRate",
+    "outputs":[
+      {
+        "internalType":"uint256",
+        "name":"perfomanceFeeRate",
+        "type":"uint256"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      }
+    ],
+    "name":"getRoleAdmin",
+    "outputs":[
+      {
+        "internalType":"bytes32",
+        "name":"",
+        "type":"bytes32"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      }
+    ],
+    "name":"grantRole",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      }
+    ],
+    "name":"hasRole",
+    "outputs":[
+      {
+        "internalType":"bool",
+        "name":"",
+        "type":"bool"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_initBlueprint",
+        "type":"address"
+      }
+    ],
+    "name":"initialize",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      
+    ],
+    "name":"proxiableUUID",
+    "outputs":[
+      {
+        "internalType":"bytes32",
+        "name":"",
+        "type":"bytes32"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"callerConfirmation",
+        "type":"address"
+      }
+    ],
+    "name":"renounceRole",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes32",
+        "name":"role",
+        "type":"bytes32"
+      },
+      {
+        "internalType":"address",
+        "name":"account",
+        "type":"address"
+      }
+    ],
+    "name":"revokeRole",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_newFeeReceiver",
+        "type":"address"
+      }
+    ],
+    "name":"setFeeReceiver",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"uint256",
+        "name":"_newPerfomanceFeeRate",
+        "type":"uint256"
+      }
+    ],
+    "name":"setPerfomanceFeeRate",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"bytes4",
+        "name":"interfaceId",
+        "type":"bytes4"
+      }
+    ],
+    "name":"supportsInterface",
+    "outputs":[
+      {
+        "internalType":"bool",
+        "name":"",
+        "type":"bool"
+      }
+    ],
+    "stateMutability":"view",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_newImplementation",
+        "type":"address"
+      }
+    ],
+    "name":"upgradeTo",
+    "outputs":[
+      
+    ],
+    "stateMutability":"nonpayable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"newImplementation",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes",
+        "name":"data",
+        "type":"bytes"
+      }
+    ],
+    "name":"upgradeToAndCall",
+    "outputs":[
+      
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  },
+  {
+    "inputs":[
+      {
+        "internalType":"address",
+        "name":"_wallet",
+        "type":"address"
+      },
+      {
+        "internalType":"bytes",
+        "name":"_signature",
+        "type":"bytes"
+      },
+      {
+        "internalType":"address",
+        "name":"_token",
+        "type":"address"
+      },
+      {
+        "internalType":"uint256[]",
+        "name":"_depositIds",
+        "type":"uint256[]"
+      },
+      {
+        "internalType":"uint256[]",
+        "name":"_amountWithYield",
+        "type":"uint256[]"
+      },
+      {
+        "internalType":"address",
+        "name":"_receiver",
+        "type":"address"
+      }
+    ],
+    "name":"withdraw",
+    "outputs":[
+      
+    ],
+    "stateMutability":"payable",
+    "type":"function"
+  }
+]
