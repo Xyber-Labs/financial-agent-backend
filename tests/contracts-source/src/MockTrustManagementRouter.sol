@@ -75,23 +75,37 @@ contract MockTrustManagementRouter {
 
 
     function withdraw(
-        address wallet,
+        address user,
         address token,
         address receiver,
         uint256[] calldata depositIds,
-        uint256[] calldata amountsWithYield,
-        bytes calldata signature,
-        uint256 deadline
+        uint256 amountWithYield
     ) external {}
 
     function getDeposits(address user, address token) external view returns(Deposit[] memory) {
         return mockDeposits;
     }
 
+    function getWalletAddress(address user) public view returns(address walletAddress, bool isDeployed) {
+        return (mockWalletAddress, mockIsDeployed);
+    }
+
+    function WALLET_BEACON() public view returns(address) {
+        return address(this);
+    }
+
 
     /*
      * Below are internal mock-functions to help replicating needed functionality from the original TrustManagementRouter contract
      */
+
+     address mockWalletAddress;
+     bool mockIsDeployed;
+
+     function mockSetWalletAddress(address walletAddress, bool isDeployed) external {
+        mockWalletAddress = walletAddress;
+        mockIsDeployed = isDeployed;
+     }
 
      Deposit[] mockDeposits;
      function mockSetDeposits(Deposit[] calldata deposits) external {
