@@ -6,13 +6,13 @@ import (
 )
 
 type Config struct {
-	Networks NetworksConfig
+	Network NetworkConfig
 }
 
-type NetworksConfig []NetworkConfig
-
 type NetworkConfig struct {
+	// Name of the network (e.g. ethereum)
 	Name string
+	// Http RPC endpoint to use for interacting with the network
 	HttpRpcUrl string
 }
 
@@ -30,19 +30,12 @@ func LoadConfig() (*Config, error) {
 }
 
 func (c *Config) Validate() error {
-	if len(c.Networks) == 0 {
-		return errors.New("no networks configured")
+	if c.Network.Name == "" {
+		return errors.New("network name is empty")
 	}
 
-	// Check the networks
-	for _, network := range c.Networks {
-		if network.Name == "" {
-			return errors.New("network name is empty")
-		}
-
-		if network.HttpRpcUrl == "" {
-			return errors.New("network http rpc url is empty")
-		}
+	if c.Network.HttpRpcUrl == "" {
+		return errors.New("network http rpc url is empty")
 	}
 
 	return nil

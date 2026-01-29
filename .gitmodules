@@ -1,0 +1,3 @@
+[submodule "go-tee"]
+	path = go-tee
+	url = git@github.com:Xyber-Labs/go-tee.git
